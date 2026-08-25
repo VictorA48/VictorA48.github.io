@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UTV - Televisión en Vivo</title>
-  <!-- HLS Player para streaming .m3u8 -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <!-- Iconos de FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
@@ -252,7 +250,6 @@
 </head>
 <body>
 
-  <!-- ENCABEZADO -->
   <header>
     <div class="logo-container">
       <div class="logo-badge">UTV</div>
@@ -263,15 +260,12 @@
     </div>
   </header>
 
-  <!-- CONTENEDOR PRINCIPAL -->
   <div class="main-container">
 
-    <!-- REPRODUCTOR HLS DE UTV -->
     <div class="player-wrapper">
       <video id="videoPlayer" controls autoplay playsinline></video>
     </div>
 
-    <!-- BOTONES DE CONTACTO Y REDES -->
     <div class="action-bar">
       <div class="social-links">
         <a href="https://www.facebook.com/profile.php?id=100093553610524" target="_blank" class="social-btn btn-fb">
@@ -296,20 +290,18 @@
       </button>
     </div>
 
-    <!-- SECCIÓN DE PROGRAMACIÓN -->
     <div>
       <div class="tabs-container">
         <button class="tab-btn active" id="btnHoy" onclick="mostrarDia('hoy')">
-          <i class="fas fa-tv"></i> Hoy (Martes 25)
+          <i class="fas fa-calendar-day"></i> Martes 25 Agosto 2026
         </button>
         <button class="tab-btn" id="btnManana" onclick="mostrarDia('manana')">
-          <i class="fas fa-calendar-plus"></i> Mañana (Miércoles 26)
+          <i class="fas fa-calendar-plus"></i> Miércoles 26 Agosto 2026
         </button>
       </div>
 
       <div class="schedule-list" id="grillaProgramacion">
-        <!-- Generado dinámicamente -->
-      </div>
+        </div>
     </div>
 
     <footer>
@@ -317,12 +309,11 @@
     </footer>
   </div>
 
-  <!-- SCRIPT -->
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
 
-    // 1. Programación de Hoy (Martes 25 Agosto 2026)
+    // 1. Martes 25 Agosto 2026
     const programacionHoy = [
       { hora: "15:50", titulo: "Especial Concierto: Benny Benassi" },
       { hora: "18:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
@@ -332,7 +323,7 @@
       { hora: "22:22", titulo: "Fin de la Transmisión" }
     ];
 
-    // 2. Programación de Mañana (Miércoles 26 Agosto 2026)
+    // 2. Miércoles 26 Agosto 2026
     const programacionManana = [
       { hora: "16:43", titulo: "Especial Concierto: Donna Summer" },
       { hora: "18:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
@@ -371,7 +362,7 @@
       grillaContainer.innerHTML = html;
     }
 
-    // Inicializar mostrando Hoy
+    // Cargar Martes 25 de inicio
     mostrarDia('hoy');
 
     // Reproductor HLS
