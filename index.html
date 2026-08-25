@@ -207,7 +207,7 @@
       display: flex;
       align-items: center;
       background: #161b22;
-      padding: 12px 18px;
+      padding: 14px 18px;
       border-radius: 8px;
       border: 1px solid #21262d;
       gap: 20px;
@@ -224,18 +224,21 @@
       padding: 6px 12px;
       border-radius: 6px;
       border: 1px solid rgba(0, 173, 181, 0.3);
-      min-width: 85px;
+      min-width: 90px;
       text-align: center;
+      flex-shrink: 0;
     }
     .schedule-details {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      flex-grow: 1;
     }
     .schedule-show-title {
       font-size: 16px;
-      font-weight: bold;
-      color: #fff;
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.4;
+      word-break: break-word;
     }
 
     /* FOOTER */
@@ -305,7 +308,7 @@
       </div>
 
       <div class="schedule-list" id="grillaProgramacion">
-        <!-- Cargará automáticamente -->
+        <!-- Generado dinámicamente -->
       </div>
     </div>
 
@@ -319,12 +322,8 @@
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
 
-    // Conexión directa a Google Sheets
-    const SHEET_ID = "1TAxicWCeaKzMJXw_k0EBSrIK2RXhuxH2-zD9FIs02x4";
-    const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&t=${new Date().getTime()}`;
-
-    // Datos de respaldo directo
-    const programacionHoyRespaldo = [
+    // 1. Programación de Hoy (Martes 25)
+    const programacionHoy = [
       { hora: "15:50", titulo: "Especial Concierto: Benny Benassi" },
       { hora: "18:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
       { hora: "18:33", titulo: "Series Temporada 4: Un Doctor Diferente" },
@@ -333,7 +332,8 @@
       { hora: "22:22", titulo: "Fin de la Transmisión" }
     ];
 
-    const programacionMananaRespaldo = [
+    // 2. Programación de Mañana (Miércoles 26)
+    const programacionManana = [
       { hora: "16:43", titulo: "Especial Concierto: Donna Summer" },
       { hora: "18:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
       { hora: "18:33", titulo: "Series Temporada 4: Un Doctor Diferente" },
@@ -342,44 +342,12 @@
       { hora: "22:19", titulo: "Fin de la Transmisión" }
     ];
 
-    let datosHoy = programacionHoyRespaldo;
-    let diaActual = 'hoy';
-
-    async function cargarDesdeGoogleSheets() {
-      try {
-        const response = await fetch(CSV_URL);
-        if (response.ok) {
-          const text = await response.text();
-          const lineas = text.trim().split("\n");
-          let nuevaLista = [];
-          lineas.forEach(linea => {
-            if (!linea.trim()) return;
-            let cols = linea.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || linea.split(",");
-            if (cols.length >= 2) {
-              let h = cols[0].replace(/^"|"$/g, '').trim();
-              let p = cols.slice(1).join(",").replace(/^"|"$/g, '').trim();
-              if (!h.toLowerCase().includes("hora") && h && p) {
-                nuevaLista.push({ hora: h, titulo: p });
-              }
-            }
-          });
-          if (nuevaLista.length > 0) {
-            datosHoy = nuevaLista;
-          }
-        }
-      } catch (e) {
-        console.log("Usando datos locales:", e);
-      }
-      mostrarDia(diaActual);
-    }
-
     function mostrarDia(dia) {
-      diaActual = dia;
       const btnHoy = document.getElementById("btnHoy");
       const btnManana = document.getElementById("btnManana");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
-      let lista = dia === 'manana' ? programacionMananaRespaldo : datosHoy;
+      const lista = (dia === 'manana') ? programacionManana : programacionHoy;
       
       if (dia === 'manana') {
         btnManana.classList.add("active");
@@ -403,7 +371,8 @@
       grillaContainer.innerHTML = html;
     }
 
-    cargarDesdeGoogleSheets();
+    // Inicializar mostrando Hoy
+    mostrarDia('hoy');
 
     // Reproductor HLS
     if (Hls.isSupported()) {
