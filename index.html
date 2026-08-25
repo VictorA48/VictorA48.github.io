@@ -1,12 +1,355 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0; url=https://macos.aidevmac.com/">
-    <title>Google</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UTV - Televisión en Vivo</title>
+  <!-- HLS Player para streaming .m3u8 -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <!-- Iconos de FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background-color: #0b0e14;
+      color: #e6edf3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+
+    /* HEADER */
+    header {
+      width: 100%;
+      padding: 14px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #161b22;
+      border-bottom: 2px solid #00adb5;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-badge {
+      background: linear-gradient(135deg, #00adb5, #00fff2);
+      color: #0b0e14;
+      font-weight: 900;
+      font-size: 24px;
+      padding: 4px 14px;
+      border-radius: 8px;
+      letter-spacing: 1px;
+      box-shadow: 0 0 15px rgba(0, 173, 181, 0.4);
+    }
+    .channel-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+    }
+    .live-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 0, 85, 0.15);
+      border: 1px solid #ff0055;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 12px;
+      color: #ff3366;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #ff0055;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #ff0055;
+      animation: blink 1.2s infinite ease-in-out;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.8); }
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .main-container {
+      width: 95%;
+      max-width: 1100px;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* REPRODUCTOR DE VIDEO */
+    .player-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* Relación de aspecto 16:9 */
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      border: 1px solid #21262d;
+    }
+    video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      outline: none;
+    }
+
+    /* BARRA DE CONTROL Y REDES */
+    .action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      background: #161b22;
+      padding: 15px 20px;
+      border-radius: 10px;
+      gap: 15px;
+      border: 1px solid #21262d;
+    }
+    .social-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      transition: transform 0.2s, filter 0.2s;
+      color: #fff;
+    }
+    .social-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.15);
+    }
+    .btn-fb { background: #1877f2; }
+    .btn-ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+    .btn-wa { background: #25d366; color: #0b0e14; }
+    .btn-yt { background: #ff0000; }
+    .btn-blog { background: #ff5722; }
+
+    .btn-fullscreen {
+      background: #00adb5;
+      color: #0b0e14;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+    .btn-fullscreen:hover {
+      background: #00fff2;
+    }
+
+    /* GRILLA DE PROGRAMACIÓN */
+    .section-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #00adb5;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .schedule-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .schedule-item {
+      display: flex;
+      align-items: center;
+      background: #161b22;
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: 1px solid #21262d;
+      gap: 20px;
+      transition: background 0.2s;
+    }
+    .schedule-item:hover {
+      background: #1f2937;
+    }
+    .schedule-time {
+      font-size: 16px;
+      font-weight: bold;
+      color: #00fff2;
+      background: rgba(0, 173, 181, 0.1);
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 173, 181, 0.3);
+      min-width: 85px;
+      text-align: center;
+    }
+    .schedule-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .schedule-show-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 12px;
+      color: #8b949e;
+    }
+  </style>
 </head>
 <body>
-    <p>If you were not automatically redirected, please follow <a href="https://macos.aidevmac.com/">this link</a>.</p>
+
+  <!-- ENCABEZADO -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-badge">UTV</div>
+      <span class="channel-title">Televisión en Vivo</span>
+    </div>
+    <div class="live-indicator">
+      <span class="dot"></span> SEÑAL EN VIVO
+    </div>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="main-container">
+
+    <!-- REPRODUCTOR HLS DE UTV -->
+    <div class="player-wrapper">
+      <video id="videoPlayer" controls autoplay playsinline></video>
+    </div>
+
+    <!-- BOTONES DE CONTACTO Y REDES -->
+    <div class="action-bar">
+      <div class="social-links">
+        <a href="https://www.facebook.com/profile.php?id=100093553610524" target="_blank" class="social-btn btn-fb">
+          <i class="fab fa-facebook-f"></i> Facebook
+        </a>
+        <a href="https://www.instagram.com/victordaniel1282/" target="_blank" class="social-btn btn-ig">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+        <a href="https://wa.me/message/MYUB7W3PT6U2H1" target="_blank" class="social-btn btn-wa">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+        <a href="https://www.youtube.com/@VictorAg%C3%BCero-Dj-Operador" target="_blank" class="social-btn btn-yt">
+          <i class="fab fa-youtube"></i> YouTube
+        </a>
+        <a href="https://ultradanceonlineparaguay.blogspot.com/" target="_blank" class="social-btn btn-blog">
+          <i class="fas fa-blog"></i> Blog
+        </a>
+      </div>
+
+      <button class="btn-fullscreen" onclick="togglePantallaCompleta()">
+        <i class="fas fa-expand"></i> Pantalla Completa
+      </button>
+    </div>
+
+    <!-- GRILLA DE PROGRAMACIÓN DE HOY -->
+    <div>
+      <div class="section-title">
+        <i class="fas fa-calendar-day"></i> Programación de Hoy
+      </div>
+      <div class="schedule-list" id="grillaProgramacion">
+        <!-- Generado dinámicamente -->
+      </div>
+    </div>
+
+    <footer>
+      &copy; 2026 UTV - Transmisión Digital Oficial.
+    </footer>
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
+    const video = document.getElementById("videoPlayer");
+
+    // ==========================================
+    // EDITA AQUÍ TU LISTA DE PROGRAMAS DEL DÍA:
+    // ==========================================
+    const programacionDeHoy = [
+      { hora: "15:50", titulo: "Especial Concierto: Benny Benassi" },
+      { hora: "18:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
+      { hora: "18:33", titulo: "Series Temporada 4: Un Doctor Diferente" },
+      { hora: "19:16", titulo: "Contrarreloj" },
+      { hora: "20:47", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "22:22", titulo: "Fin de la Transmisión" }
+    ];
+
+    // Cargar la lista en pantalla
+    const grillaContainer = document.getElementById("grillaProgramacion");
+    let htmlContenido = "";
+    
+    programacionDeHoy.forEach(item => {
+      htmlContenido += `
+        <div class="schedule-item">
+          <div class="schedule-time"><i class="far fa-clock"></i> ${item.hora}</div>
+          <div class="schedule-details">
+            <div class="schedule-show-title">${item.titulo}</div>
+          </div>
+        </div>
+      `;
+    });
+    grillaContainer.innerHTML = htmlContenido;
+
+    // Reproductor HLS
+    if (Hls.isSupported()) {
+      const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+      hls.loadSource(streamURL);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        video.play().catch(() => {});
+      });
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = streamURL;
+      video.addEventListener("loadedmetadata", function () {
+        video.play().catch(() => {});
+      });
+    }
+
+    function togglePantallaCompleta() {
+      if (!document.fullscreenElement) {
+        if (video.requestFullscreen) {
+          video.requestFullscreen();
+        } else if (video.webkitRequestFullscreen) {
+          video.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+  </script>
 </body>
 </html>
