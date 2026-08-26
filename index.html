@@ -292,22 +292,28 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnHoy" onclick="mostrarDia('hoy')">
+        <button class="tab-btn" id="btnMartes" onclick="mostrarDia('martes')">
           <i class="fas fa-calendar-day"></i> Martes 25 Agosto 2026
         </button>
-        <button class="tab-btn" id="btnManana" onclick="mostrarDia('manana')">
-          <i class="fas fa-calendar-plus"></i> Miércoles 26 Agosto 2026
+        <button class="tab-btn" id="btnMiercoles" onclick="mostrarDia('miercoles')">
+          <i class="fas fa-calendar-day"></i> Miércoles 26 Agosto 2026
         </button>
         <button class="tab-btn" id="btnJueves" onclick="mostrarDia('jueves')">
-          <i class="fas fa-calendar-plus"></i> Jueves 27 Agosto 2026
+          <i class="fas fa-calendar-day"></i> Jueves 27 Agosto 2026
         </button>
         <button class="tab-btn" id="btnViernes" onclick="mostrarDia('viernes')">
-          <i class="fas fa-calendar-plus"></i> Viernes 28 Agosto 2026
+          <i class="fas fa-calendar-day"></i> Viernes 28 Agosto 2026
+        </button>
+        <button class="tab-btn active" id="btnSabado" onclick="mostrarDia('sabado')">
+          <i class="fas fa-calendar-day"></i> Sábado 29 Agosto 2026
+        </button>
+        <button class="tab-btn" id="btnDomingo" onclick="mostrarDia('domingo')">
+          <i class="fas fa-calendar-day"></i> Domingo 30 Agosto 2026
         </button>
       </div>
 
       <div class="schedule-list" id="grillaProgramacion">
-        </div>
+      </div>
     </div>
 
     <footer>
@@ -319,18 +325,8 @@
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
 
-    // 1. Martes 25 Agosto 2026
-    const programacionHoy = [
-      { hora: "15:50", titulo: "Especial Concierto: Benny Benassi" },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
-      { hora: "18:33", titulo: "Series Temporada 4: Un Doctor Diferente" },
-      { hora: "19:16", titulo: "Contrarreloj" },
-      { hora: "20:47", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:22", titulo: "Fin de la Transmisión" }
-    ];
-
     // 2. Miércoles 26 Agosto 2026
-    const programacionManana = [
+    const programacionMiercoles = [
       { hora: "16:43", titulo: "Especial Concierto: Donna Summer" },
       { hora: "18:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
       { hora: "18:33", titulo: "Series Temporada 4: Un Doctor Diferente" },
@@ -359,32 +355,60 @@
       { hora: "22:21", titulo: "Fin de la Transmisión" }
     ];
 
+    // 5. Sábado 29 Agosto 2026
+    const programacionSabado = [
+      { hora: "12:00", titulo: "Series: Los Tres Chiflados" },
+      { hora: "13:09", titulo: "Series Animada: The Thundercats" },
+      { hora: "14:09", titulo: "Pelicula: Harry Potter y la Orden de Fenix" },
+      { hora: "16:27", titulo: "Concierto: Tiesto" },
+      { hora: "17:41", titulo: "Santo Rosario: Misterios Gozosos" },
+      { hora: "18:19", titulo: "Series Temporada 2: El Juego del Calamar" },
+      { hora: "19:25", titulo: "Series Temporada 3: La Casa de Papel" },
+      { hora: "20:12", titulo: "Pelicula: Regreso a la Era de los Dinosaurios" },
+      { hora: "21:37", titulo: "Fin de la Transmisión" }
+    ];
+
+    // 6. Domingo 30 Agosto 2026
+    const programacionDomingo = [
+      { hora: "12:00", titulo: "Serie Animada: Dragon Ball" },
+      { hora: "13:14", titulo: "Series Animada: Mazinger Z" },
+      { hora: "14:17", titulo: "Concierto: David Guetta" },
+      { hora: "15:25", titulo: "Santa Misa" },
+      { hora: "16:21", titulo: "Santo Rosario: Misterios Gloriosos" },
+      { hora: "16:54", titulo: "Series Temporada 2: El Juego del Calamar" },
+      { hora: "18:00", titulo: "Series Temporada 3: La Casa de Papel" },
+      { hora: "18:44", titulo: "Pelicula Paraguaya: La Guerra de un Solo Hombre de Anthony Hopkins" },
+      { hora: "20:15", titulo: "Pelicula: El Señor de los Anillos El Retorno del Rey" },
+      { hora: "23:31", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
-      const btnHoy = document.getElementById("btnHoy");
-      const btnManana = document.getElementById("btnManana");
-      const btnJueves = document.getElementById("btnJueves");
-      const btnViernes = document.getElementById("btnViernes");
+      const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
-      // Quitar clase activo a todos
-      if(btnHoy) btnHoy.classList.remove("active");
-      if(btnManana) btnManana.classList.remove("active");
-      if(btnJueves) btnJueves.classList.remove("active");
-      if(btnViernes) btnViernes.classList.remove("active");
+      // Quitar clase active a todos los botones
+      botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionHoy;
+      let lista = programacionSabado;
 
-      if (dia === 'manana') {
-        lista = programacionManana;
-        if(btnManana) btnManana.classList.add("active");
+      if (dia === 'martes') {
+        lista = programacionMartes;
+        document.getElementById("btnMartes")?.classList.add("active");
+      } else if (dia === 'miercoles') {
+        lista = programacionMiercoles;
+        document.getElementById("btnMiercoles")?.classList.add("active");
       } else if (dia === 'jueves') {
         lista = programacionJueves;
-        if(btnJueves) btnJueves.classList.add("active");
+        document.getElementById("btnJueves")?.classList.add("active");
       } else if (dia === 'viernes') {
         lista = programacionViernes;
-        if(btnViernes) btnViernes.classList.add("active");
+        document.getElementById("btnViernes")?.classList.add("active");
+      } else if (dia === 'domingo') {
+        lista = programacionDomingo;
+        document.getElementById("btnDomingo")?.classList.add("active");
       } else {
-        if(btnHoy) btnHoy.classList.add("active");
+        lista = programacionSabado;
+        document.getElementById("btnSabado")?.classList.add("active");
       }
 
       let html = "";
@@ -401,8 +425,8 @@
       grillaContainer.innerHTML = html;
     }
 
-    // Iniciar con la programación de Hoy
-    mostrarDia('hoy');
+    // Iniciar mostrando la programación del Sábado por defecto
+    mostrarDia('sabado');
 
     // Reproductor HLS
     if (Hls.isSupported()) {
