@@ -292,10 +292,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnMiercoles" onclick="mostrarDia('miercoles')">
-          <i class="fas fa-calendar-day"></i> Miércoles 26 Agosto 2026
-        </button>
-        <button class="tab-btn" id="btnJueves" onclick="mostrarDia('jueves')">
+        <button class="tab-btn active" id="btnJueves" onclick="mostrarDia('jueves')">
           <i class="fas fa-calendar-day"></i> Jueves 27 Agosto 2026
         </button>
         <button class="tab-btn" id="btnViernes" onclick="mostrarDia('viernes')">
@@ -322,17 +319,7 @@
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
 
-    // 1. Miércoles 26 Agosto 2026
-    const programacionMiercoles = [
-      { hora: "16:43", titulo: "Especial Concierto: Donna Summer" },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
-      { hora: "18:33", titulo: "Series Temporada 4: Un Doctor Diferente" },
-      { hora: "19:16", titulo: "Pequeños Invasores" },
-      { hora: "20:42", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:19", titulo: "Fin de la Transmisión" }
-    ];
-
-    // 2. Jueves 27 Agosto 2026
+    // 1. Jueves 27 Agosto 2026
     const programacionJueves = [
       { hora: "16:31", titulo: "Especial Concierto Fatboy Slim" },
       { hora: "18:00", titulo: 'Santo Rosario "Misterios Luminosos"' },
@@ -342,7 +329,7 @@
       { hora: "23:06", titulo: "Fin de la Transmisión" }
     ];
 
-    // 3. Viernes 28 Agosto 2026
+    // 2. Viernes 28 Agosto 2026
     const programacionViernes = [
       { hora: "15:54", titulo: "Especial Concierto Padre Guilherme" },
       { hora: "18:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
@@ -352,7 +339,7 @@
       { hora: "22:21", titulo: "Fin de la Transmisión" }
     ];
 
-    // 4. Sábado 29 Agosto 2026
+    // 3. Sábado 29 Agosto 2026
     const programacionSabado = [
       { hora: "12:00", titulo: "Series: Los Tres Chiflados" },
       { hora: "13:09", titulo: "Series Animada: The Thundercats" },
@@ -365,7 +352,7 @@
       { hora: "21:37", titulo: "Fin de la Transmisión" }
     ];
 
-    // 5. Domingo 30 Agosto 2026
+    // 4. Domingo 30 Agosto 2026
     const programacionDomingo = [
       { hora: "12:00", titulo: "Serie Animada: Dragon Ball" },
       { hora: "13:14", titulo: "Series Animada: Mazinger Z" },
@@ -386,12 +373,9 @@
       // Quitar clase active a todos los botones
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionMiercoles;
+      let lista = programacionJueves;
 
-      if (dia === 'jueves') {
-        lista = programacionJueves;
-        document.getElementById("btnJueves")?.classList.add("active");
-      } else if (dia === 'viernes') {
+      if (dia === 'viernes') {
         lista = programacionViernes;
         document.getElementById("btnViernes")?.classList.add("active");
       } else if (dia === 'sabado') {
@@ -401,8 +385,8 @@
         lista = programacionDomingo;
         document.getElementById("btnDomingo")?.classList.add("active");
       } else {
-        lista = programacionMiercoles;
-        document.getElementById("btnMiercoles")?.classList.add("active");
+        lista = programacionJueves;
+        document.getElementById("btnJueves")?.classList.add("active");
       }
 
       let html = "";
@@ -419,8 +403,8 @@
       grillaContainer.innerHTML = html;
     }
 
-    // Iniciar mostrando la programación de Miércoles por defecto
-    mostrarDia('miercoles');
+    // Iniciar mostrando la programación de Jueves por defecto
+    mostrarDia('jueves');
 
     // Reproductor HLS
     if (Hls.isSupported()) {
