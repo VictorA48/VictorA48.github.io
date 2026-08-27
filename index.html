@@ -304,6 +304,9 @@
         <button class="tab-btn" id="btnDomingo" onclick="mostrarDia('domingo')">
           <i class="fas fa-calendar-day"></i> Domingo 30 Agosto 2026
         </button>
+        <button class="tab-btn" id="btnLunes" onclick="mostrarDia('lunes')">
+          <i class="fas fa-calendar-day"></i> Lunes 31 Agosto 2026
+        </button>
       </div>
 
       <div class="schedule-list" id="grillaProgramacion">
@@ -366,6 +369,16 @@
       { hora: "23:31", titulo: "Fin de la Transmisión" }
     ];
 
+    // 5. Lunes 31 Agosto 2026
+    const programacionLunes = [
+      { hora: "16:42", titulo: "Especial: Anyma Presents Genesys" },
+      { hora: "18:00", titulo: 'Santo Rosario "Misterios Gozosos"' },
+      { hora: "18:38", titulo: "Series Temporada 4: Un Doctor Diferente" },
+      { hora: "19:21", titulo: "Mi Nuevo Juguete" },
+      { hora: "21:13", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "22:52", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
@@ -384,6 +397,9 @@
       } else if (dia === 'domingo') {
         lista = programacionDomingo;
         document.getElementById("btnDomingo")?.classList.add("active");
+      } else if (dia === 'lunes') {
+        lista = programacionLunes;
+        document.getElementById("btnLunes")?.classList.add("active");
       } else {
         lista = programacionJueves;
         document.getElementById("btnJueves")?.classList.add("active");
