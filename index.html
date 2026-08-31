@@ -292,13 +292,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnSabado" onclick="mostrarDia('sabado')">
-          <i class="fas fa-calendar-day"></i> Sábado 29 Agosto 2026
-        </button>
-        <button class="tab-btn" id="btnDomingo" onclick="mostrarDia('domingo')">
-          <i class="fas fa-calendar-day"></i> Domingo 30 Agosto 2026
-        </button>
-        <button class="tab-btn" id="btnLunes" onclick="mostrarDia('lunes')">
+        <button class="tab-btn active" id="btnLunes" onclick="mostrarDia('lunes')">
           <i class="fas fa-calendar-day"></i> Lunes 31 Agosto 2026
         </button>
         <button class="tab-btn" id="btnMartes" onclick="mostrarDia('martes')">
@@ -312,6 +306,12 @@
         </button>
         <button class="tab-btn" id="btnViernes" onclick="mostrarDia('viernes')">
           <i class="fas fa-calendar-day"></i> Viernes 4 Setiembre 2026
+        </button>
+        <button class="tab-btn" id="btnSabado" onclick="mostrarDia('sabado')">
+          <i class="fas fa-calendar-day"></i> Sábado 5 Setiembre 2026
+        </button>
+        <button class="tab-btn" id="btnDomingo" onclick="mostrarDia('domingo')">
+          <i class="fas fa-calendar-day"></i> Domingo 6 Setiembre 2026
         </button>
       </div>
 
@@ -328,34 +328,7 @@
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
 
-    // 1. Sábado 29 Agosto 2026
-    const programacionSabado = [
-      { hora: "12:00", titulo: "Series: Los Tres Chiflados" },
-      { hora: "13:09", titulo: "Series Animada: The Thundercats" },
-      { hora: "14:09", titulo: "Pelicula: Harry Potter y la Orden de Fenix" },
-      { hora: "16:27", titulo: "Concierto: Tiesto" },
-      { hora: "17:41", titulo: "Santo Rosario: Misterios Gozosos" },
-      { hora: "18:19", titulo: "Series Temporada 2: El Juego del Calamar" },
-      { hora: "19:25", titulo: "Series Temporada 3: La Casa de Papel" },
-      { hora: "20:12", titulo: "Pelicula: Regreso a la Era de los Dinosaurios" },
-      { hora: "21:37", titulo: "Fin de la Transmisión" }
-    ];
-
-    // 2. Domingo 30 Agosto 2026
-    const programacionDomingo = [
-      { hora: "12:00", titulo: "Serie Animada: Dragon Ball" },
-      { hora: "13:14", titulo: "Series Animada: Mazinger Z" },
-      { hora: "14:17", titulo: "Concierto: David Guetta" },
-      { hora: "15:25", titulo: "Santa Misa" },
-      { hora: "16:21", titulo: "Santo Rosario: Misterios Gloriosos" },
-      { hora: "16:54", titulo: "Series Temporada 2: El Juego del Calamar" },
-      { hora: "18:00", titulo: "Series Temporada 3: La Casa de Papel" },
-      { hora: "18:44", titulo: "Pelicula Paraguaya: La Guerra de un Solo Hombre de Anthony Hopkins" },
-      { hora: "20:15", titulo: "Pelicula: El Señor de los Anillos El Retorno del Rey" },
-      { hora: "23:31", titulo: "Fin de la Transmisión" }
-    ];
-
-    // 3. Lunes 31 Agosto 2026
+    // 1. Lunes 31 Agosto 2026
     const programacionLunes = [
       { hora: "16:42", titulo: "Especial: Anyma Presents Genesys" },
       { hora: "18:00", titulo: 'Santo Rosario "Misterios Gozosos"' },
@@ -365,7 +338,7 @@
       { hora: "22:52", titulo: "Fin de la Transmisión" }
     ];
 
-    // 4. Martes 1 Setiembre 2026
+    // 2. Martes 1 Setiembre 2026
     const programacionMartes = [
       { hora: "16:54", titulo: "Especial Concert : Scooter" },
       { hora: "18:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
@@ -375,7 +348,7 @@
       { hora: "21:34", titulo: "Fin de la Transmisión" }
     ];
 
-    // 5. Miércoles 2 Setiembre 2026
+    // 3. Miércoles 2 Setiembre 2026
     const programacionMiercoles = [
       { hora: "15:30", titulo: "Especial Concert: Phil Collins" },
       { hora: "18:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
@@ -385,7 +358,7 @@
       { hora: "22:24", titulo: "Fin de la Transmisión" }
     ];
 
-    // 6. Jueves 3 Setiembre 2026
+    // 4. Jueves 3 Setiembre 2026
     const programacionJueves = [
       { hora: "16:59", titulo: "Especial: Ace Of Base" },
       { hora: "18:00", titulo: 'Santo Rosario "Misterios Luminosos"' },
@@ -394,7 +367,7 @@
       { hora: "20:51", titulo: "Series: Moisés y los Diez Mandamientos" }
     ];
 
-    // 7. Viernes 4 Setiembre 2026
+    // 5. Viernes 4 Setiembre 2026
     const programacionViernes = [
       { hora: "13:47", titulo: "Especial Concert: Tiesto" },
       { hora: "18:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
@@ -404,6 +377,33 @@
       { hora: "22:47", titulo: "Fin de la Transmisión" }
     ];
 
+    // 6. Sábado 5 Setiembre 2026
+    const programacionSabado = [
+      { hora: "12:00", titulo: "Los Tres Chiflados" },
+      { hora: "13:06", titulo: "The Thundercats" },
+      { hora: "14:06", titulo: "Harry Potter y el Misterio del Principe" },
+      { hora: "16:39", titulo: "Especial Concert: A-HA" },
+      { hora: "18:20", titulo: 'Santo Rosario "Misterios Gozosos"' },
+      { hora: "18:58", titulo: "Series Temporada 2: El Juego del Calamar" },
+      { hora: "20:00", titulo: "Series Temporada 3: La Casa de Papel" },
+      { hora: "20:57", titulo: "Documental: Enigmas Arqueológicos" },
+      { hora: "23:01", titulo: "Fin de la Transmisión" }
+    ];
+
+    // 7. Domingo 6 Setiembre 2026
+    const programacionDomingo = [
+      { hora: "12:00", titulo: "Serie Anime: Dragon Ball" },
+      { hora: "13:14", titulo: "Serie Anime: Mazinger Z" },
+      { hora: "14:15", titulo: "El Hobbit Un Viaje Inesperado" },
+      { hora: "17:04", titulo: "Especial Concert: Queen" },
+      { hora: "18:55", titulo: "Santa Misa" },
+      { hora: "19:51", titulo: 'Santo Rosario "Misterios Gloriosos"' },
+      { hora: "20:24", titulo: "Series Temporada 2: El Juego del Calamar" },
+      { hora: "21:20", titulo: "Series Temporada 1: La Casa de los Espiritus" },
+      { hora: "22:06", titulo: "Pelicula Paraguaya: La Cárcel del Barrio" },
+      { hora: "23:06", titulo: "Series: Moisés y los Diez Mandamientos" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
@@ -411,15 +411,9 @@
       // Quitar clase active a todos los botones
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionSabado;
+      let lista = programacionLunes;
 
-      if (dia === 'domingo') {
-        lista = programacionDomingo;
-        document.getElementById("btnDomingo")?.classList.add("active");
-      } else if (dia === 'lunes') {
-        lista = programacionLunes;
-        document.getElementById("btnLunes")?.classList.add("active");
-      } else if (dia === 'martes') {
+      if (dia === 'martes') {
         lista = programacionMartes;
         document.getElementById("btnMartes")?.classList.add("active");
       } else if (dia === 'miercoles') {
@@ -431,9 +425,15 @@
       } else if (dia === 'viernes') {
         lista = programacionViernes;
         document.getElementById("btnViernes")?.classList.add("active");
-      } else {
+      } else if (dia === 'sabado') {
         lista = programacionSabado;
         document.getElementById("btnSabado")?.classList.add("active");
+      } else if (dia === 'domingo') {
+        lista = programacionDomingo;
+        document.getElementById("btnDomingo")?.classList.add("active");
+      } else {
+        lista = programacionLunes;
+        document.getElementById("btnLunes")?.classList.add("active");
       }
 
       let html = "";
@@ -450,8 +450,8 @@
       grillaContainer.innerHTML = html;
     }
 
-    // Iniciar mostrando la programación de Sábado por defecto
-    mostrarDia('sabado');
+    // Iniciar mostrando la programación de Lunes por defecto
+    mostrarDia('lunes');
 
     // Reproductor HLS
     if (Hls.isSupported()) {
