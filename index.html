@@ -1,22 +1,582 @@
-// Contador de visitas corregido y a prueba de fallos
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UTV - Televisión en Vivo</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background-color: #0b0e14;
+      color: #e6edf3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+
+    /* HEADER */
+    header {
+      width: 100%;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #161b22;
+      border-bottom: 2px solid #00adb5;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-badge {
+      background: linear-gradient(135deg, #00adb5, #00fff2);
+      color: #0b0e14;
+      font-weight: 900;
+      font-size: 24px;
+      padding: 4px 14px;
+      border-radius: 8px;
+      letter-spacing: 1px;
+      box-shadow: 0 0 15px rgba(0, 173, 181, 0.4);
+    }
+    .channel-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+    }
+    .header-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .clock-widget {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(22, 27, 34, 0.95);
+      border: 1px solid #30363d;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: #e6edf3;
+    }
+    .clock-widget i {
+      color: #00adb5;
+    }
+    .clock-widget .clock-date {
+      color: #8b949e;
+      text-transform: capitalize;
+    }
+    .clock-widget .clock-time {
+      font-weight: bold;
+      color: #00fff2;
+    }
+    .visitor-counter {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 173, 181, 0.15);
+      border: 1px solid #00adb5;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 12px;
+      color: #00fff2;
+    }
+    .live-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 0, 85, 0.15);
+      border: 1px solid #ff0055;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 12px;
+      color: #ff3366;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #ff0055;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #ff0055;
+      animation: blink 1.2s infinite ease-in-out;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.8); }
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .main-container {
+      width: 95%;
+      max-width: 1100px;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* REPRODUCTOR DE VIDEO */
+    .player-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      border: 1px solid #21262d;
+    }
+    video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      outline: none;
+    }
+
+    /* BARRA DE CONTROL Y REDES */
+    .action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      background: #161b22;
+      padding: 15px 20px;
+      border-radius: 10px;
+      gap: 15px;
+      border: 1px solid #21262d;
+    }
+    .social-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      transition: transform 0.2s, filter 0.2s;
+      color: #fff;
+    }
+    .social-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.15);
+    }
+    .btn-fb { background: #1877f2; }
+    .btn-ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+    .btn-wa { background: #25d366; color: #0b0e14; }
+    .btn-yt { background: #ff0000; }
+    .btn-blog { background: #ff5722; }
+
+    .btn-fullscreen {
+      background: #00adb5;
+      color: #0b0e14;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+    .btn-fullscreen:hover {
+      background: #00fff2;
+    }
+
+    /* PESTAÑAS DE DÍAS */
+    .tabs-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: #161b22;
+      border: 1px solid #21262d;
+      color: #8b949e;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tab-btn.active {
+      background: #00adb5;
+      color: #0b0e14;
+      border-color: #00fff2;
+      box-shadow: 0 0 10px rgba(0, 173, 181, 0.4);
+    }
+
+    /* GRILLA DE PROGRAMACIÓN */
+    .schedule-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .schedule-item {
+      display: flex;
+      align-items: center;
+      background: #161b22;
+      padding: 14px 18px;
+      border-radius: 8px;
+      border: 1px solid #21262d;
+      gap: 20px;
+      transition: background 0.2s;
+    }
+    .schedule-item:hover {
+      background: #1f2937;
+    }
+    .schedule-time {
+      font-size: 16px;
+      font-weight: bold;
+      color: #00fff2;
+      background: rgba(0, 173, 181, 0.1);
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 173, 181, 0.3);
+      min-width: 90px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .schedule-details {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .schedule-show-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 12px;
+      color: #8b949e;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-container">
+      <div class="logo-badge">UTV</div>
+      <span class="channel-title">Televisión en Vivo</span>
+    </div>
+    <div class="header-status">
+      <div class="clock-widget">
+        <i class="fas fa-clock"></i>
+        <span class="clock-date" id="relojFecha">Cargando...</span>
+        <span class="clock-time" id="relojHora">--:--:--</span>
+      </div>
+      <div class="visitor-counter">
+        <i class="fas fa-eye"></i> <span id="contadorVisitas">...</span>
+      </div>
+      <div class="live-indicator">
+        <span class="dot"></span> SEÑAL EN VIVO
+      </div>
+    </div>
+  </header>
+
+  <div class="main-container">
+
+    <div class="player-wrapper">
+      <video id="videoPlayer" controls autoplay playsinline></video>
+    </div>
+
+    <div class="action-bar">
+      <div class="social-links">
+        <a href="https://www.facebook.com/profile.php?id=100093553610524" target="_blank" class="social-btn btn-fb">
+          <i class="fab fa-facebook-f"></i> Facebook
+        </a>
+        <a href="https://www.instagram.com/victordaniel1282/" target="_blank" class="social-btn btn-ig">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+        <a href="https://wa.me/message/MYUB7W3PT6U2H1" target="_blank" class="social-btn btn-wa">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+        <a href="https://www.youtube.com/@VictorAg%C3%BCero-Dj-Operador" target="_blank" class="social-btn btn-yt">
+          <i class="fab fa-youtube"></i> YouTube
+        </a>
+        <a href="https://ultradanceonlineparaguay.blogspot.com/" target="_blank" class="social-btn btn-blog">
+          <i class="fas fa-blog"></i> Blog
+        </a>
+      </div>
+
+      <button class="btn-fullscreen" onclick="togglePantallaCompleta()">
+        <i class="fas fa-expand"></i> Pantalla Completa
+      </button>
+    </div>
+
+    <div>
+      <div class="tabs-container">
+        <button class="tab-btn active" id="btnMiercoles" onclick="mostrarDia('miercoles')">
+          <i class="fas fa-calendar-day"></i> Miércoles 2 Setiembre 2026
+        </button>
+        <button class="tab-btn" id="btnJueves" onclick="mostrarDia('jueves')">
+          <i class="fas fa-calendar-day"></i> Jueves 3 Setiembre 2026
+        </button>
+        <button class="tab-btn" id="btnViernes" onclick="mostrarDia('viernes')">
+          <i class="fas fa-calendar-day"></i> Viernes 4 Setiembre 2026
+        </button>
+        <button class="tab-btn" id="btnSabado" onclick="mostrarDia('sabado')">
+          <i class="fas fa-calendar-day"></i> Sábado 5 Setiembre 2026
+        </button>
+        <button class="tab-btn" id="btnDomingo" onclick="mostrarDia('domingo')">
+          <i class="fas fa-calendar-day"></i> Domingo 6 Setiembre 2026
+        </button>
+        <button class="tab-btn" id="btnLunes7" onclick="mostrarDia('lunes7')">
+          <i class="fas fa-calendar-day"></i> Lunes 7 Setiembre 2026
+        </button>
+        <button class="tab-btn" id="btnMartes8" onclick="mostrarDia('martes8')">
+          <i class="fas fa-calendar-day"></i> Martes 8 Setiembre 2026
+        </button>
+      </div>
+
+      <div class="schedule-list" id="grillaProgramacion">
+      </div>
+    </div>
+
+    <footer>
+      &copy; 2026 UTV - Transmisión Digital Oficial.
+    </footer>
+  </div>
+
+  <script>
+    const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
+    const video = document.getElementById("videoPlayer");
+
+    // Miércoles 2 Setiembre 2026
+    const programacionMiercoles = [
+      { hora: "15:30", titulo: "Especial Concert: Phil Collins" },
+      { hora: "18:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
+      { hora: "18:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
+      { hora: "19:16", titulo: "Pelicula: Catástrofe" },
+      { hora: "20:42", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "22:24", titulo: "Fin de la Transmisión" }
+    ];
+
+    // Jueves 3 Setiembre 2026
+    const programacionJueves = [
+      { hora: "16:59", titulo: "Especial: Ace Of Base" },
+      { hora: "18:00", titulo: 'Santo Rosario "Misterios Luminosos"' },
+      { hora: "18:38", titulo: "Series Temporada 5: Un Doctor Diferente" },
+      { hora: "19:21", titulo: "Pelicula: Punto de Exterminio" },
+      { hora: "20:51", titulo: "Series: Moisés y los Diez Mandamientos" }
+    ];
+
+    // Viernes 4 Setiembre 2026
+    const programacionViernes = [
+      { hora: "13:47", titulo: "Especial Concert: Tiesto" },
+      { hora: "18:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
+      { hora: "18:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
+      { hora: "19:16", titulo: "Pelicula: Inesperado" },
+      { hora: "21:05", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "22:47", titulo: "Fin de la Transmisión" }
+    ];
+
+    // Sábado 5 Setiembre 2026
+    const programacionSabado = [
+      { hora: "12:00", titulo: "Los Tres Chiflados" },
+      { hora: "13:06", titulo: "The Thundercats" },
+      { hora: "14:06", titulo: "Harry Potter y el Misterio del Principe" },
+      { hora: "16:39", titulo: "Especial Concert: A-HA" },
+      { hora: "18:20", titulo: 'Santo Rosario "Misterios Gozosos"' },
+      { hora: "18:58", titulo: "Series Temporada 2: El Juego del Calamar" },
+      { hora: "20:00", titulo: "Series Temporada 3: La Casa de Papel" },
+      { hora: "20:57", titulo: "Documental: Enigmas Arqueológicos" },
+      { hora: "23:01", titulo: "Fin de la Transmisión" }
+    ];
+
+    // Domingo 6 Setiembre 2026
+    const programacionDomingo = [
+      { hora: "12:00", titulo: "Dragon Ball" },
+      { hora: "13:14", titulo: "Mazinger Z" },
+      { hora: "14:15", titulo: "El Hobbit Un Viaje Inesperado" },
+      { hora: "17:04", titulo: "Especial Concert: Queen" },
+      { hora: "18:55", titulo: "Santa Misa" },
+      { hora: "19:51", titulo: 'Santo Rosario "Misterios Gloriosos"' },
+      { hora: "20:24", titulo: 'Series Temporada 2" El Juego del Calamar' },
+      { hora: "21:20", titulo: 'Series Temporada 1 Estreno" La Casa de los Espíritus' },
+      { hora: "22:06", titulo: "Película Paraguaya: La Cárcel del Barrio" },
+      { hora: "23:06", titulo: "Fin de la Transmisión" }
+    ];
+
+    // Lunes 7 Setiembre 2026
+    const programacionLunes7 = [
+      { hora: "16:53", titulo: "Especial Concert : Alesso" },
+      { hora: "18:00", titulo: 'Santo Rosario "Misterios Gozosos"' },
+      { hora: "18:38", titulo: "Series Temporada 5: Un Doctor Diferente" },
+      { hora: "19:21", titulo: "Pelicula: Interestelar" },
+      { hora: "22:10", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "23:50", titulo: "Fin de la Transmisión" }
+    ];
+
+    // Martes 8 Setiembre 2026
+    const programacionMartes8 = [
+      { hora: "16:31", titulo: "Especial Concert : Armin Van Buuren" },
+      { hora: "18:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
+      { hora: "18:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
+      { hora: "19:16", titulo: "Pelicula: Condenados" },
+      { hora: "21:10", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "22:56", titulo: "Fin de la Transmisión" }
+    ];
+
+    function mostrarDia(dia) {
+      const botones = document.querySelectorAll(".tab-btn");
+      const grillaContainer = document.getElementById("grillaProgramacion");
+      
+      botones.forEach(btn => btn.classList.remove("active"));
+
+      let lista = programacionMiercoles;
+
+      if (dia === 'jueves') {
+        lista = programacionJueves;
+        document.getElementById("btnJueves")?.classList.add("active");
+      } else if (dia === 'viernes') {
+        lista = programacionViernes;
+        document.getElementById("btnViernes")?.classList.add("active");
+      } else if (dia === 'sabado') {
+        lista = programacionSabado;
+        document.getElementById("btnSabado")?.classList.add("active");
+      } else if (dia === 'domingo') {
+        lista = programacionDomingo;
+        document.getElementById("btnDomingo")?.classList.add("active");
+      } else if (dia === 'lunes7') {
+        lista = programacionLunes7;
+        document.getElementById("btnLunes7")?.classList.add("active");
+      } else if (dia === 'martes8') {
+        lista = programacionMartes8;
+        document.getElementById("btnMartes8")?.classList.add("active");
+      } else {
+        lista = programacionMiercoles;
+        document.getElementById("btnMiercoles")?.classList.add("active");
+      }
+
+      let html = "";
+      lista.forEach(item => {
+        html += `
+          <div class="schedule-item">
+            <div class="schedule-time"><i class="far fa-clock"></i> ${item.hora}</div>
+            <div class="schedule-details">
+              <div class="schedule-show-title">${item.titulo}</div>
+            </div>
+          </div>
+        `;
+      });
+      grillaContainer.innerHTML = html;
+    }
+
+    // Iniciar mostrando la programación de Miércoles 2 por defecto
+    mostrarDia('miercoles');
+
+    // Reproductor HLS
+    if (Hls.isSupported()) {
+      const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+      hls.loadSource(streamURL);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        video.play().catch(() => {});
+      });
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = streamURL;
+      video.addEventListener("loadedmetadata", function () {
+        video.play().catch(() => {});
+      });
+    }
+
+    function togglePantallaCompleta() {
+      if (!document.fullscreenElement) {
+        if (video.requestFullscreen) {
+          video.requestFullscreen();
+        } else if (video.webkitRequestFullscreen) {
+          video.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // Reloj sincronizado con hora de Paraguay (America/Asuncion)
+    function actualizarRelojParaguay() {
+      const ahora = new Date();
+      const timeZone = "America/Asuncion";
+
+      const formatoFecha = new Intl.DateTimeFormat("es-PY", {
+        timeZone: timeZone,
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      });
+
+      const formatoHora = new Intl.DateTimeFormat("es-PY", {
+        timeZone: timeZone,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      });
+
+      document.getElementById("relojFecha").textContent = formatoFecha.format(ahora);
+      document.getElementById("relojHora").textContent = formatoHora.format(ahora);
+    }
+
+    setInterval(actualizarRelojParaguay, 1000);
+    actualizarRelojParaguay();
+
+    // Contador de visitas seguro (evita NaN y cuenta siempre)
     async function cargarVisitas() {
       const contadorEl = document.getElementById("contadorVisitas");
       const claveLocal = "utv_vistas_locales";
 
       try {
-        // Petición a servidor de conteo
         const res = await fetch("https://api.counterapi.dev/v1/utv_oficial_py/visitas/up");
         const data = await res.json();
 
-        // Verificamos que sea un número válido
         if (data && typeof data.count === "number" && !isNaN(data.count)) {
           contadorEl.textContent = data.count.toLocaleString("es-PY") + " vistas";
           localStorage.setItem(claveLocal, data.count);
           return;
         }
-        throw new Error("Dato no numérico");
+        throw new Error("Respuesta inválida");
       } catch (err) {
-        // Si la red externa falla o no responde, usa y suma en el navegador del usuario
         let vistasGuardadas = parseInt(localStorage.getItem(claveLocal) || "1", 10);
         vistasGuardadas += 1;
         localStorage.setItem(claveLocal, vistasGuardadas);
@@ -24,3 +584,6 @@
       }
     }
     cargarVisitas();
+  </script>
+</body>
+</html>
