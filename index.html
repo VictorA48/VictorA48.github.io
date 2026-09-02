@@ -27,7 +27,7 @@
     /* HEADER */
     header {
       width: 100%;
-      padding: 14px 25px;
+      padding: 12px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -36,6 +36,8 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      flex-wrap: wrap;
+      gap: 12px;
     }
     .logo-container {
       display: flex;
@@ -56,6 +58,46 @@
       font-size: 16px;
       font-weight: bold;
       color: #fff;
+    }
+    .header-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .clock-widget {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(22, 27, 34, 0.95);
+      border: 1px solid #30363d;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: #e6edf3;
+    }
+    .clock-widget i {
+      color: #00adb5;
+    }
+    .clock-widget .clock-date {
+      color: #8b949e;
+      text-transform: capitalize;
+    }
+    .clock-widget .clock-time {
+      font-weight: bold;
+      color: #00fff2;
+    }
+    .visitor-counter {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 173, 181, 0.15);
+      border: 1px solid #00adb5;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 12px;
+      color: #00fff2;
     }
     .live-indicator {
       display: flex;
@@ -255,8 +297,18 @@
       <div class="logo-badge">UTV</div>
       <span class="channel-title">Televisión en Vivo</span>
     </div>
-    <div class="live-indicator">
-      <span class="dot"></span> SEÑAL EN VIVO
+    <div class="header-status">
+      <div class="clock-widget">
+        <i class="fas fa-clock"></i>
+        <span class="clock-date" id="relojFecha">Cargando...</span>
+        <span class="clock-time" id="relojHora">--:--:--</span>
+      </div>
+      <div class="visitor-counter">
+        <i class="fas fa-eye"></i> <span id="contadorVisitas">...</span>
+      </div>
+      <div class="live-indicator">
+        <span class="dot"></span> SEÑAL EN VIVO
+      </div>
     </div>
   </header>
 
@@ -408,7 +460,6 @@
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
-      // Quitar clase active a todos los botones
       botones.forEach(btn => btn.classList.remove("active"));
 
       let lista = programacionMiercoles;
@@ -481,6 +532,47 @@
         }
       }
     }
+
+    // Contador de visitas
+    async function cargarVisitas() {
+      const contadorEl = document.getElementById("contadorVisitas");
+      try {
+        const respuesta = await fetch("https://api.counterapi.dev/v1/utv_canal/visitas/up");
+        const data = await respuesta.json();
+        contadorEl.textContent = Number(data.count).toLocaleString() + " vistas";
+      } catch (error) {
+        contadorEl.textContent = "Online";
+      }
+    }
+    cargarVisitas();
+
+    // Reloj sincronizado con hora de Paraguay (America/Asuncion)
+    function actualizarRelojParaguay() {
+      const ahora = new Date();
+      const timeZone = "America/Asuncion";
+
+      const formatoFecha = new Intl.DateTimeFormat("es-PY", {
+        timeZone: timeZone,
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      });
+
+      const formatoHora = new Intl.DateTimeFormat("es-PY", {
+        timeZone: timeZone,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      });
+
+      document.getElementById("relojFecha").textContent = formatoFecha.format(ahora);
+      document.getElementById("relojHora").textContent = formatoHora.format(ahora);
+    }
+
+    setInterval(actualizarRelojParaguay, 1000);
+    actualizarRelojParaguay();
   </script>
 </body>
 </html>
