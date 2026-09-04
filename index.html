@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnJueves" onclick="mostrarDia('jueves')">
-          <i class="fas fa-calendar-day"></i> Jueves 3 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnViernes" onclick="mostrarDia('viernes')">
+        <button class="tab-btn active" id="btnViernes" onclick="mostrarDia('viernes')">
           <i class="fas fa-calendar-day"></i> Viernes 4 Setiembre 2026
         </button>
         <button class="tab-btn" id="btnSabado" onclick="mostrarDia('sabado')">
@@ -365,6 +362,9 @@
         <button class="tab-btn" id="btnMiercoles9" onclick="mostrarDia('miercoles9')">
           <i class="fas fa-calendar-day"></i> Miércoles 9 Setiembre 2026
         </button>
+        <button class="tab-btn" id="btnJueves10" onclick="mostrarDia('jueves10')">
+          <i class="fas fa-calendar-day"></i> Jueves 10 Setiembre 2026
+        </button>
       </div>
 
       <div class="schedule-list" id="grillaProgramacion">
@@ -379,15 +379,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Jueves 3 Setiembre 2026
-    const programacionJueves = [
-      { hora: "16:59", titulo: "Especial: Ace Of Base" },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Luminosos"' },
-      { hora: "18:38", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "19:21", titulo: "Pelicula: Punto de Exterminio" },
-      { hora: "20:51", titulo: "Series: Moisés y los Diez Mandamientos" }
-    ];
 
     // Viernes 4 Setiembre 2026
     const programacionViernes = [
@@ -456,18 +447,25 @@
       { hora: "23:11", titulo: "Fin de la Transmisión" }
     ];
 
+    // Jueves 10 Setiembre 2026
+    const programacionJueves10 = [
+      { hora: "15:47", titulo: "Especial : VideoClips 90s" },
+      { hora: "18:00", titulo: 'Santo Rosario "Misterios Luminosos"' },
+      { hora: "18:38", titulo: "Series Temporada 5: Un Doctor Diferente" },
+      { hora: "19:21", titulo: "Pelicula: La Casa del Engaño" },
+      { hora: "21:08", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "22:50", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionJueves;
+      let lista = programacionViernes;
 
-      if (dia === 'viernes') {
-        lista = programacionViernes;
-        document.getElementById("btnViernes")?.classList.add("active");
-      } else if (dia === 'sabado') {
+      if (dia === 'sabado') {
         lista = programacionSabado;
         document.getElementById("btnSabado")?.classList.add("active");
       } else if (dia === 'domingo') {
@@ -482,9 +480,12 @@
       } else if (dia === 'miercoles9') {
         lista = programacionMiercoles9;
         document.getElementById("btnMiercoles9")?.classList.add("active");
+      } else if (dia === 'jueves10') {
+        lista = programacionJueves10;
+        document.getElementById("btnJueves10")?.classList.add("active");
       } else {
-        lista = programacionJueves;
-        document.getElementById("btnJueves")?.classList.add("active");
+        lista = programacionViernes;
+        document.getElementById("btnViernes")?.classList.add("active");
       }
 
       let html = "";
@@ -501,8 +502,8 @@
       grillaContainer.innerHTML = html;
     }
 
-    // Iniciar mostrando la programación de Jueves 3 por defecto
-    mostrarDia('jueves');
+    // Iniciar mostrando la programación de Viernes 4 por defecto
+    mostrarDia('viernes');
 
     // Reproductor HLS
     if (Hls.isSupported()) {
