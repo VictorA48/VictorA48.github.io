@@ -281,6 +281,17 @@
       word-break: break-word;
     }
 
+    /* AVISO SIN PROGRAMACIÓN */
+    .empty-schedule {
+      text-align: center;
+      padding: 30px;
+      background: #161b22;
+      border-radius: 8px;
+      border: 1px dashed #30363d;
+      color: #8b949e;
+      font-size: 15px;
+    }
+
     /* FOOTER */
     footer {
       margin-top: 25px;
@@ -343,31 +354,15 @@
     </div>
 
     <div>
-      <div class="tabs-container">
-        <button class="tab-btn active" id="btnLunes7" onclick="mostrarDia('lunes7')">
-          <i class="fas fa-calendar-day"></i> Lunes 7 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnMartes8" onclick="mostrarDia('martes8')">
-          <i class="fas fa-calendar-day"></i> Martes 8 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnMiercoles9" onclick="mostrarDia('miercoles9')">
-          <i class="fas fa-calendar-day"></i> Miércoles 9 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnJueves10" onclick="mostrarDia('jueves10')">
-          <i class="fas fa-calendar-day"></i> Jueves 10 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnViernes11" onclick="mostrarDia('viernes11')">
-          <i class="fas fa-calendar-day"></i> Viernes 11 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnSabado12" onclick="mostrarDia('sabado12')">
-          <i class="fas fa-calendar-day"></i> Sábado 12 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnDomingo13" onclick="mostrarDia('domingo13')">
-          <i class="fas fa-calendar-day"></i> Domingo 13 Setiembre 2026
-        </button>
+      <div class="tabs-container" id="contenedorTabs">
+        <!-- Las pestañas se cargarán aquí con la nueva programación -->
       </div>
 
       <div class="schedule-list" id="grillaProgramacion">
+        <div class="empty-schedule">
+          <i class="fas fa-calendar-alt" style="margin-right: 8px;"></i>
+          Próximamente nueva programación disponible.
+        </div>
       </div>
     </div>
 
@@ -379,130 +374,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Lunes 7 Setiembre 2026
-    const programacionLunes7 = [
-      { hora: "16:53", titulo: "Especial Concert : Alesso" },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Gozosos"' },
-      { hora: "18:38", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "19:21", titulo: "Pelicula: Interestelar" },
-      { hora: "22:10", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "23:50", titulo: "Fin de la Transmisión" }
-    ];
-
-    // Martes 8 Setiembre 2026
-    const programacionMartes8 = [
-      { hora: "16:31", titulo: "Especial Concert : Armin Van Buuren" },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
-      { hora: "18:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "19:16", titulo: "Pelicula: Condenados" },
-      { hora: "21:10", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:56", titulo: "Fin de la Transmisión" }
-    ];
-
-    // Miércoles 9 Setiembre 2026
-    const programacionMiercoles9 = [
-      { hora: "16:45", titulo: "Especial Concert : Calvin Harris" },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
-      { hora: "18:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "19:16", titulo: "Pelicula: Godzilla II El Rey de los Monstruos" },
-      { hora: "21:28", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "23:11", titulo: "Fin de la Transmisión" }
-    ];
-
-    // Jueves 10 Setiembre 2026
-    const programacionJueves10 = [
-      { hora: "15:47", titulo: "Especial : VideoClips 90s" },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Luminosos"' },
-      { hora: "18:38", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "19:21", titulo: "Pelicula: La Casa del Engaño" },
-      { hora: "21:08", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:50", titulo: "Fin de la Transmisión" }
-    ];
-
-    // Viernes 11 Setiembre 2026
-    const programacionViernes11 = [
-      { hora: "15:54", titulo: "Especial Concert : Padre Guilherme" },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
-      { hora: "18:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "19:16", titulo: "Pelicula: Ma" },
-      { hora: "20:56", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:36", titulo: "Fin de la Transmisión" }
-    ];
-
-    // Sábado 12 Setiembre 2026
-    const programacionSabado12 = [
-      { hora: "12:00", titulo: "Los Tres Chiflados" },
-      { hora: "13:07", titulo: "Los Thundercats" },
-      { hora: "14:07", titulo: 'Harry Potter y las Reliquias de la Muerte "Parte 1"' },
-      { hora: "16:33", titulo: "Especial Concert: Ottagon" },
-      { hora: "17:32", titulo: 'Santo Rosario "Misterios Gozosos"' },
-      { hora: "18:10", titulo: 'Series Temporada 1 Estreno" La Casa de los Espíritus' },
-      { hora: "18:55", titulo: "Película: Infectados" },
-      { hora: "20:20", titulo: 'Película: Mortal Kombat "Aniquilación"' },
-      { hora: "21:55", titulo: "Fin de la Transmisión" }
-    ];
-
-    // Domingo 13 Setiembre 2026
-    const programacionDomingo13 = [
-      { hora: "12:00", titulo: "Dragon Ball" },
-      { hora: "13:14", titulo: "Mazinger Z" },
-      { hora: "14:20", titulo: "El Hobbit La Desolacion de Smaug" },
-      { hora: "17:01", titulo: "Especial Concert: Giuseppe Ottaviani" },
-      { hora: "18:13", titulo: "Santa Misa" },
-      { hora: "18:59", titulo: 'Santo Rosario "Misterios Gloriosos"' },
-      { hora: "19:31", titulo: 'Series Temporada 1 : La Casa de los Espíritus' },
-      { hora: "20:24", titulo: "Película Paraguaya : Los Buscadores" },
-      { hora: "22:04", titulo: "Fin de la Transmisión" }
-    ];
-
-    function mostrarDia(dia) {
-      const botones = document.querySelectorAll(".tab-btn");
-      const grillaContainer = document.getElementById("grillaProgramacion");
-      
-      botones.forEach(btn => btn.classList.remove("active"));
-
-      let lista = programacionLunes7;
-
-      if (dia === 'martes8') {
-        lista = programacionMartes8;
-        document.getElementById("btnMartes8")?.classList.add("active");
-      } else if (dia === 'miercoles9') {
-        lista = programacionMiercoles9;
-        document.getElementById("btnMiercoles9")?.classList.add("active");
-      } else if (dia === 'jueves10') {
-        lista = programacionJueves10;
-        document.getElementById("btnJueves10")?.classList.add("active");
-      } else if (dia === 'viernes11') {
-        lista = programacionViernes11;
-        document.getElementById("btnViernes11")?.classList.add("active");
-      } else if (dia === 'sabado12') {
-        lista = programacionSabado12;
-        document.getElementById("btnSabado12")?.classList.add("active");
-      } else if (dia === 'domingo13') {
-        lista = programacionDomingo13;
-        document.getElementById("btnDomingo13")?.classList.add("active");
-      } else {
-        lista = programacionLunes7;
-        document.getElementById("btnLunes7")?.classList.add("active");
-      }
-
-      let html = "";
-      lista.forEach(item => {
-        html += `
-          <div class="schedule-item">
-            <div class="schedule-time"><i class="far fa-clock"></i> ${item.hora}</div>
-            <div class="schedule-details">
-              <div class="schedule-show-title">${item.titulo}</div>
-            </div>
-          </div>
-        `;
-      });
-      grillaContainer.innerHTML = html;
-    }
-
-    // Iniciar mostrando la programación de Lunes 7 por defecto
-    mostrarDia('lunes7');
 
     // Reproductor HLS
     if (Hls.isSupported()) {
@@ -561,7 +432,7 @@
     setInterval(actualizarRelojParaguay, 1000);
     actualizarRelojParaguay();
 
-    // Contador de visitas seguro (evita NaN y cuenta siempre)
+    // Contador de visitas seguro
     async function cargarVisitas() {
       const contadorEl = document.getElementById("contadorVisitas");
       const claveLocal = "utv_vistas_locales";
