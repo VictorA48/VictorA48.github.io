@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnLunes7" onclick="mostrarDia('lunes7')">
-          <i class="fas fa-calendar-day"></i> Lunes 7 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnMartes8" onclick="mostrarDia('martes8')">
+        <button class="tab-btn active" id="btnMartes8" onclick="mostrarDia('martes8')">
           <i class="fas fa-calendar-day"></i> Martes 8 Setiembre 2026
         </button>
         <button class="tab-btn" id="btnMiercoles9" onclick="mostrarDia('miercoles9')">
@@ -365,6 +362,9 @@
         <button class="tab-btn" id="btnDomingo13" onclick="mostrarDia('domingo13')">
           <i class="fas fa-calendar-day"></i> Domingo 13 Setiembre 2026
         </button>
+        <button class="tab-btn" id="btnLunes14" onclick="mostrarDia('lunes14')">
+          <i class="fas fa-calendar-day"></i> Lunes 14 Setiembre 2026
+        </button>
       </div>
 
       <div class="schedule-list" id="grillaProgramacion">
@@ -379,16 +379,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Lunes 7 Setiembre 2026
-    const programacionLunes7 = [
-      { hora: "16:53", titulo: "Especial Concert : Alesso" },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Gozosos"' },
-      { hora: "18:38", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "19:21", titulo: "Pelicula: Interestelar" },
-      { hora: "22:10", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "23:50", titulo: "Fin de la Transmisión" }
-    ];
 
     // Martes 8 Setiembre 2026
     const programacionMartes8 = [
@@ -456,18 +446,25 @@
       { hora: "22:04", titulo: "Fin de la Transmisión" }
     ];
 
+    // Lunes 14 Setiembre 2026
+    const programacionLunes14 = [
+      { hora: "16:47", titulo: "Especial Concert: Marshmello" },
+      { hora: "18:00", titulo: 'Santo Rosario "Misterios Gozosos"' },
+      { hora: "18:38", titulo: "Series Temporada 5: Un Doctor Diferente" },
+      { hora: "19:21", titulo: "Película: Amenaza Roja" },
+      { hora: "21:28", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "23:08", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionLunes7;
+      let lista = programacionMartes8;
 
-      if (dia === 'martes8') {
-        lista = programacionMartes8;
-        document.getElementById("btnMartes8")?.classList.add("active");
-      } else if (dia === 'miercoles9') {
+      if (dia === 'miercoles9') {
         lista = programacionMiercoles9;
         document.getElementById("btnMiercoles9")?.classList.add("active");
       } else if (dia === 'jueves10') {
@@ -482,9 +479,12 @@
       } else if (dia === 'domingo13') {
         lista = programacionDomingo13;
         document.getElementById("btnDomingo13")?.classList.add("active");
+      } else if (dia === 'lunes14') {
+        lista = programacionLunes14;
+        document.getElementById("btnLunes14")?.classList.add("active");
       } else {
-        lista = programacionLunes7;
-        document.getElementById("btnLunes7")?.classList.add("active");
+        lista = programacionMartes8;
+        document.getElementById("btnMartes8")?.classList.add("active");
       }
 
       let html = "";
@@ -501,8 +501,8 @@
       grillaContainer.innerHTML = html;
     }
 
-    // Iniciar mostrando la programación de Lunes 7 por defecto
-    mostrarDia('lunes7');
+    // Iniciar mostrando la programación de Martes 8 por defecto
+    mostrarDia('martes8');
 
     // Reproductor HLS
     if (Hls.isSupported()) {
