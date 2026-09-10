@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnMiercoles9" onclick="mostrarDia('miercoles9')">
-          <i class="fas fa-calendar-day"></i> Miércoles 9 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnJueves10" onclick="mostrarDia('jueves10')">
+        <button class="tab-btn active" id="btnJueves10" onclick="mostrarDia('jueves10')">
           <i class="fas fa-calendar-day"></i> Jueves 10 Setiembre 2026
         </button>
         <button class="tab-btn" id="btnViernes11" onclick="mostrarDia('viernes11')">
@@ -365,6 +362,9 @@
         <button class="tab-btn" id="btnMartes15" onclick="mostrarDia('martes15')">
           <i class="fas fa-calendar-day"></i> Martes 15 Setiembre 2026
         </button>
+        <button class="tab-btn" id="btnMiercoles16" onclick="mostrarDia('miercoles16')">
+          <i class="fas fa-calendar-day"></i> Miércoles 16 Setiembre 2026
+        </button>
       </div>
 
       <div class="schedule-list" id="grillaProgramacion">
@@ -379,16 +379,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Miércoles 9 Setiembre 2026
-    const programacionMiercoles9 = [
-      { hora: "16:45", titulo: "Especial Concert : Calvin Harris" },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
-      { hora: "18:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "19:16", titulo: "Pelicula: Godzilla II El Rey de los Monstruos" },
-      { hora: "21:28", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "23:11", titulo: "Fin de la Transmisión" }
-    ];
 
     // Jueves 10 Setiembre 2026
     const programacionJueves10 = [
@@ -456,18 +446,25 @@
       { hora: "22:24", titulo: "Fin de la Transmisión" }
     ];
 
+    // Miércoles 16 Setiembre 2026
+    const programacionMiercoles16 = [
+      { hora: "16:32", titulo: "Especial Concert : W&W" },
+      { hora: "18:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
+      { hora: "18:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
+      { hora: "19:16", titulo: "Película: El Enigma de la Pirámide" },
+      { hora: "21:05", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "22:45", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionMiercoles9;
+      let lista = programacionJueves10;
 
-      if (dia === 'jueves10') {
-        lista = programacionJueves10;
-        document.getElementById("btnJueves10")?.classList.add("active");
-      } else if (dia === 'viernes11') {
+      if (dia === 'viernes11') {
         lista = programacionViernes11;
         document.getElementById("btnViernes11")?.classList.add("active");
       } else if (dia === 'sabado12') {
@@ -482,9 +479,12 @@
       } else if (dia === 'martes15') {
         lista = programacionMartes15;
         document.getElementById("btnMartes15")?.classList.add("active");
+      } else if (dia === 'miercoles16') {
+        lista = programacionMiercoles16;
+        document.getElementById("btnMiercoles16")?.classList.add("active");
       } else {
-        lista = programacionMiercoles9;
-        document.getElementById("btnMiercoles9")?.classList.add("active");
+        lista = programacionJueves10;
+        document.getElementById("btnJueves10")?.classList.add("active");
       }
 
       let html = "";
@@ -501,8 +501,8 @@
       grillaContainer.innerHTML = html;
     }
 
-    // Iniciar mostrando la programación de Miércoles 9 por defecto
-    mostrarDia('miercoles9');
+    // Iniciar mostrando la programación de Jueves 10 por defecto
+    mostrarDia('jueves10');
 
     // Reproductor HLS
     if (Hls.isSupported()) {
