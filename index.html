@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnJueves10" onclick="mostrarDia('jueves10')">
-          <i class="fas fa-calendar-day"></i> Jueves 10 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnViernes11" onclick="mostrarDia('viernes11')">
+        <button class="tab-btn active" id="btnViernes11" onclick="mostrarDia('viernes11')">
           <i class="fas fa-calendar-day"></i> Viernes 11 Setiembre 2026
         </button>
         <button class="tab-btn" id="btnSabado12" onclick="mostrarDia('sabado12')">
@@ -365,6 +362,9 @@
         <button class="tab-btn" id="btnMiercoles16" onclick="mostrarDia('miercoles16')">
           <i class="fas fa-calendar-day"></i> Miércoles 16 Setiembre 2026
         </button>
+        <button class="tab-btn" id="btnJueves17" onclick="mostrarDia('jueves17')">
+          <i class="fas fa-calendar-day"></i> Jueves 17 Setiembre 2026
+        </button>
       </div>
 
       <div class="schedule-list" id="grillaProgramacion">
@@ -379,16 +379,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Jueves 10 Setiembre 2026
-    const programacionJueves10 = [
-      { hora: "15:47", titulo: "Especial : VideoClips 90s" },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Luminosos"' },
-      { hora: "18:38", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "19:21", titulo: "Pelicula: La Casa del Engaño" },
-      { hora: "21:08", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:50", titulo: "Fin de la Transmisión" }
-    ];
 
     // Viernes 11 Setiembre 2026
     const programacionViernes11 = [
@@ -448,12 +438,22 @@
 
     // Miércoles 16 Setiembre 2026
     const programacionMiercoles16 = [
-      { hora: "16:32", titulo: "Especial Concert : W&W" },
+      { hora: "16:30", titulo: "Especial Concert: Kygo" },
       { hora: "18:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
       { hora: "18:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "19:16", titulo: "Película: El Enigma de la Pirámide" },
-      { hora: "21:05", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:45", titulo: "Fin de la Transmisión" }
+      { hora: "19:16", titulo: "Película: Terremoto 10.0" },
+      { hora: "20:46", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "22:26", titulo: "Fin de la Transmisión" }
+    ];
+
+    // Jueves 17 Setiembre 2026
+    const programacionJueves17 = [
+      { hora: "16:03", titulo: "Especial : Techno Alemania" },
+      { hora: "18:00", titulo: 'Santo Rosario "Misterios Luminosos"' },
+      { hora: "18:38", titulo: "Series Temporada 5: Un Doctor Diferente" },
+      { hora: "19:21", titulo: "Película: El Misterio de Roswell" },
+      { hora: "20:53", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "22:35", titulo: "Fin de la Transmisión" }
     ];
 
     function mostrarDia(dia) {
@@ -462,12 +462,9 @@
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionJueves10;
+      let lista = programacionViernes11;
 
-      if (dia === 'viernes11') {
-        lista = programacionViernes11;
-        document.getElementById("btnViernes11")?.classList.add("active");
-      } else if (dia === 'sabado12') {
+      if (dia === 'sabado12') {
         lista = programacionSabado12;
         document.getElementById("btnSabado12")?.classList.add("active");
       } else if (dia === 'domingo13') {
@@ -482,9 +479,12 @@
       } else if (dia === 'miercoles16') {
         lista = programacionMiercoles16;
         document.getElementById("btnMiercoles16")?.classList.add("active");
+      } else if (dia === 'jueves17') {
+        lista = programacionJueves17;
+        document.getElementById("btnJueves17")?.classList.add("active");
       } else {
-        lista = programacionJueves10;
-        document.getElementById("btnJueves10")?.classList.add("active");
+        lista = programacionViernes11;
+        document.getElementById("btnViernes11")?.classList.add("active");
       }
 
       let html = "";
@@ -501,8 +501,8 @@
       grillaContainer.innerHTML = html;
     }
 
-    // Iniciar mostrando la programación de Jueves 10 por defecto
-    mostrarDia('jueves10');
+    // Iniciar mostrando la programación de Viernes 11 por defecto
+    mostrarDia('viernes11');
 
     // Reproductor HLS
     if (Hls.isSupported()) {
