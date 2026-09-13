@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnSabado12" onclick="mostrarDia('sabado12')">
-          <i class="fas fa-calendar-day"></i> Sábado 12 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnDomingo13" onclick="mostrarDia('domingo13')">
+        <button class="tab-btn active" id="btnDomingo13" onclick="mostrarDia('domingo13')">
           <i class="fas fa-calendar-day"></i> Domingo 13 Setiembre 2026
         </button>
         <button class="tab-btn" id="btnLunes14" onclick="mostrarDia('lunes14')">
@@ -365,6 +362,9 @@
         <button class="tab-btn" id="btnViernes18" onclick="mostrarDia('viernes18')">
           <i class="fas fa-calendar-day"></i> Viernes 18 Setiembre 2026
         </button>
+        <button class="tab-btn" id="btnSabado19" onclick="mostrarDia('sabado19')">
+          <i class="fas fa-calendar-day"></i> Sábado 19 Setiembre 2026
+        </button>
       </div>
 
       <div class="schedule-list" id="grillaProgramacion">
@@ -379,19 +379,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Sábado 12 Setiembre 2026
-    const programacionSabado12 = [
-      { hora: "12:00", titulo: "Los Tres Chiflados" },
-      { hora: "13:07", titulo: "Los Thundercats" },
-      { hora: "14:07", titulo: 'Harry Potter y las Reliquias de la Muerte "Parte 1"' },
-      { hora: "16:33", titulo: "Especial Concert: Ottagon" },
-      { hora: "17:32", titulo: 'Santo Rosario "Misterios Gozosos"' },
-      { hora: "18:10", titulo: 'Series Temporada 1 Estreno" La Casa de los Espíritus' },
-      { hora: "18:55", titulo: "Película: Infectados" },
-      { hora: "20:20", titulo: 'Película: Mortal Kombat "Aniquilación"' },
-      { hora: "21:55", titulo: "Fin de la Transmisión" }
-    ];
 
     // Domingo 13 Setiembre 2026
     const programacionDomingo13 = [
@@ -456,18 +443,27 @@
       { hora: "22:19", titulo: "Fin de la Transmisión" }
     ];
 
+    // Sábado 19 Setiembre 2026
+    const programacionSabado19 = [
+      { hora: "12:00", titulo: "Los Tres Chiflados" },
+      { hora: "13:08", titulo: "Los Thundercast" },
+      { hora: "14:08", titulo: 'Harry Potter y Las Reliquias de la Muerte "Parte 2"' },
+      { hora: "16:18", titulo: "Especial Concert: ABBA" },
+      { hora: "17:12", titulo: 'Santo Rosario "Misterios Gozosos"' },
+      { hora: "17:50", titulo: 'Series Temporada 1 : La Casa de los Espíritus' },
+      { hora: "18:44", titulo: "Especial Concert: Depeche Mode" },
+      { hora: "21:00", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionSabado12;
+      let lista = programacionDomingo13;
 
-      if (dia === 'domingo13') {
-        lista = programacionDomingo13;
-        document.getElementById("btnDomingo13")?.classList.add("active");
-      } else if (dia === 'lunes14') {
+      if (dia === 'lunes14') {
         lista = programacionLunes14;
         document.getElementById("btnLunes14")?.classList.add("active");
       } else if (dia === 'martes15') {
@@ -482,9 +478,12 @@
       } else if (dia === 'viernes18') {
         lista = programacionViernes18;
         document.getElementById("btnViernes18")?.classList.add("active");
+      } else if (dia === 'sabado19') {
+        lista = programacionSabado19;
+        document.getElementById("btnSabado19")?.classList.add("active");
       } else {
-        lista = programacionSabado12;
-        document.getElementById("btnSabado12")?.classList.add("active");
+        lista = programacionDomingo13;
+        document.getElementById("btnDomingo13")?.classList.add("active");
       }
 
       let html = "";
@@ -501,8 +500,8 @@
       grillaContainer.innerHTML = html;
     }
 
-    // Iniciar mostrando la programación de Sábado 12 por defecto
-    mostrarDia('sabado12');
+    // Iniciar mostrando la programación de Domingo 13 por defecto
+    mostrarDia('domingo13');
 
     // Reproductor HLS
     if (Hls.isSupported()) {
