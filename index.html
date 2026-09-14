@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnDomingo13" onclick="mostrarDia('domingo13')">
-          <i class="fas fa-calendar-day"></i> Domingo 13 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnLunes14" onclick="mostrarDia('lunes14')">
+        <button class="tab-btn active" id="btnLunes14" onclick="mostrarDia('lunes14')">
           <i class="fas fa-calendar-day"></i> Lunes 14 Setiembre 2026
         </button>
         <button class="tab-btn" id="btnMartes15" onclick="mostrarDia('martes15')">
@@ -365,6 +362,9 @@
         <button class="tab-btn" id="btnSabado19" onclick="mostrarDia('sabado19')">
           <i class="fas fa-calendar-day"></i> Sábado 19 Setiembre 2026
         </button>
+        <button class="tab-btn" id="btnDomingo20" onclick="mostrarDia('domingo20')">
+          <i class="fas fa-calendar-day"></i> Domingo 20 Setiembre 2026
+        </button>
       </div>
 
       <div class="schedule-list" id="grillaProgramacion">
@@ -379,19 +379,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Domingo 13 Setiembre 2026
-    const programacionDomingo13 = [
-      { hora: "12:00", titulo: "Dragon Ball" },
-      { hora: "13:14", titulo: "Mazinger Z" },
-      { hora: "14:20", titulo: "El Hobbit La Desolacion de Smaug" },
-      { hora: "17:01", titulo: "Especial Concert: Giuseppe Ottaviani" },
-      { hora: "18:13", titulo: "Santa Misa" },
-      { hora: "18:59", titulo: 'Santo Rosario "Misterios Gloriosos"' },
-      { hora: "19:31", titulo: 'Series Temporada 1 : La Casa de los Espíritus' },
-      { hora: "20:24", titulo: "Película Paraguaya : Los Buscadores" },
-      { hora: "22:04", titulo: "Fin de la Transmisión" }
-    ];
 
     // Lunes 14 Setiembre 2026
     const programacionLunes14 = [
@@ -455,18 +442,29 @@
       { hora: "21:00", titulo: "Fin de la Transmisión" }
     ];
 
+    // Domingo 20 Setiembre 2026
+    const programacionDomingo20 = [
+      { hora: "12:00", titulo: "Dragon Ball" },
+      { hora: "13:14", titulo: "Mazinger Z" },
+      { hora: "14:18", titulo: "El Hobbit La Batalla de los Cinco Ejercitos" },
+      { hora: "16:43", titulo: "Especial : VideoClips" },
+      { hora: "17:56", titulo: "Santa Misa" },
+      { hora: "18:42", titulo: 'Santo Rosario "Misterios Gloriosos"' },
+      { hora: "19:15", titulo: "Series Temporada 1 : La Casa de los Espíritus" },
+      { hora: "20:00", titulo: "Película Paraguaya : Leal" },
+      { hora: "21:47", titulo: "Película: Wall-E" },
+      { hora: "23:26", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionDomingo13;
+      let lista = programacionLunes14;
 
-      if (dia === 'lunes14') {
-        lista = programacionLunes14;
-        document.getElementById("btnLunes14")?.classList.add("active");
-      } else if (dia === 'martes15') {
+      if (dia === 'martes15') {
         lista = programacionMartes15;
         document.getElementById("btnMartes15")?.classList.add("active");
       } else if (dia === 'miercoles16') {
@@ -481,9 +479,12 @@
       } else if (dia === 'sabado19') {
         lista = programacionSabado19;
         document.getElementById("btnSabado19")?.classList.add("active");
+      } else if (dia === 'domingo20') {
+        lista = programacionDomingo20;
+        document.getElementById("btnDomingo20")?.classList.add("active");
       } else {
-        lista = programacionDomingo13;
-        document.getElementById("btnDomingo13")?.classList.add("active");
+        lista = programacionLunes14;
+        document.getElementById("btnLunes14")?.classList.add("active");
       }
 
       let html = "";
@@ -500,8 +501,8 @@
       grillaContainer.innerHTML = html;
     }
 
-    // Iniciar mostrando la programación de Domingo 13 por defecto
-    mostrarDia('domingo13');
+    // Iniciar mostrando la programación de Lunes 14 por defecto
+    mostrarDia('lunes14');
 
     // Reproductor HLS
     if (Hls.isSupported()) {
