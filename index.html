@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnLunes14" onclick="mostrarDia('lunes14')">
-          <i class="fas fa-calendar-day"></i> Lunes 14 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnMartes15" onclick="mostrarDia('martes15')">
+        <button class="tab-btn active" id="btnMartes15" onclick="mostrarDia('martes15')">
           <i class="fas fa-calendar-day"></i> Martes 15 Setiembre 2026
         </button>
         <button class="tab-btn" id="btnMiercoles16" onclick="mostrarDia('miercoles16')">
@@ -358,12 +355,6 @@
         </button>
         <button class="tab-btn" id="btnViernes18" onclick="mostrarDia('viernes18')">
           <i class="fas fa-calendar-day"></i> Viernes 18 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnSabado19" onclick="mostrarDia('sabado19')">
-          <i class="fas fa-calendar-day"></i> Sábado 19 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnDomingo20" onclick="mostrarDia('domingo20')">
-          <i class="fas fa-calendar-day"></i> Domingo 20 Setiembre 2026
         </button>
       </div>
 
@@ -380,80 +371,44 @@
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
 
-    // Lunes 14 Setiembre 2026
-    const programacionLunes14 = [
-      { hora: "16:47", titulo: "Especial Concert: Marshmello" },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Gozosos"' },
-      { hora: "18:38", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "19:21", titulo: "Película: Amenaza Roja" },
-      { hora: "21:28", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "23:08", titulo: "Fin de la Transmisión" }
-    ];
-
     // Martes 15 Setiembre 2026
     const programacionMartes15 = [
-      { hora: "16:11", titulo: "Especial Concert : KSHMR" },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
-      { hora: "18:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "19:16", titulo: "Película: Pánico en la Mina del Oro" },
-      { hora: "20:47", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:24", titulo: "Fin de la Transmisión" }
+      { hora: "19:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
+      { hora: "19:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
+      { hora: "20:17", titulo: "Pelicula: Cloverfield (Monstruo)" },
+      { hora: "21:42", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "22:25", titulo: "Especial Concert: Armin Van Buuren" },
+      { hora: "23:55", titulo: "Fin de la Transmisión" }
     ];
 
     // Miércoles 16 Setiembre 2026
     const programacionMiercoles16 = [
-      { hora: "16:30", titulo: "Especial Concert: Kygo" },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
-      { hora: "18:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "19:16", titulo: "Película: Terremoto 10.0" },
-      { hora: "20:46", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:26", titulo: "Fin de la Transmisión" }
+      { hora: "19:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
+      { hora: "19:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
+      { hora: "20:16", titulo: "Pelicula: Abraham Lincoln (Cazador de Vampiros)" },
+      { hora: "22:00", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "22:46", titulo: "Especial Concert: Eric-Prydz-Tomorrowland" },
+      { hora: "00:47", titulo: "Fin de la Transmisión" }
     ];
 
     // Jueves 17 Setiembre 2026
     const programacionJueves17 = [
-      { hora: "17:00", titulo: 'Especial Concert : "Ultra Music Festival" David Guetta' },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Luminosos"' },
-      { hora: "18:38", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "19:21", titulo: "Película: Oscuros" },
-      { hora: "20:53", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:23", titulo: "Fin de la Transmisión" }
+      { hora: "19:00", titulo: 'Santo Rosario "Misterios Luminosos"' },
+      { hora: "19:38", titulo: "Series Temporada 5: Un Doctor Diferente" },
+      { hora: "20:21", titulo: "Pelicula: Oscuros" },
+      { hora: "21:52", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "22:35", titulo: "Especial Concert: David Guetta - Ultra Festival" },
+      { hora: "23:35", titulo: "Fin de la Transmisión" }
     ];
 
     // Viernes 18 Setiembre 2026
     const programacionViernes18 = [
-      { hora: "14:32", titulo: "Especial Concert : Tiesto" },
-      { hora: "18:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
-      { hora: "18:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "19:16", titulo: "Película: Los Sustitutos" },
-      { hora: "20:44", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:19", titulo: "Fin de la Transmisión" }
-    ];
-
-    // Sábado 19 Setiembre 2026
-    const programacionSabado19 = [
-      { hora: "12:00", titulo: "Los Tres Chiflados" },
-      { hora: "13:08", titulo: "Los Thundercast" },
-      { hora: "14:08", titulo: 'Harry Potter y Las Reliquias de la Muerte "Parte 2"' },
-      { hora: "16:18", titulo: "Especial Concert: ABBA" },
-      { hora: "17:12", titulo: 'Santo Rosario "Misterios Gozosos"' },
-      { hora: "17:50", titulo: 'Series Temporada 1 : La Casa de los Espíritus' },
-      { hora: "18:44", titulo: "Especial Concert: Depeche Mode" },
-      { hora: "21:00", titulo: "Fin de la Transmisión" }
-    ];
-
-    // Domingo 20 Setiembre 2026
-    const programacionDomingo20 = [
-      { hora: "12:00", titulo: "Dragon Ball" },
-      { hora: "13:14", titulo: "Mazinger Z" },
-      { hora: "14:18", titulo: "El Hobbit La Batalla de los Cinco Ejercitos" },
-      { hora: "16:43", titulo: "Especial : VideoClips" },
-      { hora: "17:56", titulo: "Santa Misa" },
-      { hora: "18:42", titulo: 'Santo Rosario "Misterios Gloriosos"' },
-      { hora: "19:15", titulo: "Series Temporada 1 : La Casa de los Espíritus" },
-      { hora: "20:00", titulo: "Película Paraguaya : Leal" },
-      { hora: "21:47", titulo: "Película: Wall-E" },
-      { hora: "23:26", titulo: "Fin de la Transmisión" }
+      { hora: "19:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
+      { hora: "19:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
+      { hora: "20:16", titulo: "Pelicula: Los Sustitutos" },
+      { hora: "21:45", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "22:28", titulo: "Especial Concert: Tiesto" },
+      { hora: "01:56", titulo: "Fin de la Transmisión" }
     ];
 
     function mostrarDia(dia) {
@@ -462,12 +417,9 @@
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionLunes14;
+      let lista = programacionMartes15;
 
-      if (dia === 'martes15') {
-        lista = programacionMartes15;
-        document.getElementById("btnMartes15")?.classList.add("active");
-      } else if (dia === 'miercoles16') {
+      if (dia === 'miercoles16') {
         lista = programacionMiercoles16;
         document.getElementById("btnMiercoles16")?.classList.add("active");
       } else if (dia === 'jueves17') {
@@ -476,15 +428,9 @@
       } else if (dia === 'viernes18') {
         lista = programacionViernes18;
         document.getElementById("btnViernes18")?.classList.add("active");
-      } else if (dia === 'sabado19') {
-        lista = programacionSabado19;
-        document.getElementById("btnSabado19")?.classList.add("active");
-      } else if (dia === 'domingo20') {
-        lista = programacionDomingo20;
-        document.getElementById("btnDomingo20")?.classList.add("active");
       } else {
-        lista = programacionLunes14;
-        document.getElementById("btnLunes14")?.classList.add("active");
+        lista = programacionMartes15;
+        document.getElementById("btnMartes15")?.classList.add("active");
       }
 
       let html = "";
@@ -501,8 +447,8 @@
       grillaContainer.innerHTML = html;
     }
 
-    // Iniciar mostrando la programación de Lunes 14 por defecto
-    mostrarDia('lunes14');
+    // Iniciar mostrando la programación de Martes 15 por defecto
+    mostrarDia('martes15');
 
     // Reproductor HLS
     if (Hls.isSupported()) {
