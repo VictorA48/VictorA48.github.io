@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnMartes15" onclick="mostrarDia('martes15')">
-          <i class="fas fa-calendar-day"></i> Martes 15 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnMiercoles16" onclick="mostrarDia('miercoles16')">
+        <button class="tab-btn active" id="btnMiercoles16" onclick="mostrarDia('miercoles16')">
           <i class="fas fa-calendar-day"></i> Miércoles 16 Setiembre 2026
         </button>
         <button class="tab-btn" id="btnJueves17" onclick="mostrarDia('jueves17')">
@@ -355,6 +352,9 @@
         </button>
         <button class="tab-btn" id="btnViernes18" onclick="mostrarDia('viernes18')">
           <i class="fas fa-calendar-day"></i> Viernes 18 Setiembre 2026
+        </button>
+        <button class="tab-btn" id="btnSabado19" onclick="mostrarDia('sabado19')">
+          <i class="fas fa-calendar-day"></i> Sábado 19 Setiembre 2026
         </button>
       </div>
 
@@ -370,16 +370,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Martes 15 Setiembre 2026
-    const programacionMartes15 = [
-      { hora: "19:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
-      { hora: "19:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "20:17", titulo: "Pelicula: Cloverfield (Monstruo)" },
-      { hora: "21:42", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:25", titulo: "Especial Concert: Armin Van Buuren" },
-      { hora: "23:55", titulo: "Fin de la Transmisión" }
-    ];
 
     // Miércoles 16 Setiembre 2026
     const programacionMiercoles16 = [
@@ -411,26 +401,38 @@
       { hora: "01:56", titulo: "Fin de la Transmisión" }
     ];
 
+    // Sábado 19 Setiembre 2026
+    const programacionSabado19 = [
+      { hora: "12:00", titulo: "Los Tres Chiflados" },
+      { hora: "13:08", titulo: "Los Thundercast" },
+      { hora: "14:08", titulo: 'Harry Potter y Las Reliquias de la Muerte "Parte 2"' },
+      { hora: "16:18", titulo: "Especial Concert: ABBA" },
+      { hora: "17:12", titulo: 'Santo Rosario "Misterios Gozosos"' },
+      { hora: "17:50", titulo: 'Series Temporada 1 : La Casa de los Espíritus' },
+      { hora: "18:44", titulo: "Especial Concert: Depeche Mode" },
+      { hora: "21:00", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionMartes15;
+      let lista = programacionMiercoles16;
 
-      if (dia === 'miercoles16') {
-        lista = programacionMiercoles16;
-        document.getElementById("btnMiercoles16")?.classList.add("active");
-      } else if (dia === 'jueves17') {
+      if (dia === 'jueves17') {
         lista = programacionJueves17;
         document.getElementById("btnJueves17")?.classList.add("active");
       } else if (dia === 'viernes18') {
         lista = programacionViernes18;
         document.getElementById("btnViernes18")?.classList.add("active");
+      } else if (dia === 'sabado19') {
+        lista = programacionSabado19;
+        document.getElementById("btnSabado19")?.classList.add("active");
       } else {
-        lista = programacionMartes15;
-        document.getElementById("btnMartes15")?.classList.add("active");
+        lista = programacionMiercoles16;
+        document.getElementById("btnMiercoles16")?.classList.add("active");
       }
 
       let html = "";
@@ -447,8 +449,8 @@
       grillaContainer.innerHTML = html;
     }
 
-    // Iniciar mostrando la programación de Martes 15 por defecto
-    mostrarDia('martes15');
+    // Iniciar mostrando la programación de Miércoles 16 por defecto
+    mostrarDia('miercoles16');
 
     // Reproductor HLS
     if (Hls.isSupported()) {
