@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnMiercoles16" onclick="mostrarDia('miercoles16')">
-          <i class="fas fa-calendar-day"></i> Miércoles 16 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnJueves17" onclick="mostrarDia('jueves17')">
+        <button class="tab-btn active" id="btnJueves17" onclick="mostrarDia('jueves17')">
           <i class="fas fa-calendar-day"></i> Jueves 17 Setiembre 2026
         </button>
         <button class="tab-btn" id="btnViernes18" onclick="mostrarDia('viernes18')">
@@ -355,6 +352,9 @@
         </button>
         <button class="tab-btn" id="btnSabado19" onclick="mostrarDia('sabado19')">
           <i class="fas fa-calendar-day"></i> Sábado 19 Setiembre 2026
+        </button>
+        <button class="tab-btn" id="btnDomingo20" onclick="mostrarDia('domingo20')">
+          <i class="fas fa-calendar-day"></i> Domingo 20 Setiembre 2026
         </button>
       </div>
 
@@ -370,16 +370,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Miércoles 16 Setiembre 2026
-    const programacionMiercoles16 = [
-      { hora: "19:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
-      { hora: "19:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "20:16", titulo: "Pelicula: Abraham Lincoln (Cazador de Vampiros)" },
-      { hora: "22:00", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:46", titulo: "Especial Concert: Eric-Prydz-Tomorrowland" },
-      { hora: "00:47", titulo: "Fin de la Transmisión" }
-    ];
 
     // Jueves 17 Setiembre 2026
     const programacionJueves17 = [
@@ -413,26 +403,40 @@
       { hora: "21:00", titulo: "Fin de la Transmisión" }
     ];
 
+    // Domingo 20 Setiembre 2026
+    const programacionDomingo20 = [
+      { hora: "12:00", titulo: "Dragon Ball" },
+      { hora: "13:14", titulo: "Mazinger Z" },
+      { hora: "14:18", titulo: "El Hobbit La Batalla de los Cinco Ejercitos" },
+      { hora: "16:43", titulo: "Especial : VideoClips" },
+      { hora: "17:56", titulo: "Santa Misa" },
+      { hora: "18:42", titulo: 'Santo Rosario "Misterios Gloriosos"' },
+      { hora: "19:15", titulo: 'Series Temporada 1 : La Casa de los Espíritus' },
+      { hora: "20:00", titulo: "Pelicula Paraguaya : Leal" },
+      { hora: "21:47", titulo: "Película: Wall-E" },
+      { hora: "23:26", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionMiercoles16;
+      let lista = programacionJueves17;
 
-      if (dia === 'jueves17') {
-        lista = programacionJueves17;
-        document.getElementById("btnJueves17")?.classList.add("active");
-      } else if (dia === 'viernes18') {
+      if (dia === 'viernes18') {
         lista = programacionViernes18;
         document.getElementById("btnViernes18")?.classList.add("active");
       } else if (dia === 'sabado19') {
         lista = programacionSabado19;
         document.getElementById("btnSabado19")?.classList.add("active");
+      } else if (dia === 'domingo20') {
+        lista = programacionDomingo20;
+        document.getElementById("btnDomingo20")?.classList.add("active");
       } else {
-        lista = programacionMiercoles16;
-        document.getElementById("btnMiercoles16")?.classList.add("active");
+        lista = programacionJueves17;
+        document.getElementById("btnJueves17")?.classList.add("active");
       }
 
       let html = "";
@@ -449,8 +453,8 @@
       grillaContainer.innerHTML = html;
     }
 
-    // Iniciar mostrando la programación de Miércoles 16 por defecto
-    mostrarDia('miercoles16');
+    // Iniciar mostrando la programación de Jueves 17 por defecto
+    mostrarDia('jueves17');
 
     // Reproductor HLS
     if (Hls.isSupported()) {
