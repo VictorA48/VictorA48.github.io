@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnLunes21" onclick="mostrarDia('lunes21')">
-          <i class="fas fa-calendar-day"></i> Lunes 21 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnMartes22" onclick="mostrarDia('martes22')">
+        <button class="tab-btn active" id="btnMartes22" onclick="mostrarDia('martes22')">
           <i class="fas fa-calendar-day"></i> Martes 22 Setiembre 2026
         </button>
         <button class="tab-btn" id="btnMiercoles23" onclick="mostrarDia('miercoles23')">
@@ -355,6 +352,9 @@
         </button>
         <button class="tab-btn" id="btnJueves24" onclick="mostrarDia('jueves24')">
           <i class="fas fa-calendar-day"></i> Jueves 24 Setiembre 2026
+        </button>
+        <button class="tab-btn" id="btnViernes25" onclick="mostrarDia('viernes25')">
+          <i class="fas fa-calendar-day"></i> Viernes 25 Setiembre 2026
         </button>
       </div>
 
@@ -370,16 +370,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Lunes 21 Setiembre 2026
-    const programacionLunes21 = [
-      { hora: "19:00", titulo: 'Santo Rosario "Misterios Gozosos"' },
-      { hora: "19:38", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "20:21", titulo: "Pelicula: El Archivo" },
-      { hora: "22:11", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:56", titulo: "Especial RBD" },
-      { hora: "00:33", titulo: "Fin de la Transmisión" }
-    ];
 
     // Martes 22 Setiembre 2026
     const programacionMartes22 = [
@@ -411,18 +401,25 @@
       { hora: "01:13", titulo: "Fin de la Transmisión" }
     ];
 
+    // Viernes 25 Setiembre 2026
+    const programacionViernes25 = [
+      { hora: "19:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
+      { hora: "19:33", titulo: "Series Temporada 6: Un Doctor Diferente" },
+      { hora: "20:16", titulo: "Pelicula: Creación" },
+      { hora: "22:04", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "22:56", titulo: "Especial Concert: Tiesto" },
+      { hora: "02:00", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionLunes21;
+      let lista = programacionMartes22;
 
-      if (dia === 'lunes21') {
-        lista = programacionLunes21;
-        document.getElementById("btnLunes21") ? document.getElementById("btnLunes21").classList.add("active") : null;
-      } else if (dia === 'martes22') {
+      if (dia === 'martes22') {
         lista = programacionMartes22;
         document.getElementById("btnMartes22") ? document.getElementById("btnMartes22").classList.add("active") : null;
       } else if (dia === 'miercoles23') {
@@ -431,9 +428,12 @@
       } else if (dia === 'jueves24') {
         lista = programacionJueves24;
         document.getElementById("btnJueves24") ? document.getElementById("btnJueves24").classList.add("active") : null;
+      } else if (dia === 'viernes25') {
+        lista = programacionViernes25;
+        document.getElementById("btnViernes25") ? document.getElementById("btnViernes25").classList.add("active") : null;
       } else {
-        lista = programacionLunes21;
-        document.getElementById("btnLunes21") ? document.getElementById("btnLunes21").classList.add("active") : null;
+        lista = programacionMartes22;
+        document.getElementById("btnMartes22") ? document.getElementById("btnMartes22").classList.add("active") : null;
       }
 
       let html = "";
@@ -450,7 +450,7 @@
       grillaContainer.innerHTML = html;
     }
 
-    mostrarDia('lunes21');
+    mostrarDia('martes22');
 
     if (Hls.isSupported()) {
       const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
