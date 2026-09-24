@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnMiercoles23" onclick="mostrarDia('miercoles23')">
-          <i class="fas fa-calendar-day"></i> Miércoles 23 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnJueves24" onclick="mostrarDia('jueves24')">
+        <button class="tab-btn active" id="btnJueves24" onclick="mostrarDia('jueves24')">
           <i class="fas fa-calendar-day"></i> Jueves 24 Setiembre 2026
         </button>
         <button class="tab-btn" id="btnViernes25" onclick="mostrarDia('viernes25')">
@@ -355,6 +352,9 @@
         </button>
         <button class="tab-btn" id="btnSabado26" onclick="mostrarDia('sabado26')">
           <i class="fas fa-calendar-day"></i> Sábado 26 Setiembre 2026
+        </button>
+        <button class="tab-btn" id="btnDomingo27" onclick="mostrarDia('domingo27')">
+          <i class="fas fa-calendar-day"></i> Domingo 27 Setiembre 2026
         </button>
       </div>
 
@@ -370,16 +370,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Miércoles 23 Setiembre 2026
-    const programacionMiercoles23 = [
-      { hora: "19:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
-      { hora: "19:33", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "20:16", titulo: "Pelicula: Invierno Dorado" },
-      { hora: "21:45", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:32", titulo: "Especial VideoClips" },
-      { hora: "23:49", titulo: "Fin de la Transmisión" }
-    ];
 
     // Jueves 24 Setiembre 2026
     const programacionJueves24 = [
@@ -414,18 +404,29 @@
       { hora: "23:01", titulo: "Fin de la Transmisión" }
     ];
 
+    // Domingo 27 Setiembre 2026
+    const programacionDomingo27 = [
+      { hora: "12:00", titulo: "Dragon Ball" },
+      { hora: "13:14", titulo: "Mazinger Z" },
+      { hora: "14:18", titulo: "Pelicula: La Monja" },
+      { hora: "15:54", titulo: "Especial : INXS" },
+      { hora: "17:05", titulo: "Santa Misa" },
+      { hora: "17:51", titulo: 'Santo Rosario "Misterios Gloriosos"' },
+      { hora: "18:24", titulo: 'Series Temporada 1 : La Casa de los Espíritus' },
+      { hora: "19:20", titulo: "Pelicula Paraguaya : Matar a un Muerto" },
+      { hora: "20:46", titulo: "Pelicula: Una Noche en el Museo 3 (El Secreto de la Tumba)" },
+      { hora: "22:24", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionMiercoles23;
+      let lista = programacionJueves24;
 
-      if (dia === 'miercoles23') {
-        lista = programacionMiercoles23;
-        document.getElementById("btnMiercoles23") ? document.getElementById("btnMiercoles23").classList.add("active") : null;
-      } else if (dia === 'jueves24') {
+      if (dia === 'jueves24') {
         lista = programacionJueves24;
         document.getElementById("btnJueves24") ? document.getElementById("btnJueves24").classList.add("active") : null;
       } else if (dia === 'viernes25') {
@@ -434,9 +435,12 @@
       } else if (dia === 'sabado26') {
         lista = programacionSabado26;
         document.getElementById("btnSabado26") ? document.getElementById("btnSabado26").classList.add("active") : null;
+      } else if (dia === 'domingo27') {
+        lista = programacionDomingo27;
+        document.getElementById("btnDomingo27") ? document.getElementById("btnDomingo27").classList.add("active") : null;
       } else {
-        lista = programacionMiercoles23;
-        document.getElementById("btnMiercoles23") ? document.getElementById("btnMiercoles23").classList.add("active") : null;
+        lista = programacionJueves24;
+        document.getElementById("btnJueves24") ? document.getElementById("btnJueves24").classList.add("active") : null;
       }
 
       let html = "";
@@ -453,7 +457,7 @@
       grillaContainer.innerHTML = html;
     }
 
-    mostrarDia('miercoles23');
+    mostrarDia('jueves24');
 
     if (Hls.isSupported()) {
       const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
