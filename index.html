@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnJueves24" onclick="mostrarDia('jueves24')">
-          <i class="fas fa-calendar-day"></i> Jueves 24 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnViernes25" onclick="mostrarDia('viernes25')">
+        <button class="tab-btn active" id="btnViernes25" onclick="mostrarDia('viernes25')">
           <i class="fas fa-calendar-day"></i> Viernes 25 Setiembre 2026
         </button>
         <button class="tab-btn" id="btnSabado26" onclick="mostrarDia('sabado26')">
@@ -355,6 +352,9 @@
         </button>
         <button class="tab-btn" id="btnDomingo27" onclick="mostrarDia('domingo27')">
           <i class="fas fa-calendar-day"></i> Domingo 27 Setiembre 2026
+        </button>
+        <button class="tab-btn" id="btnLunes28" onclick="mostrarDia('lunes28')">
+          <i class="fas fa-calendar-day"></i> Lunes 28 Setiembre 2026
         </button>
       </div>
 
@@ -371,24 +371,14 @@
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
 
-    // Jueves 24 Setiembre 2026
-    const programacionJueves24 = [
-      { hora: "19:00", titulo: 'Santo Rosario "Misterios Luminosos"' },
-      { hora: "19:38", titulo: "Series Temporada 5: Un Doctor Diferente" },
-      { hora: "20:21", titulo: "Pelicula: Liga de la Justicia" },
-      { hora: "22:21", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "23:09", titulo: "Especial Dj Bobo" },
-      { hora: "01:13", titulo: "Fin de la Transmisión" }
-    ];
-
     // Viernes 25 Setiembre 2026
     const programacionViernes25 = [
+      { hora: "15:57", titulo: "Especial Concert: Tiesto" },
       { hora: "19:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
       { hora: "19:33", titulo: "Series Temporada 6: Un Doctor Diferente" },
       { hora: "20:16", titulo: "Pelicula: Creación" },
-      { hora: "22:04", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:56", titulo: "Especial Concert: Tiesto" },
-      { hora: "02:00", titulo: "Fin de la Transmisión" }
+      { hora: "21:05", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "21:57", titulo: "Fin de la Transmisión" }
     ];
 
     // Sábado 26 Setiembre 2026
@@ -418,18 +408,25 @@
       { hora: "22:24", titulo: "Fin de la Transmisión" }
     ];
 
+    // Lunes 28 Setiembre 2026
+    const programacionLunes28 = [
+      { hora: "19:00", titulo: 'Santo Rosario "Misterios Gozosos"' },
+      { hora: "19:38", titulo: "Series Temporada 6: Un Doctor Diferente" },
+      { hora: "20:21", titulo: "Pelicula: Plan Familiar" },
+      { hora: "22:20", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "23:09", titulo: "Especial Concert: BIZARRAP" },
+      { hora: "00:22", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionJueves24;
+      let lista = programacionViernes25;
 
-      if (dia === 'jueves24') {
-        lista = programacionJueves24;
-        document.getElementById("btnJueves24") ? document.getElementById("btnJueves24").classList.add("active") : null;
-      } else if (dia === 'viernes25') {
+      if (dia === 'viernes25') {
         lista = programacionViernes25;
         document.getElementById("btnViernes25") ? document.getElementById("btnViernes25").classList.add("active") : null;
       } else if (dia === 'sabado26') {
@@ -438,9 +435,12 @@
       } else if (dia === 'domingo27') {
         lista = programacionDomingo27;
         document.getElementById("btnDomingo27") ? document.getElementById("btnDomingo27").classList.add("active") : null;
+      } else if (dia === 'lunes28') {
+        lista = programacionLunes28;
+        document.getElementById("btnLunes28") ? document.getElementById("btnLunes28").classList.add("active") : null;
       } else {
-        lista = programacionJueves24;
-        document.getElementById("btnJueves24") ? document.getElementById("btnJueves24").classList.add("active") : null;
+        lista = programacionViernes25;
+        document.getElementById("btnViernes25") ? document.getElementById("btnViernes25").classList.add("active") : null;
       }
 
       let html = "";
@@ -457,7 +457,7 @@
       grillaContainer.innerHTML = html;
     }
 
-    mostrarDia('jueves24');
+    mostrarDia('viernes25');
 
     if (Hls.isSupported()) {
       const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
