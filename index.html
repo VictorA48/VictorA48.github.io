@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnViernes25" onclick="mostrarDia('viernes25')">
-          <i class="fas fa-calendar-day"></i> Viernes 25 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnSabado26" onclick="mostrarDia('sabado26')">
+        <button class="tab-btn active" id="btnSabado26" onclick="mostrarDia('sabado26')">
           <i class="fas fa-calendar-day"></i> Sábado 26 Setiembre 2026
         </button>
         <button class="tab-btn" id="btnDomingo27" onclick="mostrarDia('domingo27')">
@@ -355,6 +352,9 @@
         </button>
         <button class="tab-btn" id="btnLunes28" onclick="mostrarDia('lunes28')">
           <i class="fas fa-calendar-day"></i> Lunes 28 Setiembre 2026
+        </button>
+        <button class="tab-btn" id="btnMartes29" onclick="mostrarDia('martes29')">
+          <i class="fas fa-calendar-day"></i> Martes 29 Setiembre 2026
         </button>
       </div>
 
@@ -370,16 +370,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Viernes 25 Setiembre 2026
-    const programacionViernes25 = [
-      { hora: "15:57", titulo: "Especial Concert: Tiesto" },
-      { hora: "19:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
-      { hora: "19:33", titulo: "Series Temporada 6: Un Doctor Diferente" },
-      { hora: "20:16", titulo: "Pelicula: Creación" },
-      { hora: "21:05", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "21:57", titulo: "Fin de la Transmisión" }
-    ];
 
     // Sábado 26 Setiembre 2026
     const programacionSabado26 = [
@@ -418,18 +408,25 @@
       { hora: "00:22", titulo: "Fin de la Transmisión" }
     ];
 
+    // Martes 29 Setiembre 2026
+    const programacionMartes29 = [
+      { hora: "19:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
+      { hora: "19:33", titulo: "Series Temporada 6: Un Doctor Diferente" },
+      { hora: "20:16", titulo: "Pelicula: Que les Pasa A Los Hombres (A Él No Le Gustas Tanto)" },
+      { hora: "22:25", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "23:09", titulo: "Especial Concert: Talk Talk" },
+      { hora: "00:34", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionViernes25;
+      let lista = programacionSabado26;
 
-      if (dia === 'viernes25') {
-        lista = programacionViernes25;
-        document.getElementById("btnViernes25") ? document.getElementById("btnViernes25").classList.add("active") : null;
-      } else if (dia === 'sabado26') {
+      if (dia === 'sabado26') {
         lista = programacionSabado26;
         document.getElementById("btnSabado26") ? document.getElementById("btnSabado26").classList.add("active") : null;
       } else if (dia === 'domingo27') {
@@ -438,9 +435,12 @@
       } else if (dia === 'lunes28') {
         lista = programacionLunes28;
         document.getElementById("btnLunes28") ? document.getElementById("btnLunes28").classList.add("active") : null;
+      } else if (dia === 'martes29') {
+        lista = programacionMartes29;
+        document.getElementById("btnMartes29") ? document.getElementById("btnMartes29").classList.add("active") : null;
       } else {
-        lista = programacionViernes25;
-        document.getElementById("btnViernes25") ? document.getElementById("btnViernes25").classList.add("active") : null;
+        lista = programacionSabado26;
+        document.getElementById("btnSabado26") ? document.getElementById("btnSabado26").classList.add("active") : null;
       }
 
       let html = "";
@@ -457,7 +457,7 @@
       grillaContainer.innerHTML = html;
     }
 
-    mostrarDia('viernes25');
+    mostrarDia('sabado26');
 
     if (Hls.isSupported()) {
       const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
