@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnDomingo27" onclick="mostrarDia('domingo27')">
-          <i class="fas fa-calendar-day"></i> Domingo 27 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnLunes28" onclick="mostrarDia('lunes28')">
+        <button class="tab-btn active" id="btnLunes28" onclick="mostrarDia('lunes28')">
           <i class="fas fa-calendar-day"></i> Lunes 28 Setiembre 2026
         </button>
         <button class="tab-btn" id="btnMartes29" onclick="mostrarDia('martes29')">
@@ -355,6 +352,9 @@
         </button>
         <button class="tab-btn" id="btnMiercoles30" onclick="mostrarDia('miercoles30')">
           <i class="fas fa-calendar-day"></i> Miércoles 30 Setiembre 2026
+        </button>
+        <button class="tab-btn" id="btnJueves1" onclick="mostrarDia('jueves1')">
+          <i class="fas fa-calendar-day"></i> Jueves 1 Octubre 2026
         </button>
       </div>
 
@@ -370,20 +370,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Domingo 27 Setiembre 2026
-    const programacionDomingo27 = [
-      { hora: "12:00", titulo: "Dragon Ball" },
-      { hora: "13:14", titulo: "Mazinger Z" },
-      { hora: "14:18", titulo: "Pelicula: La Monja" },
-      { hora: "15:54", titulo: "Especial : INXS" },
-      { hora: "17:05", titulo: "Santa Misa" },
-      { hora: "17:51", titulo: 'Santo Rosario "Misterios Gloriosos"' },
-      { hora: "18:24", titulo: 'Series Temporada 1 : La Casa de los Espíritus' },
-      { hora: "19:20", titulo: "Pelicula Paraguaya : Matar a un Muerto" },
-      { hora: "20:46", titulo: "Pelicula: Una Noche en el Museo 3 (El Secreto de la Tumba)" },
-      { hora: "22:24", titulo: "Fin de la Transmisión" }
-    ];
 
     // Lunes 28 Setiembre 2026
     const programacionLunes28 = [
@@ -415,18 +401,25 @@
       { hora: "00:09", titulo: "Fin de la Transmisión" }
     ];
 
+    // Jueves 1 Octubre 2026
+    const programacionJueves1 = [
+      { hora: "19:00", titulo: 'Santo Rosario "Misterios Luminosos"' },
+      { hora: "19:38", titulo: "Series Temporada 6: Un Doctor Diferente" },
+      { hora: "20:21", titulo: "Pelicula: Otra vida" },
+      { hora: "21:57", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "22:45", titulo: "Especial : Faithless" },
+      { hora: "00:20", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionDomingo27;
+      let lista = programacionLunes28;
 
-      if (dia === 'domingo27') {
-        lista = programacionDomingo27;
-        document.getElementById("btnDomingo27") ? document.getElementById("btnDomingo27").classList.add("active") : null;
-      } else if (dia === 'lunes28') {
+      if (dia === 'lunes28') {
         lista = programacionLunes28;
         document.getElementById("btnLunes28") ? document.getElementById("btnLunes28").classList.add("active") : null;
       } else if (dia === 'martes29') {
@@ -435,9 +428,12 @@
       } else if (dia === 'miercoles30') {
         lista = programacionMiercoles30;
         document.getElementById("btnMiercoles30") ? document.getElementById("btnMiercoles30").classList.add("active") : null;
+      } else if (dia === 'jueves1') {
+        lista = programacionJueves1;
+        document.getElementById("btnJueves1") ? document.getElementById("btnJueves1").classList.add("active") : null;
       } else {
-        lista = programacionDomingo27;
-        document.getElementById("btnDomingo27") ? document.getElementById("btnDomingo27").classList.add("active") : null;
+        lista = programacionLunes28;
+        document.getElementById("btnLunes28") ? document.getElementById("btnLunes28").classList.add("active") : null;
       }
 
       let html = "";
@@ -454,7 +450,7 @@
       grillaContainer.innerHTML = html;
     }
 
-    mostrarDia('domingo27');
+    mostrarDia('lunes28');
 
     if (Hls.isSupported()) {
       const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
@@ -521,11 +517,10 @@
     setInterval(actualizarRelojParaguay, 1000);
     actualizarRelojParaguay();
 
-    // CONTADOR DE VISITAS DINÁMICO Y ROBUSTO
+    // CONTADOR DE VISITAS DINÁMICO
     function cargarVisitas() {
       const contadorEl = document.getElementById("contadorVisitas");
       
-      // Intentar usar un servidor API alternativo sin restricciones de CORS
       fetch("https://api.counterapi.dev/v1/utv_oficial_paraguay/vistas/up")
         .then(res => res.json())
         .then(data => {
@@ -537,7 +532,6 @@
           }
         })
         .catch(() => {
-          // Si la API remota falla o se bloquea, maneja las vistas localmente con un piso mínimo realista
           let visitasGuardadas = parseInt(localStorage.getItem("utv_visitas_cache") || "1258", 10);
           visitasGuardadas += 1;
           localStorage.setItem("utv_visitas_cache", visitasGuardadas);
