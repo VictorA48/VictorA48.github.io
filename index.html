@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnMiercoles30" onclick="mostrarDia('miercoles30')">
-          <i class="fas fa-calendar-day"></i> Miércoles 30 Setiembre 2026
-        </button>
-        <button class="tab-btn" id="btnJueves1" onclick="mostrarDia('jueves1')">
+        <button class="tab-btn active" id="btnJueves1" onclick="mostrarDia('jueves1')">
           <i class="fas fa-calendar-day"></i> Jueves 1 Octubre 2026
         </button>
         <button class="tab-btn" id="btnViernes2" onclick="mostrarDia('viernes2')">
@@ -355,6 +352,9 @@
         </button>
         <button class="tab-btn" id="btnSabado3" onclick="mostrarDia('sabado3')">
           <i class="fas fa-calendar-day"></i> Sábado 3 Octubre 2026
+        </button>
+        <button class="tab-btn" id="btnDomingo4" onclick="mostrarDia('domingo4')">
+          <i class="fas fa-calendar-day"></i> Domingo 4 Octubre 2026
         </button>
       </div>
 
@@ -370,16 +370,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Miércoles 30 Setiembre 2026
-    const programacionMiercoles30 = [
-      { hora: "19:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
-      { hora: "19:33", titulo: "Series Temporada 6: Un Doctor Diferente" },
-      { hora: "20:15", titulo: "Pelicula: Oblivion" },
-      { hora: "22:19", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "23:09", titulo: "Especial : Techno Rave Visuals" },
-      { hora: "00:09", titulo: "Fin de la Transmisión" }
-    ];
 
     // Jueves 1 Octubre 2026
     const programacionJueves1 = [
@@ -414,18 +404,29 @@
       { hora: "21:15", titulo: "Fin de la Transmisión" }
     ];
 
+    // Domingo 4 Octubre 2026
+    const programacionDomingo4 = [
+      { hora: "12:00", titulo: "Dragon Ball" },
+      { hora: "13:14", titulo: "Mazinger Z" },
+      { hora: "14:16", titulo: "Pelicula: Up" },
+      { hora: "15:52", titulo: "Especial : U2" },
+      { hora: "17:12", titulo: "Santa Misa" },
+      { hora: "17:58", titulo: 'Santo Rosario "Misterios Gloriosos"' },
+      { hora: "18:31", titulo: "Series Temporada 1: Hannah Montana" },
+      { hora: "19:40", titulo: "Pelicula Paraguaya : Chaco" },
+      { hora: "20:49", titulo: "Pelicula: La Monja 2" },
+      { hora: "22:39", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionMiercoles30;
+      let lista = programacionJueves1;
 
-      if (dia === 'miercoles30') {
-        lista = programacionMiercoles30;
-        document.getElementById("btnMiercoles30") ? document.getElementById("btnMiercoles30").classList.add("active") : null;
-      } else if (dia === 'jueves1') {
+      if (dia === 'jueves1') {
         lista = programacionJueves1;
         document.getElementById("btnJueves1") ? document.getElementById("btnJueves1").classList.add("active") : null;
       } else if (dia === 'viernes2') {
@@ -434,9 +435,12 @@
       } else if (dia === 'sabado3') {
         lista = programacionSabado3;
         document.getElementById("btnSabado3") ? document.getElementById("btnSabado3").classList.add("active") : null;
+      } else if (dia === 'domingo4') {
+        lista = programacionDomingo4;
+        document.getElementById("btnDomingo4") ? document.getElementById("btnDomingo4").classList.add("active") : null;
       } else {
-        lista = programacionMiercoles30;
-        document.getElementById("btnMiercoles30") ? document.getElementById("btnMiercoles30").classList.add("active") : null;
+        lista = programacionJueves1;
+        document.getElementById("btnJueves1") ? document.getElementById("btnJueves1").classList.add("active") : null;
       }
 
       let html = "";
@@ -453,7 +457,7 @@
       grillaContainer.innerHTML = html;
     }
 
-    mostrarDia('miercoles30');
+    mostrarDia('jueves1');
 
     if (Hls.isSupported()) {
       const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
