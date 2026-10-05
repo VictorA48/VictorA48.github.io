@@ -344,14 +344,14 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnDomingo4" onclick="mostrarDia('domingo4')">
-          <i class="fas fa-calendar-day"></i> Domingo 4 Octubre 2026
-        </button>
-        <button class="tab-btn" id="btnLunes5" onclick="mostrarDia('lunes5')">
+        <button class="tab-btn active" id="btnLunes5" onclick="mostrarDia('lunes5')">
           <i class="fas fa-calendar-day"></i> Lunes 5 Octubre 2026
         </button>
         <button class="tab-btn" id="btnMartes6" onclick="mostrarDia('martes6')">
           <i class="fas fa-calendar-day"></i> Martes 6 Octubre 2026
+        </button>
+        <button class="tab-btn" id="btnMiercoles7" onclick="mostrarDia('miercoles7')">
+          <i class="fas fa-calendar-day"></i> Miércoles 7 Octubre 2026
         </button>
       </div>
 
@@ -367,20 +367,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Domingo 4 Octubre 2026
-    const programacionDomingo4 = [
-      { hora: "12:00", titulo: "Dragon Ball" },
-      { hora: "13:14", titulo: "Mazinger Z" },
-      { hora: "14:16", titulo: "Pelicula: Up" },
-      { hora: "15:52", titulo: "Especial : U2" },
-      { hora: "17:12", titulo: "Santa Misa" },
-      { hora: "17:58", titulo: 'Santo Rosario "Misterios Gloriosos"' },
-      { hora: "18:31", titulo: "Series Temporada 1 Estreno: Hannah Montana" },
-      { hora: "19:40", titulo: "Pelicula Paraguaya : Chaco" },
-      { hora: "20:49", titulo: "Pelicula: La Monja 2" },
-      { hora: "22:39", titulo: "Fin de la Transmisión" }
-    ];
 
     // Lunes 5 Octubre 2026
     const programacionLunes5 = [
@@ -402,26 +388,36 @@
       { hora: "00:29", titulo: "Fin de la Transmisión" }
     ];
 
+    // Miércoles 7 Octubre 2026
+    const programacionMiercoles7 = [
+      { hora: "19:00", titulo: 'Santo Rosario "Misterios Gloriosos"' },
+      { hora: "19:33", titulo: "Series Temporada 6: Un Doctor Diferente" },
+      { hora: "20:16", titulo: "Pelicula: El Hombre de Acero" },
+      { hora: "22:39", titulo: "Series: Moisés y los Diez Mandamientos" },
+      { hora: "23:39", titulo: "Especial : Ellie Goulding" },
+      { hora: "01:05", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionDomingo4;
+      let lista = programacionLunes5;
 
-      if (dia === 'domingo4') {
-        lista = programacionDomingo4;
-        document.getElementById("btnDomingo4") ? document.getElementById("btnDomingo4").classList.add("active") : null;
-      } else if (dia === 'lunes5') {
+      if (dia === 'lunes5') {
         lista = programacionLunes5;
         document.getElementById("btnLunes5") ? document.getElementById("btnLunes5").classList.add("active") : null;
       } else if (dia === 'martes6') {
         lista = programacionMartes6;
         document.getElementById("btnMartes6") ? document.getElementById("btnMartes6").classList.add("active") : null;
+      } else if (dia === 'miercoles7') {
+        lista = programacionMiercoles7;
+        document.getElementById("btnMiercoles7") ? document.getElementById("btnMiercoles7").classList.add("active") : null;
       } else {
-        lista = programacionDomingo4;
-        document.getElementById("btnDomingo4") ? document.getElementById("btnDomingo4").classList.add("active") : null;
+        lista = programacionLunes5;
+        document.getElementById("btnLunes5") ? document.getElementById("btnLunes5").classList.add("active") : null;
       }
 
       let html = "";
@@ -438,7 +434,7 @@
       grillaContainer.innerHTML = html;
     }
 
-    mostrarDia('domingo4');
+    mostrarDia('lunes5');
 
     if (Hls.isSupported()) {
       const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
