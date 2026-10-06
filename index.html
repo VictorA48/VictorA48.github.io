@@ -344,14 +344,14 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnLunes5" onclick="mostrarDia('lunes5')">
-          <i class="fas fa-calendar-day"></i> Lunes 5 Octubre 2026
-        </button>
-        <button class="tab-btn" id="btnMartes6" onclick="mostrarDia('martes6')">
+        <button class="tab-btn active" id="btnMartes6" onclick="mostrarDia('martes6')">
           <i class="fas fa-calendar-day"></i> Martes 6 Octubre 2026
         </button>
         <button class="tab-btn" id="btnMiercoles7" onclick="mostrarDia('miercoles7')">
           <i class="fas fa-calendar-day"></i> Miércoles 7 Octubre 2026
+        </button>
+        <button class="tab-btn" id="btnJueves8" onclick="mostrarDia('jueves8')">
+          <i class="fas fa-calendar-day"></i> Jueves 8 Octubre 2026
         </button>
       </div>
 
@@ -367,16 +367,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Lunes 5 Octubre 2026
-    const programacionLunes5 = [
-      { hora: "19:00", titulo: 'Santo Rosario "Misterios Gozosos"' },
-      { hora: "19:38", titulo: "Series Temporada 6: Un Doctor Diferente" },
-      { hora: "20:21", titulo: "Pelicula: Meteorito Lunar" },
-      { hora: "21:49", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "22:49", titulo: "Especial : Rihanna" },
-      { hora: "23:57", titulo: "Fin de la Transmisión" }
-    ];
 
     // Martes 6 Octubre 2026
     const programacionMartes6 = [
@@ -398,26 +388,36 @@
       { hora: "01:05", titulo: "Fin de la Transmisión" }
     ];
 
+    // Jueves 8 Octubre 2026
+    const programacionJueves8 = [
+      { hora: "19:00", titulo: 'Santo Rosario "Misterios Luminosos"' },
+      { hora: "19:38", titulo: "Series Temporada 6: Un Doctor Diferente" },
+      { hora: "20:21", titulo: 'Series: Moisés y los Diez Mandamientos "Final"' },
+      { hora: "21:30", titulo: "Pelicula: Atómica" },
+      { hora: "23:25", titulo: "Especial : Faithless" },
+      { hora: "00:47", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionLunes5;
+      let lista = programacionMartes6;
 
-      if (dia === 'lunes5') {
-        lista = programacionLunes5;
-        document.getElementById("btnLunes5") ? document.getElementById("btnLunes5").classList.add("active") : null;
-      } else if (dia === 'martes6') {
+      if (dia === 'martes6') {
         lista = programacionMartes6;
         document.getElementById("btnMartes6") ? document.getElementById("btnMartes6").classList.add("active") : null;
       } else if (dia === 'miercoles7') {
         lista = programacionMiercoles7;
         document.getElementById("btnMiercoles7") ? document.getElementById("btnMiercoles7").classList.add("active") : null;
+      } else if (dia === 'jueves8') {
+        lista = programacionJueves8;
+        document.getElementById("btnJueves8") ? document.getElementById("btnJueves8").classList.add("active") : null;
       } else {
-        lista = programacionLunes5;
-        document.getElementById("btnLunes5") ? document.getElementById("btnLunes5").classList.add("active") : null;
+        lista = programacionMartes6;
+        document.getElementById("btnMartes6") ? document.getElementById("btnMartes6").classList.add("active") : null;
       }
 
       let html = "";
@@ -434,7 +434,7 @@
       grillaContainer.innerHTML = html;
     }
 
-    mostrarDia('lunes5');
+    mostrarDia('martes6');
 
     if (Hls.isSupported()) {
       const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
