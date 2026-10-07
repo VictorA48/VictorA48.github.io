@@ -344,14 +344,14 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnMartes6" onclick="mostrarDia('martes6')">
-          <i class="fas fa-calendar-day"></i> Martes 6 Octubre 2026
-        </button>
-        <button class="tab-btn" id="btnMiercoles7" onclick="mostrarDia('miercoles7')">
+        <button class="tab-btn active" id="btnMiercoles7" onclick="mostrarDia('miercoles7')">
           <i class="fas fa-calendar-day"></i> Miércoles 7 Octubre 2026
         </button>
         <button class="tab-btn" id="btnJueves8" onclick="mostrarDia('jueves8')">
           <i class="fas fa-calendar-day"></i> Jueves 8 Octubre 2026
+        </button>
+        <button class="tab-btn" id="btnViernes9" onclick="mostrarDia('viernes9')">
+          <i class="fas fa-calendar-day"></i> Viernes 9 Octubre 2026
         </button>
       </div>
 
@@ -367,16 +367,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Martes 6 Octubre 2026
-    const programacionMartes6 = [
-      { hora: "19:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
-      { hora: "19:33", titulo: "Series Temporada 6: Un Doctor Diferente" },
-      { hora: "20:16", titulo: "Pelicula: Encantada" },
-      { hora: "22:03", titulo: "Series: Moisés y los Diez Mandamientos" },
-      { hora: "23:03", titulo: "Especial : Talk Talk" },
-      { hora: "00:29", titulo: "Fin de la Transmisión" }
-    ];
 
     // Miércoles 7 Octubre 2026
     const programacionMiercoles7 = [
@@ -398,26 +388,36 @@
       { hora: "00:47", titulo: "Fin de la Transmisión" }
     ];
 
+    // Viernes 9 Octubre 2026
+    const programacionViernes9 = [
+      { hora: "19:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
+      { hora: "19:33", titulo: "Series Temporada 6: Un Doctor Diferente" },
+      { hora: "20:16", titulo: 'Series: Moisés y los Diez Mandamientos "Repetición Final"' },
+      { hora: "21:25", titulo: "Avatar" },
+      { hora: "00:24", titulo: "Especial : Eric Prydz" },
+      { hora: "02:22", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionMartes6;
+      let lista = programacionMiercoles7;
 
-      if (dia === 'martes6') {
-        lista = programacionMartes6;
-        document.getElementById("btnMartes6") ? document.getElementById("btnMartes6").classList.add("active") : null;
-      } else if (dia === 'miercoles7') {
+      if (dia === 'miercoles7') {
         lista = programacionMiercoles7;
         document.getElementById("btnMiercoles7") ? document.getElementById("btnMiercoles7").classList.add("active") : null;
       } else if (dia === 'jueves8') {
         lista = programacionJueves8;
         document.getElementById("btnJueves8") ? document.getElementById("btnJueves8").classList.add("active") : null;
+      } else if (dia === 'viernes9') {
+        lista = programacionViernes9;
+        document.getElementById("btnViernes9") ? document.getElementById("btnViernes9").classList.add("active") : null;
       } else {
-        lista = programacionMartes6;
-        document.getElementById("btnMartes6") ? document.getElementById("btnMartes6").classList.add("active") : null;
+        lista = programacionMiercoles7;
+        document.getElementById("btnMiercoles7") ? document.getElementById("btnMiercoles7").classList.add("active") : null;
       }
 
       let html = "";
@@ -434,7 +434,7 @@
       grillaContainer.innerHTML = html;
     }
 
-    mostrarDia('martes6');
+    mostrarDia('miercoles7');
 
     if (Hls.isSupported()) {
       const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
