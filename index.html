@@ -344,14 +344,14 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnJueves8" onclick="mostrarDia('jueves8')">
-          <i class="fas fa-calendar-day"></i> Jueves 8 Octubre 2026
-        </button>
-        <button class="tab-btn" id="btnViernes9" onclick="mostrarDia('viernes9')">
+        <button class="tab-btn active" id="btnViernes9" onclick="mostrarDia('viernes9')">
           <i class="fas fa-calendar-day"></i> Viernes 9 Octubre 2026
         </button>
         <button class="tab-btn" id="btnSabado10" onclick="mostrarDia('sabado10')">
           <i class="fas fa-calendar-day"></i> Sábado 10 Octubre 2026
+        </button>
+        <button class="tab-btn" id="btnDomingo11" onclick="mostrarDia('domingo11')">
+          <i class="fas fa-calendar-day"></i> Domingo 11 Octubre 2026
         </button>
       </div>
 
@@ -367,16 +367,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Jueves 8 Octubre 2026
-    const programacionJueves8 = [
-      { hora: "19:00", titulo: 'Santo Rosario "Misterios Luminosos"' },
-      { hora: "19:38", titulo: "Series Temporada 6: Un Doctor Diferente" },
-      { hora: "20:21", titulo: 'Series: Moisés y los Diez Mandamientos "Final"' },
-      { hora: "21:30", titulo: "Pelicula: Atómica" },
-      { hora: "23:25", titulo: "Especial : Faithless" },
-      { hora: "00:47", titulo: "Fin de la Transmisión" }
-    ];
 
     // Viernes 9 Octubre 2026
     const programacionViernes9 = [
@@ -400,26 +390,40 @@
       { hora: "20:55", titulo: "Fin de la Transmisión" }
     ];
 
+    // Domingo 11 Octubre 2026
+    const programacionDomingo11 = [
+      { hora: "12:00", titulo: "Dragon Ball" },
+      { hora: "13:14", titulo: "Mazinger Z" },
+      { hora: "14:20", titulo: "Pelicula: Los Cuatro Jinetes Del Apocalipsis" },
+      { hora: "15:47", titulo: "Especial : The 90s Festival" },
+      { hora: "16:54", titulo: "Santa Misa" },
+      { hora: "17:40", titulo: 'Santo Rosario "Misterios Gloriosos"' },
+      { hora: "18:13", titulo: 'Series Temporada 1 : Hannah Montana' },
+      { hora: "19:21", titulo: "Pelicula Paraguaya : Morgue" },
+      { hora: "20:42", titulo: "Pelicula : La Isla Maldita" },
+      { hora: "22:28", titulo: "Fin de la Transmisión" }
+    ];
+
     function mostrarDia(dia) {
       const botones = document.querySelectorAll(".tab-btn");
       const grillaContainer = document.getElementById("grillaProgramacion");
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionJueves8;
+      let lista = programacionViernes9;
 
-      if (dia === 'jueves8') {
-        lista = programacionJueves8;
-        document.getElementById("btnJueves8") ? document.getElementById("btnJueves8").classList.add("active") : null;
-      } else if (dia === 'viernes9') {
+      if (dia === 'viernes9') {
         lista = programacionViernes9;
         document.getElementById("btnViernes9") ? document.getElementById("btnViernes9").classList.add("active") : null;
       } else if (dia === 'sabado10') {
         lista = programacionSabado10;
         document.getElementById("btnSabado10") ? document.getElementById("btnSabado10").classList.add("active") : null;
+      } else if (dia === 'domingo11') {
+        lista = programacionDomingo11;
+        document.getElementById("btnDomingo11") ? document.getElementById("btnDomingo11").classList.add("active") : null;
       } else {
-        lista = programacionJueves8;
-        document.getElementById("btnJueves8") ? document.getElementById("btnJueves8").classList.add("active") : null;
+        lista = programacionViernes9;
+        document.getElementById("btnViernes9") ? document.getElementById("btnViernes9").classList.add("active") : null;
       }
 
       let html = "";
@@ -436,7 +440,7 @@
       grillaContainer.innerHTML = html;
     }
 
-    mostrarDia('jueves8');
+    mostrarDia('viernes9');
 
     if (Hls.isSupported()) {
       const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
