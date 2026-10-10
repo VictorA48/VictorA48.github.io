@@ -600,7 +600,7 @@
         <svg class="animated-weather-icon" viewBox="0 0 64 64">
           <path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#cbd5e1" />
         </svg>
-        <span>Asunción: 19°C</span>
+        <span id="textoClimaEncabezado">Asunción: 19°C</span>
       </div>
       
       <div class="widget-pill visitor-counter">
@@ -855,6 +855,23 @@
       if (eh) eh.textContent = h + ":" + m + ":" + s;
     }
 
+    // Consulta automática a Open-Meteo cada 1 hora para Asunción
+    function consultarClimaAuto() {
+      var urlClima = "https://api.open-meteo.com/v1/forecast?latitude=-25.2637&longitude=-57.5759&current=temperature_2m&timezone=America%2FAsuncion";
+      fetch(urlClima)
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (data && data.current && data.current.temperature_2m !== undefined) {
+            var tempG = Math.round(data.current.temperature_2m);
+            var txtElem = document.getElementById("textoClimaEncabezado");
+            if (txtElem) {
+              txtElem.textContent = "Asunción: " + tempG + "°C";
+            }
+          }
+        })
+        .catch(function() {});
+    }
+
     function iniciarPlayer() {
       var url = "https://eu1.servers10.com:8081/8146/index.m3u8";
       var v = document.getElementById("videoPlayer");
@@ -889,8 +906,12 @@
       actualizarReloj();
       mostrarDia("sabado10");
       iniciarPlayer();
-      setInterval(actualizarReloj, 1000);
-      setInterval(function() { mostrarDia(diaActual); }, 30000);
+      consultarClimaAuto();
+
+      // Timers automáticos
+      setInterval(actualizarReloj, 1000); // Reloj cada segundo
+      setInterval(function() { mostrarDia(diaActual); }, 30000); // Guía de programación cada 30s
+      setInterval(consultarClimaAuto, 3600000); // Clima de Asunción cada 1 hora (3,600,000 ms)
     };
   </script>
 </body>
