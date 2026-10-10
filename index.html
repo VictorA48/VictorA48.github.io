@@ -168,6 +168,27 @@
       object-fit: contain;
     }
 
+    .player-error {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(8, 11, 17, 0.92);
+      color: var(--text-muted);
+      gap: 10px;
+      z-index: 10;
+      display: none;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .player-error i { font-size: 36px; color: var(--live-red); }
+
     /* BARRA DE ACCIONES Y REDES */
     .action-bar {
       display: flex;
@@ -467,7 +488,7 @@
       </div>
       
       <div class="widget-pill visitor-counter">
-        <i class="fas fa-eye"></i> <span id="contadorVisitas">Cargando...</span>
+        <i class="fas fa-eye"></i> <span id="contadorVisitas">1.258 vistas</span>
       </div>
       
       <div class="widget-pill live-indicator">
@@ -481,6 +502,10 @@
 
     <!-- REPRODUCTOR -->
     <div class="player-wrapper">
+      <div id="playerError" class="player-error">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>Señal fuera de línea o cargando transmisión...</span>
+      </div>
       <video id="videoPlayer" controls autoplay muted playsinline></video>
     </div>
 
@@ -526,4 +551,182 @@
         </div>
       </div>
 
-      <!-- GRILLA DE PROGRAM
+      <!-- GRILLA DE PROGRAMACIÓN -->
+      <div class="schedule-grid" id="grillaProgramacion"></div>
+    </div>
+
+    <footer>
+      &copy; 2026 - 2032 UTV - Televisión Digital Oficial. Todos los derechos reservados.
+    </footer>
+  </div>
+
+  <script>
+    const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
+    const video = document.getElementById("videoPlayer");
+    const errorDiv = document.getElementById("playerError");
+
+    const programacionSabado10 = [
+      { hora: "12:00", fin: "13:09", titulo: "Los Tres Chiflados", categoria: "animacion" },
+      { hora: "13:09", fin: "14:16", titulo: "Los Thundercats", categoria: "animacion" },
+      { hora: "14:16", fin: "15:57", titulo: "Película : Todopoderoso", categoria: "pelicula" },
+      { hora: "15:57", fin: "17:23", titulo: "Especial Concert : Talk Talk", categoria: "especial" },
+      { hora: "17:23", fin: "18:01", titulo: 'Santo Rosario "Misterios Gozosos"', categoria: "religioso" },
+      { hora: "18:01", fin: "19:09", titulo: 'Series Temporada 1 : Hanna Montana', categoria: "serie" },
+      { hora: "19:09", fin: "20:55", titulo: 'Película : La Barbería 2 "Vuelta al Negocio"', categoria: "pelicula" },
+      { hora: "20:55", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
+    ];
+
+    const programacionDomingo11 = [
+      { hora: "12:00", fin: "13:14", titulo: "Dragon Ball", categoria: "animacion" },
+      { hora: "13:14", fin: "14:20", titulo: "Mazinger Z", categoria: "animacion" },
+      { hora: "14:20", fin: "15:47", titulo: "Película : Los Cuatro Jinetes Del Apocalipsis", categoria: "pelicula" },
+      { hora: "15:47", fin: "16:54", titulo: "Especial : The 90s Festival", categoria: "especial" },
+      { hora: "16:54", fin: "17:40", titulo: "Santa Misa", categoria: "religioso" },
+      { hora: "17:40", fin: "18:13", titulo: 'Santo Rosario "Misterios Gloriosos"', categoria: "religioso" },
+      { hora: "18:13", fin: "19:21", titulo: 'Series Temporada 1 : Hannah Montana', categoria: "serie" },
+      { hora: "19:21", fin: "20:42", titulo: "Película Paraguaya : Morgue", categoria: "pelicula" },
+      { hora: "20:42", fin: "22:28", titulo: "Película : La Isla Maldita", categoria: "pelicula" },
+      { hora: "22:28", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
+    ];
+
+    let diaActualCargado = 'sabado10';
+
+    function obtenerMinutos(horaStr) {
+      if (!horaStr) return 0;
+      const partes = horaStr.split(':');
+      return (parseInt(partes[0], 10) || 0) * 60 + (parseInt(partes[1], 10) || 0);
+    }
+
+    function obtenerBadgeCategoria(cat) {
+      const mapas = {
+        pelicula: '<span class="show-badge badge-pelicula"><i class="fas fa-film"></i> Película</span>',
+        serie: '<span class="show-badge badge-serie"><i class="fas fa-tv"></i> Serie</span>',
+        religioso: '<span class="show-badge badge-religioso"><i class="fas fa-church"></i> Religioso</span>',
+        animacion: '<span class="show-badge badge-animacion"><i class="fas fa-child"></i> Animación</span>',
+        especial: '<span class="show-badge badge-especial"><i class="fas fa-star"></i> Especial</span>',
+        general: '<span class="show-badge badge-general"><i class="fas fa-broadcast-tower"></i> Emisión</span>'
+      };
+      return mapas[cat] || mapas.general;
+    }
+
+    function mostrarDia(dia) {
+      diaActualCargado = dia;
+      const grillaContainer = document.getElementById("grillaProgramacion");
+      if (!grillaContainer) return;
+
+      const btnSabado = document.getElementById("btnSabado10");
+      const btnDomingo = document.getElementById("btnDomingo11");
+
+      if (btnSabado) btnSabado.classList.remove("active");
+      if (btnDomingo) btnDomingo.classList.remove("active");
+
+      let lista = programacionSabado10;
+      if (dia === 'domingo11') {
+        lista = programacionDomingo11;
+        if (btnDomingo) btnDomingo.classList.add("active");
+      } else {
+        if (btnSabado) btnSabado.classList.add("active");
+      }
+
+      const ahora = new Date();
+      const horaMinutosActual = ahora.getHours() * 60 + ahora.getMinutes();
+
+      let html = "";
+      lista.forEach(item => {
+        const minInicio = obtenerMinutos(item.hora);
+        const minFin = obtenerMinutos(item.fin);
+        const esEnVivo = horaMinutosActual >= minInicio && horaMinutosActual < minFin;
+        
+        let porcentajeProgreso = 0;
+        if (esEnVivo && minFin > minInicio) {
+          porcentajeProgreso = Math.min(100, Math.max(0, ((horaMinutosActual - minInicio) / (minFin - minInicio)) * 100));
+        }
+
+        html += `
+          <div class="schedule-card ${esEnVivo ? 'is-live' : ''}">
+            <div class="schedule-time"><i class="far fa-clock"></i> ${item.hora}</div>
+            <div class="schedule-details">
+              <div class="schedule-header-row">
+                ${obtenerBadgeCategoria(item.categoria)}
+                ${esEnVivo ? '<span class="live-tag"><i class="fas fa-play"></i> EN AIRE AHORA</span>' : ''}
+              </div>
+              <div class="schedule-show-title">${item.titulo}</div>
+              ${esEnVivo ? `
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" style="width: \${porcentajeProgreso}%"></div>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      });
+
+      grillaContainer.innerHTML = html;
+    }
+
+    // Inicializar Reproductor HLS con manejo de errores visible
+    function iniciarReproductor() {
+      if (Hls.isSupported()) {
+        const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+        hls.loadSource(streamURL);
+        hls.attachMedia(video);
+        
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+          errorDiv.style.display = "none";
+          video.play().catch(() => { video.muted = true; video.play(); });
+        });
+
+        hls.on(Hls.Events.ERROR, function (event, data) {
+          if (data.fatal) {
+            errorDiv.style.display = "flex";
+          }
+        });
+      } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        video.src = streamURL;
+        video.addEventListener("loadedmetadata", function () {
+          errorDiv.style.display = "none";
+          video.play().catch(() => { video.muted = true; video.play(); });
+        });
+        video.addEventListener("error", function () {
+          errorDiv.style.display = "flex";
+        });
+      }
+    }
+
+    function togglePantallaCompleta() {
+      if (!document.fullscreenElement) {
+        if (video.requestFullscreen) video.requestFullscreen();
+        else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    // Reloj seguro con formato largo sin "de"
+    function actualizarReloj() {
+      const ahora = new Date();
+      try {
+        const opcionesFecha = { weekday: "long", day: "numeric", month: "long", year: "numeric" };
+        let fechaTexto = ahora.toLocaleDateString("es-ES", opcionesFecha).replace(/\bde\b/g, "").replace(/\s+/g, " ");
+        fechaTexto = fechaTexto.charAt(0).toUpperCase() + fechaTexto.slice(1);
+        
+        let horaTexto = ahora.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+
+        document.getElementById("relojFecha").textContent = fechaTexto;
+        document.getElementById("relojHora").textContent = horaTexto;
+      } catch (e) {
+        document.getElementById("relojFecha").textContent = "Sábado, 10 Octubre 2026";
+        document.getElementById("relojHora").textContent = ahora.toLocaleTimeString();
+      }
+    }
+
+    // Carga inicial inmediata
+    mostrarDia('sabado10');
+    actualizarReloj();
+    iniciarReproductor();
+
+    setInterval(actualizarReloj, 1000);
+    setInterval(() => mostrarDia(diaActualCargado), 60000);
+  </script>
+</body>
+</html>
