@@ -653,7 +653,7 @@
               <div class="schedule-show-title">${item.titulo}</div>
               ${esEnVivo ? `
                 <div class="progress-bar-container">
-                  <div class="progress-bar-fill" style="width: \${porcentajeProgreso}%"></div>
+                  <div class="progress-bar-fill" style="width: ${porcentajeProgreso}%"></div>
                 </div>
               ` : ''}
             </div>
@@ -664,7 +664,7 @@
       grillaContainer.innerHTML = html;
     }
 
-    // Inicializar Reproductor HLS con manejo de errores visible
+    // Inicializar Reproductor HLS
     function iniciarReproductor() {
       if (Hls.isSupported()) {
         const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
@@ -672,23 +672,23 @@
         hls.attachMedia(video);
         
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
-          errorDiv.style.display = "none";
+          if (errorDiv) errorDiv.style.display = "none";
           video.play().catch(() => { video.muted = true; video.play(); });
         });
 
         hls.on(Hls.Events.ERROR, function (event, data) {
-          if (data.fatal) {
+          if (data.fatal && errorDiv) {
             errorDiv.style.display = "flex";
           }
         });
       } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
         video.src = streamURL;
         video.addEventListener("loadedmetadata", function () {
-          errorDiv.style.display = "none";
+          if (errorDiv) errorDiv.style.display = "none";
           video.play().catch(() => { video.muted = true; video.play(); });
         });
         video.addEventListener("error", function () {
-          errorDiv.style.display = "flex";
+          if (errorDiv) errorDiv.style.display = "flex";
         });
       }
     }
@@ -702,7 +702,7 @@
       }
     }
 
-    // Reloj seguro con formato largo sin "de"
+    // Reloj ajustado
     function actualizarReloj() {
       const ahora = new Date();
       try {
@@ -712,18 +712,50 @@
         
         let horaTexto = ahora.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
 
-        document.getElementById("relojFecha").textContent = fechaTexto;
-        document.getElementById("relojHora").textContent = horaTexto;
+        const elFecha = document.getElementById("relojFecha");
+        const elHora = document.getElementById("relojHora");
+        if (elFecha) elFecha.textContent = fechaTexto;
+        if (elHora) elHora.textContent = horaTexto;
       } catch (e) {
-        document.getElementById("relojFecha").textContent = "Sábado, 10 Octubre 2026";
-        document.getElementById("relojHora").textContent = ahora.toLocaleTimeString();
+        const elFecha = document.getElementById("relojFecha");
+        const elHora = document.getElementById("relojHora");
+        if (elFecha) elFecha.textContent = "Sábado, 10 Octubre 2026";
+        if (elHora) elHora.textContent = ahora.toLocaleTimeString();
       }
     }
 
-    // Carga inicial inmediata
+    // Contador de visitas dinámico y continuo
+    function cargarVisitas() {
+      const contadorEl = document.getElementById("contadorVisitas");
+      if (!contadorEl) return;
+
+      let visitas = parseInt(localStorage.getItem("utv_visitas_totales") || "1258", 10);
+
+      if (!sessionStorage.getItem("utv_sesion_contada")) {
+        visitas += 1;
+        localStorage.setItem("utv_visitas_totales", visitas);
+        sessionStorage.setItem("utv_sesion_contada", "true");
+      }
+
+      contadorEl.textContent = visitas.toLocaleString("es-PY") + " vistas";
+
+      fetch("https://api.counterapi.dev/v1/utv_oficial_paraguay/vistas/up")
+        .then(res => res.json())
+        .then(data => {
+          if (data && typeof data.count === "number" && data.count > visitas) {
+            visitas = data.count;
+            localStorage.setItem("utv_visitas_totales", visitas);
+            contadorEl.textContent = visitas.toLocaleString("es-PY") + " vistas";
+          }
+        })
+        .catch(() => {});
+    }
+
+    // Ejecución inicial
     mostrarDia('sabado10');
     actualizarReloj();
     iniciarReproductor();
+    cargarVisitas();
 
     setInterval(actualizarReloj, 1000);
     setInterval(() => mostrarDia(diaActualCargado), 60000);
