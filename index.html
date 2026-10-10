@@ -70,11 +70,25 @@
     }
 
     .logo-img {
-      height: 42px;
+      height: 48px;
       width: auto;
+      max-width: 180px;
       object-fit: contain;
-      filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.3));
-      border-radius: 6px;
+      filter: drop-shadow(0 0 12px rgba(0, 242, 254, 0.4));
+      border-radius: 8px;
+      display: block;
+    }
+
+    .logo-fallback {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #080b11;
+      font-weight: 800;
+      font-size: 24px;
+      padding: 4px 16px;
+      border-radius: 10px;
+      letter-spacing: 1.5px;
+      box-shadow: 0 0 20px var(--primary-glow);
+      display: none;
     }
 
     .channel-title {
@@ -607,7 +621,8 @@
   <!-- HEADER -->
   <header>
     <div class="logo-container">
-      <img src="logo.png" alt="UTV Logo" class="logo-img" onerror="this.style.display='none'">
+      <img src="logo.png" alt="UTV Logo" class="logo-img" id="channelLogo" onerror="mostrarLogoFallback()">
+      <div class="logo-fallback" id="logoFallback">UTV</div>
       <span class="channel-title">Televisión Digital</span>
     </div>
     
@@ -786,6 +801,13 @@
     const video = document.getElementById("videoPlayer");
     const errorDiv = document.getElementById("playerError");
 
+    function mostrarLogoFallback() {
+      const img = document.getElementById("channelLogo");
+      const fallback = document.getElementById("logoFallback");
+      if (img) img.style.display = "none";
+      if (fallback) fallback.style.display = "block";
+    }
+
     const programacionSabado10 = [
       { hora: "12:00", fin: "13:09", titulo: "Los Tres Chiflados", categoria: "animacion" },
       { hora: "13:09", fin: "14:16", titulo: "Los Thundercats", categoria: "animacion" },
@@ -868,11 +890,9 @@
             <div class="schedule-time"><i class="far fa-clock"></i> ${item.hora}</div>
             <div class="schedule-details">
               <div class="schedule-header-row">
-                ${obtenerBadgeCategoria(item.categoria)}
-                ${esEnVivo ? '<span class="live-tag"><i class="fas fa-play"></i> EN AIRE AHORA</span>' : ''}
+                ${obtenerBadgeCategoria(item.categoria)}${esEnVivo ? '<span class="live-tag"><i class="fas fa-play"></i> EN AIRE AHORA</span>' : ''}
               </div>
-              <div class="schedule-show-title">${item.titulo}</div>
-              ${esEnVivo ? `
+              <div class="schedule-show-title">${item.titulo}</div>${esEnVivo ? `
                 <div class="progress-bar-container">
                   <div class="progress-bar-fill" style="width: ${porcentajeProgreso}%"></div>
                 </div>
@@ -950,124 +970,4 @@
       if (code === 0) {
         return `
           <svg class="animated-weather-icon" viewBox="0 0 64 64">
-            <g class="animated-sun-rays" stroke="#ffb703" stroke-width="3" stroke-linecap="round">
-              <line x1="32" y1="10" x2="32" y2="16" /><line x1="32" y1="48" x2="32" y2="54" />
-              <line x1="10" y1="32" x2="16" y2="32" /><line x1="48" y1="32" x2="54" y2="32" />
-              <line x1="16.4" y1="16.4" x2="20.7" y2="20.7" /><line x1="43.3" y1="43.3" x2="47.6" y2="47.6" />
-              <line x1="16.4" y1="47.6" x2="20.7" y2="43.3" /><line x1="43.3" y1="20.7" x2="47.6" y2="16.4" />
-            </g>
-            <circle class="animated-sun-core" cx="32" cy="32" r="10" fill="#ffb703" />
-          </svg>`;
-      }
-      if (code <= 3) {
-        return `
-          <svg class="animated-weather-icon" viewBox="0 0 64 64">
-            <g class="animated-sun-rays" stroke="#ffb703" stroke-width="3" stroke-linecap="round">
-              <line x1="24" y1="8" x2="24" y2="13" /><line x1="8" y1="24" x2="13" y2="24" />
-              <line x1="12.7" y1="12.7" x2="16.2" y2="16.2" />
-            </g>
-            <circle class="animated-sun-core" cx="24" cy="24" r="8" fill="#ffb703" />
-            <path class="animated-cloud-front" d="M 26,42 A 10,10 0 0,1 42,35 A 8,8 0 0,1 54,42 A 6,6 0 0,1 52,52 L 26,52 A 6,6 0 0,1 26,42 Z" fill="#cbd5e1" />
-          </svg>`;
-      }
-      if (code <= 67) {
-        return `
-          <svg class="animated-weather-icon" viewBox="0 0 64 64">
-            <path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#94a3b8" />
-            <line class="animated-rain-1" x1="22" y1="46" x2="20" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" />
-            <line class="animated-rain-2" x1="32" y1="46" x2="30" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" />
-            <line class="animated-rain-3" x1="42" y1="46" x2="40" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" />
-          </svg>`;
-      }
-      return `
-        <svg class="animated-weather-icon" viewBox="0 0 64 64">
-          <path class="animated-cloud-back" d="M 18,28 A 10,10 0 0,1 36,22 A 9,9 0 0,1 50,28 A 7,7 0 0,1 48,40 L 18,40 A 7,7 0 0,1 18,28 Z" fill="#64748b" />
-          <polygon class="animated-lightning" points="30,38 24,48 31,48 27,58 38,44 31,44" fill="#ffe600" />
-        </svg>`;
-    }
-
-    function obtenerDescClima(code) {
-      if (code === 0) return "Despejado";
-      if (code <= 3) return "Parcialmente Nublado";
-      if (code <= 48) return "Niebla";
-      if (code <= 67) return "Lluvia Ligera";
-      if (code <= 77) return "Lluvia Fuerte";
-      if (code <= 99) return "Tormenta";
-      return "Soleado";
-    }
-
-    function cargarClimaAsuncion() {
-      setTimeout(() => {
-        const urlClima = "https://api.open-meteo.com/v1/forecast?latitude=-25.2637&longitude=-57.5759&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=America%2FAsuncion";
-
-        fetch(urlClima)
-          .then(res => res.json())
-          .then(data => {
-            if (data && data.current) {
-              const tempActual = Math.round(data.current.temperature_2m);
-              const headerWidget = document.getElementById("widgetClimaHeader");
-              if (headerWidget) {
-                headerWidget.innerHTML = `${obtenerSVGAnimado(data.current.weather_code)} <span>Asunción: ${tempActual}°C</span>`;
-              }
-
-              const gridPronostico = document.getElementById("gridPronostico");
-              if (gridPronostico && data.daily) {
-                let htmlPronostico = "";
-                for (let i = 0; i < 3; i++) {
-                  const fechaObj = new Date(data.daily.time[i] + "T00:00:00");
-                  let nombreDia = fechaObj.toLocaleDateString("es-ES", { weekday: "long", day: "numeric" }).replace(/\bde\b/g, "");
-                  nombreDia = nombreDia.charAt(0).toUpperCase() + nombreDia.slice(1);
-
-                  const maxTemp = Math.round(data.daily.temperature_2m_max[i]);
-                  const minTemp = Math.round(data.daily.temperature_2m_min[i]);
-                  const codeDia = data.daily.weather_code[i];
-
-                  htmlPronostico += `
-                    <div class="weather-card">
-                      <div class="weather-card-info">
-                        <div class="weather-card-day">${nombreDia}</div>
-                        <div class="weather-card-desc">${obtenerDescClima(codeDia)}</div>
-                        <div class="weather-card-temps">Máx: ${maxTemp}°C / Mín: ${minTemp}°C</div>
-                      </div>
-                      ${obtenerSVGAnimado(codeDia)}
-                    </div>
-                  `;
-                }
-                gridPronostico.innerHTML = htmlPronostico;
-              }
-            }
-          })
-          .catch(() => {});
-      }, 500);
-    }
-
-    // Contador de visitas
-    function cargarVisitas() {
-      const contadorEl = document.getElementById("contadorVisitas");
-      if (!contadorEl) return;
-
-      let visitas = parseInt(localStorage.getItem("utv_visitas_totales") || "1258", 10);
-
-      if (!sessionStorage.getItem("utv_sesion_contada")) {
-        visitas += 1;
-        localStorage.setItem("utv_visitas_totales", visitas);
-        sessionStorage.setItem("utv_sesion_contada", "true");
-      }
-
-      contadorEl.textContent = visitas.toLocaleString("es-PY") + " vistas";
-    }
-
-    // Ejecución garantizada inmediata
-    mostrarDia('sabado10');
-    actualizarReloj();
-    iniciarReproductor();
-    cargarVisitas();
-
-    // Clima en segundo plano
-    cargarClimaAsuncion();
-
-    setInterval(actualizarReloj, 1000);
-    setInterval(() => mostrarDia(diaActualCargado), 60000);
-  </script>
-</body>
-</html>
+            
