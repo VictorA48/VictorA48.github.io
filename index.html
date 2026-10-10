@@ -47,10 +47,10 @@
       overflow-x: hidden;
     }
 
-    /* HEADER MODERNO */
+    /* HEADER MODERNO CON LOGO INTEGRADO */
     header {
       width: 100%;
-      padding: 14px 28px;
+      padding: 12px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -66,18 +66,15 @@
     .logo-container {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
-    .logo-badge {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: #080b11;
-      font-weight: 800;
-      font-size: 26px;
-      padding: 4px 18px;
-      border-radius: 10px;
-      letter-spacing: 1.5px;
-      box-shadow: 0 0 20px var(--primary-glow);
+    .logo-img {
+      height: 42px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.3));
+      border-radius: 6px;
     }
 
     .channel-title {
@@ -138,7 +135,7 @@
       50% { opacity: 0.3; transform: scale(0.85); }
     }
 
-    /* ANIMACIONES REALISTAS DEL CLIMA (CORREGIDO Y CENTRADO) */
+    /* ANIMACIONES REALISTAS DEL CLIMA */
     .animated-weather-icon {
       width: 36px;
       height: 36px;
@@ -610,7 +607,7 @@
   <!-- HEADER -->
   <header>
     <div class="logo-container">
-      <div class="logo-badge">UTV</div>
+      <img src="logo.png" alt="UTV Logo" class="logo-img" onerror="this.style.display='none'">
       <span class="channel-title">Televisión Digital</span>
     </div>
     
