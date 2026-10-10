@@ -591,7 +591,7 @@
     <div class="header-status">
       <div class="widget-pill clock-widget">
         <i class="fas fa-clock"></i>
-        <span class="clock-date" id="relojFecha">Sábado, 10 Octubre</span>
+        <span class="clock-date" id="relojFecha">Sábado, 10 Octubre 2026</span>
         <span class="clock-time" id="relojHora">00:00:00</span>
       </div>
 
@@ -844,7 +844,7 @@
       var dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
       var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
       
-      var txtFecha = dias[d.getDay()] + ", " + d.getDate() + " " + meses[d.getMonth()];
+      var txtFecha = dias[d.getDay()] + ", " + d.getDate() + " " + meses[d.getMonth()] + " " + d.getFullYear();
       var h = String(d.getHours()).padStart(2, '0');
       var m = String(d.getMinutes()).padStart(2, '0');
       var s = String(d.getSeconds()).padStart(2, '0');
