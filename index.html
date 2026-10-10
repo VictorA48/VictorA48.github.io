@@ -314,7 +314,6 @@
       background: rgba(30, 38, 54, 0.8);
     }
 
-    /* ESTADO EN VIVO DENTRO DE LA TARJETA */
     .schedule-card.is-live {
       border-color: var(--live-red);
       background: rgba(255, 42, 95, 0.06);
@@ -400,7 +399,6 @@
       line-height: 1.4;
     }
 
-    /* BARRA DE PROGRESO DE TRANSMISIÓN EN VIVO */
     .progress-bar-container {
       width: 100%;
       height: 4px;
@@ -417,7 +415,6 @@
       transition: width 0.4s ease;
     }
 
-    /* FOOTER */
     footer {
       margin-top: 35px;
       text-align: center;
@@ -521,217 +518,12 @@
         
         <div class="tabs-container">
           <button class="tab-btn active" id="btnSabado10" onclick="mostrarDia('sabado10')">
-            <i class="fas fa-calendar-day"></i> Sábado 10 Octubre
+            <i class="fas fa-calendar-day"></i> Sábado, 10 Octubre 2026
           </button>
           <button class="tab-btn" id="btnDomingo11" onclick="mostrarDia('domingo11')">
-            <i class="fas fa-calendar-day"></i> Domingo 11 Octubre
+            <i class="fas fa-calendar-day"></i> Domingo, 11 Octubre 2026
           </button>
         </div>
       </div>
 
-      <!-- GRILLA DE PROGRAMACIÓN DINÁMICA -->
-      <div class="schedule-grid" id="grillaProgramacion">
-        <!-- Generado dinámicamente -->
-      </div>
-    </div>
-
-    <footer>
-      &copy; 2026 - 2032 UTV - Televisión Digital Oficial. Todos los derechos reservados.
-    </footer>
-  </div>
-
-  <script>
-    const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
-    const video = document.getElementById("videoPlayer");
-
-    // Datos de programación con categorías y minutos para cálculo de progreso en vivo
-    const programacionSabado10 = [
-      { hora: "12:00", fin: "13:09", titulo: "Los Tres Chiflados", categoria: "animacion" },
-      { hora: "13:09", fin: "14:16", titulo: "Los Thundercats", categoria: "animacion" },
-      { hora: "14:16", fin: "15:57", titulo: "Película : Todopoderoso", categoria: "pelicula" },
-      { hora: "15:57", fin: "17:23", titulo: "Especial Concert : Talk Talk", categoria: "especial" },
-      { hora: "17:23", fin: "18:01", titulo: 'Santo Rosario "Misterios Gozosos"', categoria: "religioso" },
-      { hora: "18:01", fin: "19:09", titulo: 'Series Temporada 1 : Hannah Montana', categoria: "serie" },
-      { hora: "19:09", fin: "20:55", titulo: 'Película : La Barbería 2 "Vuelta al Negocio"', categoria: "pelicula" },
-      { hora: "20:55", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
-    ];
-
-    const programacionDomingo11 = [
-      { hora: "12:00", fin: "13:14", titulo: "Dragon Ball", categoria: "animacion" },
-      { hora: "13:14", fin: "14:20", titulo: "Mazinger Z", categoria: "animacion" },
-      { hora: "14:20", fin: "15:47", titulo: "Película : Los Cuatro Jinetes Del Apocalipsis", categoria: "pelicula" },
-      { hora: "15:47", fin: "16:54", titulo: "Especial : The 90s Festival", categoria: "especial" },
-      { hora: "16:54", fin: "17:40", titulo: "Santa Misa", categoria: "religioso" },
-      { hora: "17:40", fin: "18:13", titulo: 'Santo Rosario "Misterios Gloriosos"', categoria: "religioso" },
-      { hora: "18:13", fin: "19:21", titulo: 'Series Temporada 1 : Hannah Montana', categoria: "serie" },
-      { hora: "19:21", fin: "20:42", titulo: "Película Paraguaya : Morgue", categoria: "pelicula" },
-      { hora: "20:42", fin: "22:28", titulo: "Película : La Isla Maldita", categoria: "pelicula" },
-      { hora: "22:28", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
-    ];
-
-    let diaActualCargado = 'sabado10';
-
-    function obtenerMinutos(horaStr) {
-      const [h, m] = horaStr.split(':').map(Number);
-      return h * 60 + m;
-    }
-
-    function obtenerBadgeCategoria(cat) {
-      const mapas = {
-        pelicula: '<span class="show-badge badge-pelicula"><i class="fas fa-film"></i> Película</span>',
-        serie: '<span class="show-badge badge-serie"><i class="fas fa-tv"></i> Serie</span>',
-        religioso: '<span class="show-badge badge-religioso"><i class="fas fa-church"></i> Religioso</span>',
-        animacion: '<span class="show-badge badge-animacion"><i class="fas fa-child"></i> Animación</span>',
-        especial: '<span class="show-badge badge-especial"><i class="fas fa-star"></i> Especial</span>',
-        general: '<span class="show-badge badge-general"><i class="fas fa-broadcast-tower"></i> Emisión</span>'
-      };
-      return mapas[cat] || mapas.general;
-    }
-
-    function mostrarDia(dia) {
-      diaActualCargado = dia;
-      const botones = document.querySelectorAll(".tab-btn");
-      const grillaContainer = document.getElementById("grillaProgramacion");
-      
-      botones.forEach(btn => btn.classList.remove("active"));
-
-      let lista = dia === 'domingo11' ? programacionDomingo11 : programacionSabado10;
-      const activeBtn = dia === 'domingo11' ? 'btnDomingo11' : 'btnSabado10';
-      
-      if (document.getElementById(activeBtn)) {
-        document.getElementById(activeBtn).classList.add("active");
-      }
-
-      // Obtener hora actual en minutos (Paraguay)
-      const ahora = new Date();
-      const horaMinutosActual = ahora.getHours() * 60 + ahora.getMinutes();
-
-      let html = "";
-
-      lista.forEach(item => {
-        const minInicio = obtenerMinutos(item.hora);
-        const minFin = obtenerMinutos(item.fin);
-
-        // Validar si el programa está transmitiéndose en vivo en este instante
-        const esEnVivo = horaMinutosActual >= minInicio && horaMinutosActual < minFin;
-        
-        let porcentajeProgreso = 0;
-        if (esEnVivo) {
-          porcentajeProgreso = Math.min(100, Math.max(0, ((horaMinutosActual - minInicio) / (minFin - minInicio)) * 100));
-        }
-
-        html += `
-          <div class="schedule-card ${esEnVivo ? 'is-live' : ''}">
-            <div class="schedule-time">
-              <i class="far fa-clock"></i> ${item.hora}
-            </div>
-            <div class="schedule-details">
-              <div class="schedule-header-row">
-                ${obtenerBadgeCategoria(item.categoria)}
-                ${esEnVivo ? '<span class="live-tag"><i class="fas fa-play"></i> EN AIRE AHORA</span>' : ''}
-              </div>
-              <div class="schedule-show-title">${item.titulo}</div>
-              ${esEnVivo ? `
-                <div class="progress-bar-container">
-                  <div class="progress-bar-fill" style="width: \${porcentajeProgreso}%"></div>
-                </div>
-              ` : ''}
-            </div>
-          </div>
-        `;
-      });
-
-      grillaContainer.innerHTML = html;
-    }
-
-    // Cargar día inicial
-    mostrarDia('sabado10');
-
-    // Reproductor HLS
-    if (Hls.isSupported()) {
-      const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
-      hls.loadSource(streamURL);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, function () {
-        video.play().catch(function() {
-          video.muted = true;
-          video.play();
-        });
-      });
-    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = streamURL;
-      video.addEventListener("loadedmetadata", function () {
-        video.play().catch(function() {
-          video.muted = true;
-          video.play();
-        });
-      });
-    }
-
-    function togglePantallaCompleta() {
-      if (!document.fullscreenElement) {
-        if (video.requestFullscreen) video.requestFullscreen();
-        else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
-      } else {
-        if (document.exitFullscreen) document.exitFullscreen();
-      }
-    }
-
-    // Reloj ajustado a Paraguay (America/Asuncion)
-    function actualizarRelojParaguay() {
-      const ahora = new Date();
-      const timeZone = "America/Asuncion";
-
-      try {
-        const formatoFecha = new Intl.DateTimeFormat("es-PY", {
-          timeZone: timeZone,
-          weekday: "short",
-          day: "numeric",
-          month: "short"
-        });
-
-        const formatoHora = new Intl.DateTimeFormat("es-PY", {
-          timeZone: timeZone,
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: false
-        });
-
-        document.getElementById("relojFecha").textContent = formatoFecha.format(ahora);
-        document.getElementById("relojHora").textContent = formatoHora.format(ahora);
-      } catch (e) {
-        document.getElementById("relojHora").textContent = ahora.toLocaleTimeString();
-      }
-    }
-
-    setInterval(actualizarRelojParaguay, 1000);
-    setInterval(() => mostrarDia(diaActualCargado), 60000); // Actualiza estado "EN AIRE" cada minuto
-    actualizarRelojParaguay();
-
-    // Contador de visitas
-    function cargarVisitas() {
-      const contadorEl = document.getElementById("contadorVisitas");
-      
-      fetch("https://api.counterapi.dev/v1/utv_oficial_paraguay/vistas/up")
-        .then(res => res.json())
-        .then(data => {
-          if (data && typeof data.count === "number") {
-            contadorEl.textContent = data.count.toLocaleString("es-PY") + " vistas";
-            localStorage.setItem("utv_visitas_cache", data.count);
-          } else {
-            throw new Error("Respuesta inválida");
-          }
-        })
-        .catch(() => {
-          let visitasGuardadas = parseInt(localStorage.getItem("utv_visitas_cache") || "1258", 10);
-          visitasGuardadas += 1;
-          localStorage.setItem("utv_visitas_cache", visitasGuardadas);
-          contadorEl.textContent = visitasGuardadas.toLocaleString("es-PY") + " vistas";
-        });
-    }
-    
-    cargarVisitas();
-  </script>
-</body>
-</html>
+      <!-- GRILLA DE PROGRAM
