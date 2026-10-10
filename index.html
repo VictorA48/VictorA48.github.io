@@ -344,10 +344,7 @@
 
     <div>
       <div class="tabs-container">
-        <button class="tab-btn active" id="btnViernes9" onclick="mostrarDia('viernes9')">
-          <i class="fas fa-calendar-day"></i> Viernes 9 Octubre 2026
-        </button>
-        <button class="tab-btn" id="btnSabado10" onclick="mostrarDia('sabado10')">
+        <button class="tab-btn active" id="btnSabado10" onclick="mostrarDia('sabado10')">
           <i class="fas fa-calendar-day"></i> Sábado 10 Octubre 2026
         </button>
         <button class="tab-btn" id="btnDomingo11" onclick="mostrarDia('domingo11')">
@@ -367,16 +364,6 @@
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
     const video = document.getElementById("videoPlayer");
-
-    // Viernes 9 Octubre 2026
-    const programacionViernes9 = [
-      { hora: "15:02", titulo: "Especial Concert: Erick Prydz" },
-      { hora: "17:00", titulo: 'Santo Rosario "Misterios Dolorosos"' },
-      { hora: "17:33", titulo: "Series Temporada 6: Un Doctor Diferente" },
-      { hora: "18:16", titulo: "Pelicula: Avatar" },
-      { hora: "21:15", titulo: 'Series: Moisés y los Diez Mandamientos "Final Repeticion"' },
-      { hora: "22:24", titulo: "Fin de la Transmisión" }
-    ];
 
     // Sábado 10 Octubre 2026
     const programacionSabado10 = [
@@ -410,20 +397,17 @@
       
       botones.forEach(btn => btn.classList.remove("active"));
 
-      let lista = programacionViernes9;
+      let lista = programacionSabado10;
 
-      if (dia === 'viernes9') {
-        lista = programacionViernes9;
-        document.getElementById("btnViernes9") ? document.getElementById("btnViernes9").classList.add("active") : null;
-      } else if (dia === 'sabado10') {
+      if (dia === 'sabado10') {
         lista = programacionSabado10;
         document.getElementById("btnSabado10") ? document.getElementById("btnSabado10").classList.add("active") : null;
       } else if (dia === 'domingo11') {
         lista = programacionDomingo11;
         document.getElementById("btnDomingo11") ? document.getElementById("btnDomingo11").classList.add("active") : null;
       } else {
-        lista = programacionViernes9;
-        document.getElementById("btnViernes9") ? document.getElementById("btnViernes9").classList.add("active") : null;
+        lista = programacionSabado10;
+        document.getElementById("btnSabado10") ? document.getElementById("btnSabado10").classList.add("active") : null;
       }
 
       let html = "";
@@ -440,7 +424,7 @@
       grillaContainer.innerHTML = html;
     }
 
-    mostrarDia('viernes9');
+    mostrarDia('sabado10');
 
     if (Hls.isSupported()) {
       const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
