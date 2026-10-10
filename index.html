@@ -47,7 +47,7 @@
       overflow-x: hidden;
     }
 
-    /* HEADER MODERNO CON LOGO LIMPIO Y NORMAL */
+    /* HEADER MODERNO CON LOGO LIMPIO */
     header {
       width: 100%;
       padding: 12px 28px;
@@ -175,10 +175,6 @@
       animation: floatCloudFront 3s ease-in-out infinite alternate;
     }
 
-    .animated-lightning {
-      animation: flashLightning 2.5s ease-in-out infinite;
-    }
-
     .animated-rain-1 { animation: dropRain 1s linear infinite; }
     .animated-rain-2 { animation: dropRain 1.2s linear infinite 0.3s; }
     .animated-rain-3 { animation: dropRain 0.9s linear infinite 0.6s; }
@@ -201,11 +197,6 @@
     @keyframes floatCloudFront {
       0% { transform: translate(0, 0); }
       100% { transform: translate(4px, -2px); }
-    }
-
-    @keyframes flashLightning {
-      0%, 90%, 100% { opacity: 0; }
-      92%, 96% { opacity: 1; filter: drop-shadow(0 0 6px #ffe600); }
     }
 
     @keyframes dropRain {
@@ -632,22 +623,12 @@
         <span class="clock-time" id="relojHora">00:00:00</span>
       </div>
 
-      <!-- WIDGET CLIMA ASUNCIÓN -->
+      <!-- WIDGET CLIMA REAL DE ASUNCIÓN -->
       <div class="widget-pill weather-widget-header" id="widgetClimaHeader">
         <svg class="animated-weather-icon" viewBox="0 0 64 64">
-          <g class="animated-sun-rays" stroke="#ffb703" stroke-width="3" stroke-linecap="round">
-            <line x1="32" y1="10" x2="32" y2="16" />
-            <line x1="32" y1="48" x2="32" y2="54" />
-            <line x1="10" y1="32" x2="16" y2="32" />
-            <line x1="48" y1="32" x2="54" y2="32" />
-            <line x1="16.4" y1="16.4" x2="20.7" y2="20.7" />
-            <line x1="43.3" y1="43.3" x2="47.6" y2="47.6" />
-            <line x1="16.4" y1="47.6" x2="20.7" y2="43.3" />
-            <line x1="43.3" y1="20.7" x2="47.6" y2="16.4" />
-          </g>
-          <circle class="animated-sun-core" cx="32" cy="32" r="10" fill="#ffb703" />
+          <path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#cbd5e1" />
         </svg>
-        <span>Asunción: 28°C</span>
+        <span>Asunción: 19°C</span>
       </div>
       
       <div class="widget-pill visitor-counter">
@@ -697,67 +678,50 @@
       </button>
     </div>
 
-    <!-- PANEL PRONÓSTICO DE CLIMA A 3 DÍAS -->
+    <!-- PANEL PRONÓSTICO DE CLIMA REAL A 3 DÍAS EN ASUNCIÓN -->
     <div class="weather-forecast-container">
       <div class="weather-title">
         <svg class="animated-weather-icon" viewBox="0 0 64 64">
-          <g class="animated-sun-rays" stroke="#ffb703" stroke-width="3" stroke-linecap="round">
-            <line x1="24" y1="8" x2="24" y2="13" />
-            <line x1="8" y1="24" x2="13" y2="24" />
-            <line x1="12.7" y1="12.7" x2="16.2" y2="16.2" />
-          </g>
-          <circle class="animated-sun-core" cx="24" cy="24" r="8" fill="#ffb703" />
-          <path class="animated-cloud-front" d="M 26,42 A 10,10 0 0,1 42,35 A 8,8 0 0,1 54,42 A 6,6 0 0,1 52,52 L 26,52 A 6,6 0 0,1 26,42 Z" fill="#e2e8f0" opacity="0.9" />
+          <path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#94a3b8" />
+          <line class="animated-rain-1" x1="22" y1="46" x2="20" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" />
+          <line class="animated-rain-2" x1="32" y1="46" x2="30" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" />
+          <line class="animated-rain-3" x1="42" y1="46" x2="40" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" />
         </svg>
         <span>Pronóstico del Tiempo en Asunción (3 Días)</span>
       </div>
       <div class="weather-days-grid" id="gridPronostico">
-        <!-- Día 1 -->
+        <!-- Sábado 10 -->
         <div class="weather-card">
           <div class="weather-card-info">
             <div class="weather-card-day">Sábado, 10 Octubre</div>
-            <div class="weather-card-desc">Soleado</div>
-            <div class="weather-card-temps">Máx: 32°C / Mín: 22°C</div>
+            <div class="weather-card-desc">Nublado con Lloviznas</div>
+            <div class="weather-card-temps">Máx: 21°C / Mín: 18°C</div>
           </div>
           <svg class="animated-weather-icon" viewBox="0 0 64 64">
-            <g class="animated-sun-rays" stroke="#ffb703" stroke-width="3" stroke-linecap="round">
-              <line x1="32" y1="10" x2="32" y2="16" />
-              <line x1="32" y1="48" x2="32" y2="54" />
-              <line x1="10" y1="32" x2="16" y2="32" />
-              <line x1="48" y1="32" x2="54" y2="32" />
-              <line x1="16.4" y1="16.4" x2="20.7" y2="20.7" />
-              <line x1="43.3" y1="43.3" x2="47.6" y2="47.6" />
-              <line x1="16.4" y1="47.6" x2="20.7" y2="43.3" />
-              <line x1="43.3" y1="20.7" x2="47.6" y2="16.4" />
-            </g>
-            <circle class="animated-sun-core" cx="32" cy="32" r="10" fill="#ffb703" />
+            <path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#cbd5e1" />
+            <line class="animated-rain-1" x1="26" y1="46" x2="24" y2="52" stroke="#00f2fe" stroke-width="2" stroke-linecap="round" />
+            <line class="animated-rain-2" x1="36" y1="46" x2="34" y2="52" stroke="#00f2fe" stroke-width="2" stroke-linecap="round" />
           </svg>
         </div>
 
-        <!-- Día 2 -->
+        <!-- Domingo 11 -->
         <div class="weather-card">
           <div class="weather-card-info">
             <div class="weather-card-day">Domingo, 11 Octubre</div>
-            <div class="weather-card-desc">Parcialmente Nublado</div>
-            <div class="weather-card-temps">Máx: 29°C / Mín: 20°C</div>
+            <div class="weather-card-desc">Mayormente Nublado</div>
+            <div class="weather-card-temps">Máx: 22°C / Mín: 18°C</div>
           </div>
           <svg class="animated-weather-icon" viewBox="0 0 64 64">
-            <g class="animated-sun-rays" stroke="#ffb703" stroke-width="3" stroke-linecap="round">
-              <line x1="24" y1="8" x2="24" y2="13" />
-              <line x1="8" y1="24" x2="13" y2="24" />
-              <line x1="12.7" y1="12.7" x2="16.2" y2="16.2" />
-            </g>
-            <circle class="animated-sun-core" cx="24" cy="24" r="8" fill="#ffb703" />
-            <path class="animated-cloud-front" d="M 26,42 A 10,10 0 0,1 42,35 A 8,8 0 0,1 54,42 A 6,6 0 0,1 52,52 L 26,52 A 6,6 0 0,1 26,42 Z" fill="#cbd5e1" />
+            <path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#94a3b8" />
           </svg>
         </div>
 
-        <!-- Día 3 -->
+        <!-- Lunes 12 -->
         <div class="weather-card">
           <div class="weather-card-info">
             <div class="weather-card-day">Lunes, 12 Octubre</div>
-            <div class="weather-card-desc">Lluvias dispersas</div>
-            <div class="weather-card-temps">Máx: 25°C / Mín: 18°C</div>
+            <div class="weather-card-desc">Lluvias Dispersas</div>
+            <div class="weather-card-temps">Máx: 22°C / Mín: 19°C</div>
           </div>
           <svg class="animated-weather-icon" viewBox="0 0 64 64">
             <path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#94a3b8" />
@@ -796,187 +760,3 @@
   </div>
 
   <script class="notranslate">
-    var streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
-    var video = document.getElementById("videoPlayer");
-    var errorDiv = document.getElementById("playerError");
-
-    function mostrarLogoFallback() {
-      var img = document.getElementById("channelLogo");
-      var fallback = document.getElementById("logoFallback");
-      if (img) img.style.display = "none";
-      if (fallback) fallback.style.display = "block";
-    }
-
-    var programacionSabado10 = [
-      { hora: "12:00", fin: "13:09", titulo: "Los Tres Chiflados", categoria: "animacion" },
-      { hora: "13:09", fin: "14:16", titulo: "Los Thundercats", categoria: "animacion" },
-      { hora: "14:16", fin: "15:57", titulo: "Película : Todopoderoso", categoria: "pelicula" },
-      { hora: "15:57", fin: "17:23", titulo: "Especial Concert : Talk Talk", categoria: "especial" },
-      { hora: "17:23", fin: "18:01", titulo: 'Santo Rosario "Misterios Gozosos"', categoria: "religioso" },
-      { hora: "18:01", fin: "19:09", titulo: 'Series Temporada 1 : Hanna Montana', categoria: "serie" },
-      { hora: "19:09", fin: "20:55", titulo: 'Película : La Barbería 2 "Vuelta al Negocio"', categoria: "pelicula" },
-      { hora: "20:55", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
-    ];
-
-    var programacionDomingo11 = [
-      { hora: "12:00", fin: "13:14", titulo: "Dragon Ball", categoria: "animacion" },
-      { hora: "13:14", fin: "14:20", titulo: "Mazinger Z", categoria: "animacion" },
-      { hora: "14:20", fin: "15:47", titulo: "Película : Los Cuatro Jinetes Del Apocalipsis", categoria: "pelicula" },
-      { hora: "15:47", fin: "16:54", titulo: "Especial : The 90s Festival", categoria: "especial" },
-      { hora: "16:54", fin: "17:40", titulo: "Santa Misa", categoria: "religioso" },
-      { hora: "17:40", fin: "18:13", titulo: 'Santo Rosario "Misterios Gloriosos"', categoria: "religioso" },
-      { hora: "18:13", fin: "19:21", titulo: 'Series Temporada 1 : Hannah Montana', categoria: "serie" },
-      { hora: "19:21", fin: "20:42", titulo: "Película Paraguaya : Morgue", categoria: "pelicula" },
-      { hora: "20:42", fin: "22:28", titulo: "Película : La Isla Maldita", categoria: "pelicula" },
-      { hora: "22:28", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
-    ];
-
-    var diaActualCargado = 'sabado10';
-
-    function obtenerMinutos(horaStr) {
-      if (!horaStr) return 0;
-      var partes = horaStr.split(':');
-      return (parseInt(partes[0], 10) || 0) * 60 + (parseInt(partes[1], 10) || 0);
-    }
-
-    function obtenerBadgeCategoria(cat) {
-      var mapas = {
-        pelicula: '<span class="show-badge badge-pelicula"><i class="fas fa-film"></i> Película</span>',
-        serie: '<span class="show-badge badge-serie"><i class="fas fa-tv"></i> Serie</span>',
-        religioso: '<span class="show-badge badge-religioso"><i class="fas fa-church"></i> Religioso</span>',
-        animacion: '<span class="show-badge badge-animacion"><i class="fas fa-child"></i> Animación</span>',
-        especial: '<span class="show-badge badge-especial"><i class="fas fa-star"></i> Especial</span>',
-        general: '<span class="show-badge badge-general"><i class="fas fa-broadcast-tower"></i> Emisión</span>'
-      };
-      return mapas[cat] || mapas.general;
-    }
-
-    function mostrarDia(dia) {
-      diaActualCargado = dia;
-      var grillaContainer = document.getElementById("grillaProgramacion");
-      if (!grillaContainer) return;
-
-      var btnSabado = document.getElementById("btnSabado10");
-      var btnDomingo = document.getElementById("btnDomingo11");
-
-      if (btnSabado) btnSabado.classList.remove("active");
-      if (btnDomingo) btnDomingo.classList.remove("active");
-
-      var lista = programacionSabado10;
-      if (dia === 'domingo11') {
-        lista = programacionDomingo11;
-        if (btnDomingo) btnDomingo.classList.add("active");
-      } else {
-        if (btnSabado) btnSabado.classList.add("active");
-      }
-
-      var ahora = new Date();
-      var horaMinutosActual = ahora.getHours() * 60 + ahora.getMinutes();
-
-      var html = "";
-      lista.forEach(function(item) {
-        var minInicio = obtenerMinutos(item.hora);
-        var minFin = obtenerMinutos(item.fin);
-        var esEnVivo = horaMinutosActual >= minInicio && horaMinutosActual < minFin;
-        
-        var porcentajeProgreso = 0;
-        if (esEnVivo && minFin > minInicio) {
-          porcentajeProgreso = Math.min(100, Math.max(0, ((horaMinutosActual - minInicio) / (minFin - minInicio)) * 100));
-        }
-
-        html += '<div class="schedule-card ' + (esEnVivo ? 'is-live' : '') + '">' +
-            '<div class="schedule-time"><i class="far fa-clock"></i> ' + item.hora + '</div>' +
-            '<div class="schedule-details">' +
-              '<div class="schedule-header-row">' +
-                obtenerBadgeCategoria(item.categoria) +
-                (esEnVivo ? '<span class="live-tag"><i class="fas fa-play"></i> EN AIRE AHORA</span>' : '') +
-              '</div>' +
-              '<div class="schedule-show-title">' + item.titulo + '</div>' +
-              (esEnVivo ? '<div class="progress-bar-container"><div class="progress-bar-fill" style="width: ' + porcentajeProgreso + '%"></div></div>' : '') +
-            '</div>' +
-          '</div>';
-      });
-
-      grillaContainer.innerHTML = html;
-    }
-
-    function iniciarReproductor() {
-      if (!video) return;
-      if (typeof Hls !== 'undefined' && Hls.isSupported()) {
-        var hls = new Hls({ enableWorker: true, lowLatencyMode: true });
-        hls.loadSource(streamURL);
-        hls.attachMedia(video);
-        
-        hls.on(Hls.Events.MANIFEST_PARSED, function () {
-          if (errorDiv) errorDiv.style.display = "none";
-          video.play().catch(function() { video.muted = true; video.play(); });
-        });
-
-        hls.on(Hls.Events.ERROR, function (event, data) {
-          if (data.fatal && errorDiv) {
-            errorDiv.style.display = "flex";
-          }
-        });
-      } else if (video.canPlayType && video.canPlayType("application/vnd.apple.mpegurl")) {
-        video.src = streamURL;
-        video.addEventListener("loadedmetadata", function () {
-          if (errorDiv) errorDiv.style.display = "none";
-          video.play().catch(function() { video.muted = true; video.play(); });
-        });
-        video.addEventListener("error", function () {
-          if (errorDiv) errorDiv.style.display = "flex";
-        });
-      }
-    }
-
-    function togglePantallaCompleta() {
-      if (!document.fullscreenElement) {
-        if (video.requestFullscreen) video.requestFullscreen();
-        else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
-      } else {
-        if (document.exitFullscreen) document.exitFullscreen();
-      }
-    }
-
-    function actualizarReloj() {
-      var ahora = new Date();
-      try {
-        var opcionesFecha = { weekday: "long", day: "numeric", month: "long" };
-        var fechaTexto = ahora.toLocaleDateString("es-ES", opcionesFecha).replace(/\bde\b/g, "").replace(/\s+/g, " ");
-        fechaTexto = fechaTexto.charAt(0).toUpperCase() + fechaTexto.slice(1);
-        
-        var hrs = String(ahora.getHours()).padStart(2, '0');
-        var mins = String(ahora.getMinutes()).padStart(2, '0');
-        var secs = String(ahora.getSeconds()).padStart(2, '0');
-        var horaTexto = hrs + ":" + mins + ":" + secs;
-
-        var elFecha = document.getElementById("relojFecha");
-        var elHora = document.getElementById("relojHora");
-        if (elFecha) elFecha.textContent = fechaTexto;
-        if (elHora) elHora.textContent = horaTexto;
-      } catch (e) {}
-    }
-
-    function cargarVisitas() {
-      var contadorEl = document.getElementById("contadorVisitas");
-      if (!contadorEl) return;
-      var visitas = parseInt(localStorage.getItem("utv_visitas_totales") || "1258", 10);
-      if (!sessionStorage.getItem("utv_sesion_contada")) {
-        visitas += 1;
-        localStorage.setItem("utv_visitas_totales", visitas);
-        sessionStorage.setItem("utv_sesion_contada", "true");
-      }
-      contadorEl.textContent = visitas.toLocaleString("es-PY") + " vistas";
-    }
-
-    // Ejecución directa inmediata
-    mostrarDia('sabado10');
-    actualizarReloj();
-    iniciarReproductor();
-    cargarVisitas();
-
-    setInterval(actualizarReloj, 1000);
-    setInterval(function() { mostrarDia(diaActualCargado); }, 60000);
-  </script>
-</body>
-</html>
