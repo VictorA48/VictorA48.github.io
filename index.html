@@ -811,13 +811,19 @@
 
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
+      
+      // Comprobar si el día de la pestaña coincide con el día real de hoy (Sábado = 6)
+      var esHoyReal = (ah.getDay() === 6 && dia === "sabado10") || (ah.getDay() === 0 && dia === "domingo11");
+
       var html = "";
 
       for (var i = 0; i < lista.length; i++) {
         var it = lista[i];
         var mi = obtenerMinutos(it.hora);
         var mf = obtenerMinutos(it.fin);
-        var enAire = (hm >= mi && hm < mf);
+        
+        // Solo se considera "EN AIRE" si la pestaña pertenece a la fecha de hoy
+        var enAire = esHoyReal && (hm >= mi && hm < mf);
         var pct = 0;
 
         if (enAire && mf > mi) {
@@ -855,7 +861,7 @@
       if (eh) eh.textContent = h + ":" + m + ":" + s;
     }
 
-    // Contador estable: solo suma 1 si es una nueva sesión o visita de usuario
+    // Contador estable
     function gestionarVisitas() {
       var contadorEl = document.getElementById("contadorVisitas");
       if (!contadorEl) return;
