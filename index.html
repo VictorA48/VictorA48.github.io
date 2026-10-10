@@ -713,11 +713,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn active" id="btnSabado10" onclick="mostrarDia('sabado10')">
-            <i class="fas fa-calendar-day"></i> Sábado, 10 Octubre 2026
-          </button>
-          <button class="tab-btn" id="btnDomingo11" onclick="mostrarDia('domingo11')">
+          <button class="tab-btn active" id="btnDomingo11" onclick="mostrarDia('domingo11')">
             <i class="fas fa-calendar-day"></i> Domingo, 11 Octubre 2026
+          </button>
+          <button class="tab-btn" id="btnLunes12" onclick="mostrarDia('lunes12')">
+            <i class="fas fa-calendar-day"></i> Lunes, 12 Octubre 2026
+          </button>
+          <button class="tab-btn" id="btnMartes13" onclick="mostrarDia('martes13')">
+            <i class="fas fa-calendar-day"></i> Martes, 13 Octubre 2026
           </button>
         </div>
       </div>
@@ -750,17 +753,6 @@
       }
     }
 
-    var programacionSabado10 = [
-      { hora: "12:00", fin: "13:09", titulo: "Los Tres Chiflados", categoria: "animacion" },
-      { hora: "13:09", fin: "14:16", titulo: "Los Thundercats", categoria: "animacion" },
-      { hora: "14:16", fin: "15:57", titulo: "Película : Todopoderoso", categoria: "pelicula" },
-      { hora: "15:57", fin: "17:23", titulo: "Especial Concert : Talk Talk", categoria: "especial" },
-      { hora: "17:23", fin: "18:01", titulo: "Santo Rosario Misterios Gozosos", categoria: "religioso" },
-      { hora: "18:01", fin: "19:09", titulo: "Series Temporada 1 : Hanna Montana", categoria: "serie" },
-      { hora: "19:09", fin: "20:55", titulo: "Película : La Barbería 2 Vuelta al Negocio", categoria: "pelicula" },
-      { hora: "20:55", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
-    ];
-
     var programacionDomingo11 = [
       { hora: "12:00", fin: "13:14", titulo: "Dragon Ball", categoria: "animacion" },
       { hora: "13:14", fin: "14:20", titulo: "Mazinger Z", categoria: "animacion" },
@@ -774,7 +766,25 @@
       { hora: "22:28", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
     ];
 
-    var diaActual = "sabado10";
+    var programacionLunes12 = [
+      { hora: "17:00", fin: "18:23", titulo: "Especial Concert : Mana", categoria: "especial" },
+      { hora: "18:23", fin: "19:01", titulo: "Santo Rosario Misterios Gozosos", categoria: "religioso" },
+      { hora: "19:01", fin: "19:44", titulo: "Series Temporada 6 : Un Doctor Diferente", categoria: "serie" },
+      { hora: "19:44", fin: "21:35", titulo: "Película : El Gigante de Piedra", categoria: "pelicula" },
+      { hora: "21:35", fin: "22:46", titulo: "Series Estreno : La Tierra Prometida", categoria: "serie" },
+      { hora: "22:46", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
+    ];
+
+    var programacionMartes13 = [
+      { hora: "17:00", fin: "18:43", titulo: "Especial Concert : Adele", categoria: "especial" },
+      { hora: "18:43", fin: "19:16", titulo: "Santo Rosario Misterios Dolorosos", categoria: "religioso" },
+      { hora: "19:16", fin: "20:00", titulo: "Series Temporada 6 : Un Doctor Diferente", categoria: "serie" },
+      { hora: "20:00", fin: "21:48", titulo: "Película : El Cisne Negro", categoria: "pelicula" },
+      { hora: "21:48", fin: "22:42", titulo: "Series : La Tierra Prometida", categoria: "serie" },
+      { hora: "22:42", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
+    ];
+
+    var diaActual = "domingo11";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -796,15 +806,20 @@
       var gc = document.getElementById("grillaProgramacion");
       if (!gc) return;
 
-      var b1 = document.getElementById("btnSabado10");
-      var b2 = document.getElementById("btnDomingo11");
+      var b1 = document.getElementById("btnDomingo11");
+      var b2 = document.getElementById("btnLunes12");
+      var b3 = document.getElementById("btnMartes13");
       if (b1) b1.classList.remove("active");
       if (b2) b2.classList.remove("active");
+      if (b3) b3.classList.remove("active");
 
-      var lista = programacionSabado10;
-      if (dia === "domingo11") {
-        lista = programacionDomingo11;
+      var lista = programacionDomingo11;
+      if (dia === "lunes12") {
+        lista = programacionLunes12;
         if (b2) b2.classList.add("active");
+      } else if (dia === "martes13") {
+        lista = programacionMartes13;
+        if (b3) b3.classList.add("active");
       } else {
         if (b1) b1.classList.add("active");
       }
@@ -812,8 +827,10 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       
-      // Comprobar si el día de la pestaña coincide con el día real de hoy (Sábado = 6)
-      var esHoyReal = (ah.getDay() === 6 && dia === "sabado10") || (ah.getDay() === 0 && dia === "domingo11");
+      // Comprobar si el día de la pestaña coincide con el día real de hoy (Domingo = 0, Lunes = 1, Martes = 2)
+      var esHoyReal = (ah.getDay() === 0 && dia === "domingo11") || 
+                      (ah.getDay() === 1 && dia === "lunes12") || 
+                      (ah.getDay() === 2 && dia === "martes13");
 
       var html = "";
 
@@ -822,7 +839,6 @@
         var mi = obtenerMinutos(it.hora);
         var mf = obtenerMinutos(it.fin);
         
-        // Solo se considera "EN AIRE" si la pestaña pertenece a la fecha de hoy
         var enAire = esHoyReal && (hm >= mi && hm < mf);
         var pct = 0;
 
@@ -926,7 +942,7 @@
     // Inicializar todo al cargar
     window.onload = function() {
       actualizarReloj();
-      mostrarDia("sabado10");
+      mostrarDia("domingo11");
       iniciarPlayer();
       gestionarVisitas();
       consultarClimaAuto();
