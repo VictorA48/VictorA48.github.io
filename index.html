@@ -74,8 +74,7 @@
       width: auto;
       max-width: 180px;
       object-fit: contain;
-      filter: none; /* Sin brillo ni sombras, totalmente natural */
-      border-radius: 0;
+      filter: none;
       display: block;
     }
 
@@ -321,4 +320,663 @@
       border-radius: 10px;
       font-weight: 700;
       cursor: pointer;
-      font-size: 13
+      font-size: 13px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .btn-fullscreen:hover {
+      filter: brightness(1.15);
+      transform: scale(1.02);
+    }
+
+    /* SECCIÓN SECTOR CLIMA PRONÓSTICO 3 DÍAS */
+    .weather-forecast-container {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      padding: 20px 24px;
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .weather-title {
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .weather-days-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .weather-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.25s;
+    }
+
+    .weather-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(0, 242, 254, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .weather-card-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .weather-card-day {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .weather-card-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: capitalize;
+    }
+
+    .weather-card-temps {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* SECCIÓN PROGRAMACIÓN */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title i { color: var(--primary); }
+
+    .tabs-container {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(79, 172, 254, 0.15));
+      color: var(--primary);
+      border-color: var(--primary);
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    /* GRILLA Y TARJETAS DE PROGRAMACIÓN */
+    .schedule-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .schedule-card {
+      display: flex;
+      align-items: center;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      padding: 16px 22px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      gap: 20px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .schedule-card:hover {
+      transform: translateX(4px);
+      border-color: rgba(0, 242, 254, 0.3);
+      background: rgba(30, 38, 54, 0.8);
+    }
+
+    .schedule-card.is-live {
+      border-color: var(--live-red);
+      background: rgba(255, 42, 95, 0.06);
+      box-shadow: 0 0 25px rgba(255, 42, 95, 0.15);
+    }
+
+    .schedule-card.is-live::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--live-red);
+    }
+
+    .schedule-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+      background: rgba(0, 242, 254, 0.08);
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 242, 254, 0.2);
+      min-width: 95px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .schedule-card.is-live .schedule-time {
+      color: var(--live-red);
+      background: rgba(255, 42, 95, 0.1);
+      border-color: rgba(255, 42, 95, 0.3);
+    }
+
+    .schedule-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex-grow: 1;
+    }
+
+    .schedule-header-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .show-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-pelicula { background: rgba(147, 51, 234, 0.2); color: #c084fc; border: 1px solid rgba(147, 51, 234, 0.4); }
+    .badge-serie { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+    .badge-religioso { background: rgba(234, 179, 8, 0.2); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.4); }
+    .badge-animacion { background: rgba(236, 72, 153, 0.2); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.4); }
+    .badge-especial { background: rgba(20, 184, 166, 0.2); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.4); }
+    .badge-general { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.4); }
+
+    .live-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: #fff;
+      background: var(--live-red);
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      animation: pulse 1.5s infinite;
+    }
+
+    .schedule-show-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.4;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--live-red), #ff7597);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    footer {
+      margin-top: 35px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--card-border);
+      padding-top: 20px;
+      width: 92%;
+      max-width: 1200px;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 12px 16px;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .header-status {
+        width: 100%;
+        justify-content: center;
+      }
+      .action-bar {
+        justify-content: center;
+      }
+      .schedule-card {
+        padding: 14px;
+        gap: 12px;
+      }
+      .schedule-time {
+        min-width: 80px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body class="notranslate">
+
+  <!-- HEADER -->
+  <header class="notranslate">
+    <div class="logo-container">
+      <img src="logo.png" alt="UTV Logo" class="logo-img" id="channelLogo" onerror="mostrarLogoFallback()">
+      <div class="logo-fallback" id="logoFallback">UTV</div>
+      <span class="channel-title">Televisión Digital</span>
+    </div>
+    
+    <div class="header-status">
+      <div class="widget-pill clock-widget">
+        <i class="fas fa-clock"></i>
+        <span class="clock-date" id="relojFecha">Sábado, 10 Octubre</span>
+        <span class="clock-time" id="relojHora">00:00:00</span>
+      </div>
+
+      <!-- WIDGET CLIMA ASUNCIÓN -->
+      <div class="widget-pill weather-widget-header" id="widgetClimaHeader">
+        <svg class="animated-weather-icon" viewBox="0 0 64 64">
+          <g class="animated-sun-rays" stroke="#ffb703" stroke-width="3" stroke-linecap="round">
+            <line x1="32" y1="10" x2="32" y2="16" />
+            <line x1="32" y1="48" x2="32" y2="54" />
+            <line x1="10" y1="32" x2="16" y2="32" />
+            <line x1="48" y1="32" x2="54" y2="32" />
+            <line x1="16.4" y1="16.4" x2="20.7" y2="20.7" />
+            <line x1="43.3" y1="43.3" x2="47.6" y2="47.6" />
+            <line x1="16.4" y1="47.6" x2="20.7" y2="43.3" />
+            <line x1="43.3" y1="20.7" x2="47.6" y2="16.4" />
+          </g>
+          <circle class="animated-sun-core" cx="32" cy="32" r="10" fill="#ffb703" />
+        </svg>
+        <span>Asunción: 28°C</span>
+      </div>
+      
+      <div class="widget-pill visitor-counter">
+        <i class="fas fa-eye"></i> <span id="contadorVisitas">1.258 vistas</span>
+      </div>
+      
+      <div class="widget-pill live-indicator">
+        <span class="dot"></span> EN VIVO
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="main-container">
+
+    <!-- REPRODUCTOR -->
+    <div class="player-wrapper">
+      <div id="playerError" class="player-error">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>Señal fuera de línea o cargando transmisión...</span>
+      </div>
+      <video id="videoPlayer" controls autoplay muted playsinline></video>
+    </div>
+
+    <!-- BARRA DE ACCIONES Y REDES -->
+    <div class="action-bar">
+      <div class="social-links">
+        <a href="https://www.facebook.com/profile.php?id=100093553610524" target="_blank" class="social-btn btn-fb">
+          <i class="fab fa-facebook-f"></i> Facebook
+        </a>
+        <a href="https://www.instagram.com/victordaniel1282/" target="_blank" class="social-btn btn-ig">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+        <a href="https://wa.me/message/MYUB7W3PT6U2H1" target="_blank" class="social-btn btn-wa">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+        <a href="https://www.youtube.com/@VictorAg%C3%BCero-Dj-Operador" target="_blank" class="social-btn btn-yt">
+          <i class="fab fa-youtube"></i> YouTube
+        </a>
+        <a href="https://ultradanceonlineparaguay.blogspot.com/" target="_blank" class="social-btn btn-blog">
+          <i class="fas fa-blog"></i> Blog
+        </a>
+      </div>
+
+      <button class="btn-fullscreen" onclick="togglePantallaCompleta()">
+        <i class="fas fa-expand"></i> Pantalla Completa
+      </button>
+    </div>
+
+    <!-- PANEL PRONÓSTICO DE CLIMA A 3 DÍAS -->
+    <div class="weather-forecast-container">
+      <div class="weather-title">
+        <svg class="animated-weather-icon" viewBox="0 0 64 64">
+          <g class="animated-sun-rays" stroke="#ffb703" stroke-width="3" stroke-linecap="round">
+            <line x1="24" y1="8" x2="24" y2="13" />
+            <line x1="8" y1="24" x2="13" y2="24" />
+            <line x1="12.7" y1="12.7" x2="16.2" y2="16.2" />
+          </g>
+          <circle class="animated-sun-core" cx="24" cy="24" r="8" fill="#ffb703" />
+          <path class="animated-cloud-front" d="M 26,42 A 10,10 0 0,1 42,35 A 8,8 0 0,1 54,42 A 6,6 0 0,1 52,52 L 26,52 A 6,6 0 0,1 26,42 Z" fill="#e2e8f0" opacity="0.9" />
+        </svg>
+        <span>Pronóstico del Tiempo en Asunción (3 Días)</span>
+      </div>
+      <div class="weather-days-grid" id="gridPronostico">
+        <!-- Día 1 -->
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <div class="weather-card-day">Sábado, 10 Octubre</div>
+            <div class="weather-card-desc">Soleado</div>
+            <div class="weather-card-temps">Máx: 32°C / Mín: 22°C</div>
+          </div>
+          <svg class="animated-weather-icon" viewBox="0 0 64 64">
+            <g class="animated-sun-rays" stroke="#ffb703" stroke-width="3" stroke-linecap="round">
+              <line x1="32" y1="10" x2="32" y2="16" />
+              <line x1="32" y1="48" x2="32" y2="54" />
+              <line x1="10" y1="32" x2="16" y2="32" />
+              <line x1="48" y1="32" x2="54" y2="32" />
+              <line x1="16.4" y1="16.4" x2="20.7" y2="20.7" />
+              <line x1="43.3" y1="43.3" x2="47.6" y2="47.6" />
+              <line x1="16.4" y1="47.6" x2="20.7" y2="43.3" />
+              <line x1="43.3" y1="20.7" x2="47.6" y2="16.4" />
+            </g>
+            <circle class="animated-sun-core" cx="32" cy="32" r="10" fill="#ffb703" />
+          </svg>
+        </div>
+
+        <!-- Día 2 -->
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <div class="weather-card-day">Domingo, 11 Octubre</div>
+            <div class="weather-card-desc">Parcialmente Nublado</div>
+            <div class="weather-card-temps">Máx: 29°C / Mín: 20°C</div>
+          </div>
+          <svg class="animated-weather-icon" viewBox="0 0 64 64">
+            <g class="animated-sun-rays" stroke="#ffb703" stroke-width="3" stroke-linecap="round">
+              <line x1="24" y1="8" x2="24" y2="13" />
+              <line x1="8" y1="24" x2="13" y2="24" />
+              <line x1="12.7" y1="12.7" x2="16.2" y2="16.2" />
+            </g>
+            <circle class="animated-sun-core" cx="24" cy="24" r="8" fill="#ffb703" />
+            <path class="animated-cloud-front" d="M 26,42 A 10,10 0 0,1 42,35 A 8,8 0 0,1 54,42 A 6,6 0 0,1 52,52 L 26,52 A 6,6 0 0,1 26,42 Z" fill="#cbd5e1" />
+          </svg>
+        </div>
+
+        <!-- Día 3 -->
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <div class="weather-card-day">Lunes, 12 Octubre</div>
+            <div class="weather-card-desc">Lluvias dispersas</div>
+            <div class="weather-card-temps">Máx: 25°C / Mín: 18°C</div>
+          </div>
+          <svg class="animated-weather-icon" viewBox="0 0 64 64">
+            <path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#94a3b8" />
+            <line class="animated-rain-1" x1="22" y1="46" x2="20" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" />
+            <line class="animated-rain-2" x1="32" y1="46" x2="30" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" />
+            <line class="animated-rain-3" x1="42" y1="46" x2="40" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN PROGRAMACIÓN -->
+    <div>
+      <div class="section-header">
+        <div class="section-title">
+          <i class="fas fa-tv"></i> Guía de Programación
+        </div>
+        
+        <div class="tabs-container">
+          <button class="tab-btn active" id="btnSabado10" onclick="mostrarDia('sabado10')">
+            <i class="fas fa-calendar-day"></i> Sábado, 10 Octubre 2026
+          </button>
+          <button class="tab-btn" id="btnDomingo11" onclick="mostrarDia('domingo11')">
+            <i class="fas fa-calendar-day"></i> Domingo, 11 Octubre 2026
+          </button>
+        </div>
+      </div>
+
+      <!-- GRILLA DE PROGRAMACIÓN -->
+      <div class="schedule-grid" id="grillaProgramacion"></div>
+    </div>
+
+    <footer>
+      &copy; 2026 - 2032 UTV - Televisión Digital Oficial. Todos los derechos reservados.
+    </footer>
+  </div>
+
+  <script class="notranslate">
+    var streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
+    var video = document.getElementById("videoPlayer");
+    var errorDiv = document.getElementById("playerError");
+
+    function mostrarLogoFallback() {
+      var img = document.getElementById("channelLogo");
+      var fallback = document.getElementById("logoFallback");
+      if (img) img.style.display = "none";
+      if (fallback) fallback.style.display = "block";
+    }
+
+    var programacionSabado10 = [
+      { hora: "12:00", fin: "13:09", titulo: "Los Tres Chiflados", categoria: "animacion" },
+      { hora: "13:09", fin: "14:16", titulo: "Los Thundercats", categoria: "animacion" },
+      { hora: "14:16", fin: "15:57", titulo: "Película : Todopoderoso", categoria: "pelicula" },
+      { hora: "15:57", fin: "17:23", titulo: "Especial Concert : Talk Talk", categoria: "especial" },
+      { hora: "17:23", fin: "18:01", titulo: 'Santo Rosario "Misterios Gozosos"', categoria: "religioso" },
+      { hora: "18:01", fin: "19:09", titulo: 'Series Temporada 1 : Hanna Montana', categoria: "serie" },
+      { hora: "19:09", fin: "20:55", titulo: 'Película : La Barbería 2 "Vuelta al Negocio"', categoria: "pelicula" },
+      { hora: "20:55", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
+    ];
+
+    var programacionDomingo11 = [
+      { hora: "12:00", fin: "13:14", titulo: "Dragon Ball", categoria: "animacion" },
+      { hora: "13:14", fin: "14:20", titulo: "Mazinger Z", categoria: "animacion" },
+      { hora: "14:20", fin: "15:47", titulo: "Película : Los Cuatro Jinetes Del Apocalipsis", categoria: "pelicula" },
+      { hora: "15:47", fin: "16:54", titulo: "Especial : The 90s Festival", categoria: "especial" },
+      { hora: "16:54", fin: "17:40", titulo: "Santa Misa", categoria: "religioso" },
+      { hora: "17:40", fin: "18:13", titulo: 'Santo Rosario "Misterios Gloriosos"', categoria: "religioso" },
+      { hora: "18:13", fin: "19:21", titulo: 'Series Temporada 1 : Hannah Montana', categoria: "serie" },
+      { hora: "19:21", fin: "20:42", titulo: "Película Paraguaya : Morgue", categoria: "pelicula" },
+      { hora: "20:42", fin: "22:28", titulo: "Película : La Isla Maldita", categoria: "pelicula" },
+      { hora: "22:28", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
+    ];
+
+    var diaActualCargado = 'sabado10';
+
+    function obtenerMinutos(horaStr) {
+      if (!horaStr) return 0;
+      var partes = horaStr.split(':');
+      return (parseInt(partes[0], 10) || 0) * 60 + (parseInt(partes[1], 10) || 0);
+    }
+
+    function obtenerBadgeCategoria(cat) {
+      var mapas = {
+        pelicula: '<span class="show-badge badge-pelicula"><i class="fas fa-film"></i> Película</span>',
+        serie: '<span class="show-badge badge-serie"><i class="fas fa-tv"></i> Serie</span>',
+        religioso: '<span class="show-badge badge-religioso"><i class="fas fa-church"></i> Religioso</span>',
+        animacion: '<span class="show-badge badge-animacion"><i class="fas fa-child"></i> Animación</span>',
+        especial: '<span class="show-badge badge-especial"><i class="fas fa-star"></i> Especial</span>',
+        general: '<span class="show-badge badge-general"><i class="fas fa-broadcast-tower"></i> Emisión</span>'
+      };
+      return mapas[cat] || mapas.general;
+    }
+
+    function mostrarDia(dia) {
+      diaActualCargado = dia;
+      var grillaContainer = document.getElementById("grillaProgramacion");
+      if (!grillaContainer) return;
+
+      var btnSabado = document.getElementById("btnSabado10");
+      var btnDomingo = document.getElementById("btnDomingo11");
+
+      if (btnSabado) btnSabado.classList.remove("active");
+      if (btnDomingo) btnDomingo.classList.remove("active");
+
+      var lista = programacionSabado10;
+      if (dia === 'domingo11') {
+        lista = programacionDomingo11;
+        if (btnDomingo) btnDomingo.classList.add("active");
+      } else {
+        if (btnSabado) btnSabado.classList.add("active");
+      }
+
+      var ahora = new Date();
+      var horaMinutosActual = ahora.getHours() * 60 + ahora.getMinutes();
+
+      var html = "";
+      lista.forEach(function(item) {
+        var minInicio = obtenerMinutos(item.hora);
+        var minFin = obtenerMinutos(item.fin);
+        var esEnVivo = horaMinutosActual >= minInicio && horaMinutosActual < minFin;
+        
+        var porcentajeProgreso = 0;
+        if (esEnVivo && minFin > minInicio) {
+          porcentajeProgreso = Math.min(100, Math.max(0, ((horaMinutosActual - minInicio) / (minFin - minInicio)) * 100));
+        }
+
+        html += '<div class="schedule-card ' + (esEnVivo ? 'is-live' : '') + '">' +
+            '<div class="schedule-time"><i class="far fa-clock"></i> ' + item.hora + '</div>' +
+            '<div class="schedule-details">' +
+              '<div class="schedule-header-row">' +
+                obtenerBadgeCategoria(item.categoria) +
+                (esEnVivo ? '<span class="live-tag"><i class="fas fa-play"></i> EN AIRE AHORA</span>' : '') +
+              '</div>' +
+              '<div class="schedule-show-title">' + item.titulo + '</div>' +
+              (esEnVivo ? '<div class="progress-bar-container"><div class="progress-bar-fill" style="width: ' + porcentajeProgreso + '%"></div></div>' : '') +
+            '</div>' +
+          '</div>';
+      });
+
+      grillaContainer.innerHTML = html;
+    }
+
+    function iniciarReproductor() {
+      if (!video) return;
+      if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+        var hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+        hls.loadSource(streamURL);
+        hls.attachMedia(video);
+        
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+          if (errorDiv) errorDiv.style.display = "none";
+          video.play().catch(function() { video.muted = true; video.play(); });
+        });
+
+        hls.on(Hls.Events.ERROR, function (event, data) {
+          if (data.fatal && errorDiv) {
+            errorDiv.style.display = "flex";
+          }
+        });
+      } else if (video.canPlayType && video.canPlayType("application/vnd.apple.mpegurl")) {
+        video.src = streamURL;
+        video.addEventListener("loadedmetadata", function () {
+          if (errorDiv) errorDiv.style.display = "none";
+          video.play().catch(function() { video.muted = true; video.play(); });
+        });
+        video.addEventListener("error", function () {
+          if (errorDiv) errorDiv.style.display = "flex";
+        });
+      }
+    }
+
+    function togglePantallaCompleta() {
+      if (!document.fullscreenElement) {
+        if (video.requestFullscreen) video.requestFullscreen();
+        else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    function actualizarReloj() {
+      var ahora = new Date();
+      try {
+        var opcionesFecha = { weekday: "long", day: "numeric", month: "long" };
+        var fechaTexto = ahora.toLocaleDateString("es-ES", opcionesFecha).replace(/\bde\b/g, "").replace(/\s+/g, " ");
+        fechaTexto = fechaTexto.charAt(0).toUpperCase() + fechaTexto.slice(1);
+        
+        var hrs = String(ahora.getHours()).padStart(2, '0');
+        var mins = String(ahora.getMinutes()).padStart(2, '0');
+        var secs = String(ahora.getSeconds()).padStart(2, '0');
+        var horaTexto = hrs + ":" + mins + ":" + secs;
+
+        var elFecha = document.getElementById("relojFecha");
+        var elHora = document.getElementById("relojHora");
+        if (elFecha) elFecha.textContent = fechaTexto;
+        if (elHora) elHora.textContent = horaTexto;
+      } catch (e) {}
+    }
+
+    function cargarVisitas() {
+      var contadorEl = document.getElementById("contadorVisitas");
+      if (!contadorEl) return;
+      var visitas = parseInt(localStorage.getItem("utv_visitas_totales") || "1258", 10);
+      if (!sessionStorage.getItem("utv_sesion_contada")) {
+        visitas += 1;
+        localStorage.setItem("utv_visitas_totales", visitas);
+        sessionStorage.setItem("utv_sesion_contada", "true");
+      }
+      contadorEl.textContent = visitas.toLocaleString("es-PY") + " vistas";
+    }
+
+    // Ejecución directa inmediata
+    mostrarDia('sabado10');
+    actualizarReloj();
+    iniciarReproductor();
+    cargarVisitas();
+
+    setInterval(actualizarReloj, 1000);
+    setInterval(function() { mostrarDia(diaActualCargado); }, 60000);
+  </script>
+</body>
+</html>
