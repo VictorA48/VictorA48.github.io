@@ -855,22 +855,20 @@
       if (eh) eh.textContent = h + ":" + m + ":" + s;
     }
 
-    // Contador acumulativo de visitas + fluctuación en vivo
+    // Contador estable: solo suma 1 si es una nueva sesión o visita de usuario
     function gestionarVisitas() {
       var contadorEl = document.getElementById("contadorVisitas");
       if (!contadorEl) return;
       
-      var baseVisitas = parseInt(localStorage.getItem("utv_visitas_totales") || "1258", 10);
+      var visitasTotales = parseInt(localStorage.getItem("utv_visitas_totales") || "1258", 10);
+      
       if (!sessionStorage.getItem("utv_sesion_contada")) {
-        baseVisitas += 1;
-        localStorage.setItem("utv_visitas_totales", baseVisitas);
+        visitasTotales += 1;
+        localStorage.setItem("utv_visitas_totales", visitasTotales);
         sessionStorage.setItem("utv_sesion_contada", "true");
       }
       
-      // Simula pequeñas variaciones de audiencia en tiempo real
-      var variacionLive = Math.floor(Math.random() * 5);
-      var totalVisual = baseVisitas + variacionLive;
-      contadorEl.textContent = totalVisual.toLocaleString("es-PY") + " vistas";
+      contadorEl.textContent = visitasTotales.toLocaleString("es-PY") + " vistas";
     }
 
     // Consulta automática a Open-Meteo cada 1 hora para Asunción
@@ -929,7 +927,6 @@
 
       // Timers automáticos
       setInterval(actualizarReloj, 1000); // Reloj cada segundo
-      setInterval(gestionarVisitas, 15000); // Contador dinámico de vistas cada 15s
       setInterval(function() { mostrarDia(diaActual); }, 30000); // Guía de programación cada 30s
       setInterval(consultarClimaAuto, 3600000); // Clima de Asunción cada 1 hora
     };
