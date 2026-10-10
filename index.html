@@ -1,678 +1,348 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UTV - Televisión Digital Oficial</title>
-  
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <!-- HLS.js para transmisión en vivo -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  
+
   <!-- FontAwesome e Iconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            outfit: ['Outfit', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              dark: '#080b11',
+              card: 'rgba(22, 27, 38, 0.7)',
+              border: 'rgba(255, 255, 255, 0.08)',
+              primary: '#00f2fe',
+              accent: '#4facfe',
+              live: '#ff2a5f',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
+    /* CSS Variables for Dynamic Weather Visuals */
     :root {
-      --bg-dark: #080b11;
-      --card-bg: rgba(22, 27, 38, 0.7);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --primary: #00f2fe;
       --primary-glow: rgba(0, 242, 254, 0.35);
-      --accent: #4facfe;
       --live-red: #ff2a5f;
       --live-glow: rgba(255, 42, 95, 0.5);
-      --text-main: #f1f5f9;
-      --text-muted: #94a3b8;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Outfit', sans-serif;
     }
 
     body {
-      background-color: var(--bg-dark);
+      background-color: #080b11;
       background-image: 
-        radial-gradient(circle at 10% 20%, rgba(0, 242, 254, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(79, 172, 254, 0.05) 0%, transparent 40%);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-bottom: 50px;
-      overflow-x: hidden;
+        radial-gradient(circle at 10% 20%, rgba(0, 242, 254, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(79, 172, 254, 0.06) 0%, transparent 40%);
+      color: #f1f5f9;
+      font-family: 'Outfit', sans-serif;
     }
 
-    /* HEADER MODERNO */
-    header {
-      width: 100%;
-      padding: 14px 28px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(13, 17, 23, 0.85);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--card-border);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    /* REALISTIC WEATHER ANIMATIONS */
+    /* Sun Rays Pulse & Rotation */
+    @keyframes sunRotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 14px;
+    @keyframes sunPulse {
+      0%, 100% { filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.8)); transform: scale(1); }
+      50% { filter: drop-shadow(0 0 24px rgba(251, 191, 36, 1)); transform: scale(1.08); }
     }
 
-    .logo-badge {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: #080b11;
-      font-weight: 800;
-      font-size: 26px;
-      padding: 4px 18px;
-      border-radius: 10px;
-      letter-spacing: 1.5px;
-      box-shadow: 0 0 20px var(--primary-glow);
+    .animated-sun-rays {
+      animation: sunRotate 18s linear infinite;
+      transform-origin: center;
     }
 
-    .channel-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    .animated-sun-core {
+      animation: sunPulse 3s ease-in-out infinite;
     }
 
-    .header-status {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+    /* Cloud Smooth Drifting Animation */
+    @keyframes cloudDriftSlow {
+      0%, 100% { transform: translateX(0px) translateY(0px); }
+      50% { transform: translateX(6px) translateY(-3px); }
     }
 
-    .widget-pill {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--card-border);
-      padding: 6px 14px;
-      border-radius: 30px;
-      font-size: 13px;
-      backdrop-filter: blur(8px);
+    @keyframes cloudDriftFast {
+      0%, 100% { transform: translateX(0px) translateY(0px); }
+      50% { transform: translateX(-8px) translateY(3px); }
     }
 
-    .clock-widget i { color: var(--primary); }
-    .clock-widget .clock-date { color: var(--text-muted); text-transform: capitalize; }
-    .clock-widget .clock-time { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--primary); }
-
-    .weather-widget-header i { color: #f59e0b; }
-    .weather-widget-header { color: #fff; font-weight: 600; }
-
-    .visitor-counter i { color: var(--accent); }
-    .visitor-counter { color: #fff; font-weight: 600; }
-
-    .live-indicator {
-      background: rgba(255, 42, 95, 0.12);
-      border: 1px solid var(--live-red);
-      color: #ff5e82;
-      font-weight: 700;
-      letter-spacing: 0.5px;
+    .animated-cloud-back {
+      animation: cloudDriftSlow 6s ease-in-out infinite;
     }
 
-    .dot {
-      width: 9px;
-      height: 9px;
-      background: var(--live-red);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--live-red);
-      animation: pulse 1.5s infinite ease-in-out;
+    .animated-cloud-front {
+      animation: cloudDriftFast 4s ease-in-out infinite;
     }
 
-    @keyframes pulse {
+    /* Lightning Dynamic Flash */
+    @keyframes lightningFlash {
+      0%, 88%, 93%, 97%, 100% {
+        opacity: 0.15;
+        filter: drop-shadow(0 0 2px rgba(250, 204, 21, 0.2));
+      }
+      89%, 92% {
+        opacity: 1;
+        filter: drop-shadow(0 0 18px rgba(250, 204, 21, 1)) drop-shadow(0 0 35px rgba(255, 255, 255, 0.9));
+        transform: scale(1.1) translateY(1px);
+      }
+      95% {
+        opacity: 0.9;
+        filter: drop-shadow(0 0 12px rgba(250, 204, 21, 0.8));
+      }
+    }
+
+    .animated-lightning {
+      animation: lightningFlash 3.5s infinite;
+    }
+
+    /* Rain Drop Falling Effect */
+    @keyframes rainDrop {
+      0% { opacity: 0; transform: translateY(-4px); }
+      50% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(10px); }
+    }
+
+    .animated-rain-1 { animation: rainDrop 1.2s infinite 0.1s linear; }
+    .animated-rain-2 { animation: rainDrop 1.2s infinite 0.4s linear; }
+    .animated-rain-3 { animation: rainDrop 1.2s infinite 0.7s linear; }
+
+    /* Live Badge Pulse */
+    @keyframes pulseGlow {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.3; transform: scale(0.85); }
     }
 
-    /* CONTENEDOR PRINCIPAL */
-    .main-container {
-      width: 92%;
-      max-width: 1200px;
-      margin-top: 25px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    /* REPRODUCTOR DE VIDEO */
-    .player-wrapper {
-      position: relative;
-      width: 100%;
-      padding-top: 56.25%;
-      background: #000;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 242, 254, 0.1);
-      border: 1px solid var(--card-border);
-    }
-
-    video {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      outline: none;
-      object-fit: contain;
-    }
-
-    .player-error {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: rgba(8, 11, 17, 0.92);
-      color: var(--text-muted);
-      gap: 10px;
-      z-index: 10;
-      display: none;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .player-error i { font-size: 36px; color: var(--live-red); }
-
-    /* BARRA DE ACCIONES Y REDES */
-    .action-bar {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      padding: 16px 24px;
-      border-radius: 16px;
-      gap: 16px;
-      border: 1px solid var(--card-border);
-    }
-
-    .social-links {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .social-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 13px;
-      padding: 9px 16px;
-      border-radius: 10px;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      color: #fff;
-    }
-
-    .social-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-    }
-
-    .btn-fb { background: linear-gradient(135deg, #1877f2, #0052c4); }
-    .btn-ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-    .btn-wa { background: linear-gradient(135deg, #25d366, #128c7e); }
-    .btn-yt { background: linear-gradient(135deg, #ff0000, #b30000); }
-    .btn-blog { background: linear-gradient(135deg, #ff5722, #e64a19); }
-
-    .btn-fullscreen {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: #080b11;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 13px;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 0 15px var(--primary-glow);
-    }
-
-    .btn-fullscreen:hover {
-      filter: brightness(1.15);
-      transform: scale(1.02);
-    }
-
-    /* SECCIÓN SECTOR CLIMA PRONÓSTICO 3 DÍAS */
-    .weather-forecast-container {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      padding: 20px 24px;
-      border-radius: 16px;
-      border: 1px solid var(--card-border);
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .weather-title {
-      font-size: 18px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .weather-title i { color: #f59e0b; }
-
-    .weather-days-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-    }
-
-    .weather-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: all 0.25s;
-    }
-
-    .weather-card:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(0, 242, 254, 0.3);
-      transform: translateY(-2px);
-    }
-
-    .weather-card-info {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .weather-card-day {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    .weather-card-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-      text-transform: capitalize;
-    }
-
-    .weather-card-temps {
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .weather-card-icon {
-      font-size: 28px;
-      color: #f59e0b;
-    }
-
-    /* SECCIÓN PROGRAMACIÓN */
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-
-    .section-title {
-      font-size: 22px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .section-title i { color: var(--primary); }
-
-    .tabs-container {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .tab-btn {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 10px 20px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.25s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .tab-btn:hover {
-      background: rgba(255, 255, 255, 0.08);
-      color: #fff;
-    }
-
-    .tab-btn.active {
-      background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(79, 172, 254, 0.15));
-      color: var(--primary);
-      border-color: var(--primary);
-      box-shadow: 0 0 15px var(--primary-glow);
-    }
-
-    /* GRILLA Y TARJETAS DE PROGRAMACIÓN */
-    .schedule-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .schedule-card {
-      display: flex;
-      align-items: center;
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      padding: 16px 22px;
-      border-radius: 14px;
-      border: 1px solid var(--card-border);
-      gap: 20px;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .schedule-card:hover {
-      transform: translateX(4px);
-      border-color: rgba(0, 242, 254, 0.3);
-      background: rgba(30, 38, 54, 0.8);
-    }
-
-    .schedule-card.is-live {
-      border-color: var(--live-red);
-      background: rgba(255, 42, 95, 0.06);
-      box-shadow: 0 0 25px rgba(255, 42, 95, 0.15);
-    }
-
-    .schedule-card.is-live::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 4px;
-      background: var(--live-red);
-    }
-
-    .schedule-time {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--primary);
-      background: rgba(0, 242, 254, 0.08);
-      padding: 8px 14px;
-      border-radius: 8px;
-      border: 1px solid rgba(0, 242, 254, 0.2);
-      min-width: 95px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    .schedule-card.is-live .schedule-time {
-      color: var(--live-red);
-      background: rgba(255, 42, 95, 0.1);
-      border-color: rgba(255, 42, 95, 0.3);
-    }
-
-    .schedule-details {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex-grow: 1;
-    }
-
-    .schedule-header-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .show-badge {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 3px 8px;
-      border-radius: 6px;
-      letter-spacing: 0.5px;
-    }
-
-    .badge-pelicula { background: rgba(147, 51, 234, 0.2); color: #c084fc; border: 1px solid rgba(147, 51, 234, 0.4); }
-    .badge-serie { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
-    .badge-religioso { background: rgba(234, 179, 8, 0.2); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.4); }
-    .badge-animacion { background: rgba(236, 72, 153, 0.2); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.4); }
-    .badge-especial { background: rgba(20, 184, 166, 0.2); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.4); }
-    .badge-general { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.4); }
-
-    .live-tag {
-      font-size: 11px;
-      font-weight: 800;
-      color: #fff;
-      background: var(--live-red);
-      padding: 2px 8px;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      animation: pulse 1.5s infinite;
-    }
-
-    .schedule-show-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #ffffff;
-      line-height: 1.4;
-    }
-
-    .progress-bar-container {
-      width: 100%;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 2px;
-      margin-top: 8px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--live-red), #ff7597);
-      border-radius: 2px;
-      transition: width 0.4s ease;
-    }
-
-    footer {
-      margin-top: 35px;
-      text-align: center;
-      font-size: 13px;
-      color: var(--text-muted);
-      border-top: 1px solid var(--card-border);
-      padding-top: 20px;
-      width: 92%;
-      max-width: 1200px;
-    }
-
-    @media (max-width: 768px) {
-      header {
-        padding: 12px 16px;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .header-status {
-        width: 100%;
-        justify-content: center;
-      }
-      .action-bar {
-        justify-content: center;
-      }
-      .schedule-card {
-        padding: 14px;
-        gap: 12px;
-      }
-      .schedule-time {
-        min-width: 80px;
-        font-size: 13px;
-      }
+    .live-dot {
+      animation: pulseGlow 1.5s infinite ease-in-out;
     }
   </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col items-center pb-12 overflow-x-hidden">
 
   <!-- HEADER -->
-  <header>
-    <div class="logo-container">
-      <div class="logo-badge">UTV</div>
-      <span class="channel-title">Televisión Digital</span>
+  <header class="w-full px-6 py-4 flex flex-col md:flex-row justify-between items-center bg-slate-900/80 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50 shadow-2xl gap-4">
+    <div class="flex items-center gap-3">
+      <div class="bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 font-extrabold text-2xl px-4 py-1 rounded-xl tracking-wider shadow-[0_0_20px_rgba(0,242,254,0.35)]">
+        UTV
+      </div>
+      <span class="text-sm font-semibold text-slate-400 uppercase tracking-widest">Televisión Digital</span>
     </div>
     
-    <div class="header-status">
-      <div class="widget-pill clock-widget">
-        <i class="fas fa-clock"></i>
-        <span class="clock-date" id="relojFecha">Cargando...</span>
-        <span class="clock-time" id="relojHora">--:--:--</span>
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <!-- Clock Widget -->
+      <div class="flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full text-xs backdrop-blur-md">
+        <i class="fas fa-clock text-cyan-400"></i>
+        <span class="text-slate-400 capitalize" id="relojFecha">Cargando...</span>
+        <span class="font-mono font-semibold text-cyan-400" id="relojHora">--:--:--</span>
       </div>
 
-      <!-- WIDGET CLIMA ASUNCIÓN -->
-      <div class="widget-pill weather-widget-header" id="widgetClimaHeader">
-        <i class="fas fa-sun"></i> Asunción: 28°C
+      <!-- Animated Header Weather Widget -->
+      <div class="flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white backdrop-blur-md" id="widgetClimaHeader">
+        <svg class="w-5 h-5" viewBox="0 0 50 50">
+          <circle cx="25" cy="25" r="10" fill="#f59e0b" class="animated-sun-core" />
+          <g class="animated-sun-rays" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round">
+            <line x1="25" y1="6" x2="25" y2="10" />
+            <line x1="25" y1="40" x2="25" y2="44" />
+            <line x1="6" y1="25" x2="10" y2="25" />
+            <line x1="40" y1="25" x2="44" y2="25" />
+            <line x1="11.5" y1="11.5" x2="14.3" y2="14.3" />
+            <line x1="35.7" y1="35.7" x2="38.5" y2="38.5" />
+            <line x1="11.5" y1="38.5" x2="14.3" y2="35.7" />
+            <line x1="35.7" y1="14.3" x2="38.5" y2="11.5" />
+          </g>
+        </svg>
+        <span>Asunción: 28°C</span>
       </div>
       
-      <div class="widget-pill visitor-counter">
-        <i class="fas fa-eye"></i> <span id="contadorVisitas">1.258 vistas</span>
+      <!-- Visitor Counter -->
+      <div class="flex items-center gap-2 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full text-xs font-semibold text-white backdrop-blur-md">
+        <i class="fas fa-eye text-blue-400"></i>
+        <span id="contadorVisitas">1.258 vistas</span>
       </div>
       
-      <div class="widget-pill live-indicator">
-        <span class="dot"></span> EN VIVO
+      <!-- Live Indicator -->
+      <div class="flex items-center gap-2 bg-rose-500/10 border border-rose-500 text-rose-400 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wider">
+        <span class="w-2.5 h-2.5 bg-rose-500 rounded-full shadow-[0_0_10px_#ff2a5f] live-dot"></span> EN VIVO
       </div>
     </div>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <div class="main-container">
+  <!-- MAIN CONTAINER -->
+  <main class="w-[92%] max-w-[1200px] mt-6 flex flex-col gap-6">
 
-    <!-- REPRODUCTOR -->
-    <div class="player-wrapper">
-      <div id="playerError" class="player-error">
-        <i class="fas fa-exclamation-triangle"></i>
+    <!-- REPRODUCTOR DE VIDEO -->
+    <div class="relative w-full pt-[56.25%] bg-black rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(0,242,254,0.1)] border border-white/10">
+      <div id="playerError" class="absolute inset-0 flex flex-col justify-center items-center bg-slate-950/90 text-slate-400 gap-3 z-10 hidden text-center p-5">
+        <i class="fas fa-exclamation-triangle text-4xl text-rose-500"></i>
         <span>Señal fuera de línea o cargando transmisión...</span>
       </div>
-      <video id="videoPlayer" controls autoplay muted playsinline></video>
+      <video id="videoPlayer" class="absolute top-0 left-0 w-full h-full object-contain" controls autoplay muted playsinline></video>
     </div>
 
     <!-- BARRA DE ACCIONES Y REDES -->
-    <div class="action-bar">
-      <div class="social-links">
-        <a href="https://www.facebook.com/profile.php?id=100093553610524" target="_blank" class="social-btn btn-fb">
+    <div class="flex flex-wrap justify-between items-center bg-slate-900/70 backdrop-blur-md p-4 rounded-2xl gap-4 border border-white/10">
+      <div class="flex flex-wrap items-center gap-2.5">
+        <a href="https://www.facebook.com/profile.php?id=100093553610524" target="_blank" class="inline-flex items-center gap-2 text-white font-semibold text-xs px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:-translate-y-0.5 transition-all shadow-md">
           <i class="fab fa-facebook-f"></i> Facebook
         </a>
-        <a href="https://www.instagram.com/victordaniel1282/" target="_blank" class="social-btn btn-ig">
+        <a href="https://www.instagram.com/victordaniel1282/" target="_blank" class="inline-flex items-center gap-2 text-white font-semibold text-xs px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600 hover:-translate-y-0.5 transition-all shadow-md">
           <i class="fab fa-instagram"></i> Instagram
         </a>
-        <a href="https://wa.me/message/MYUB7W3PT6U2H1" target="_blank" class="social-btn btn-wa">
+        <a href="https://wa.me/message/MYUB7W3PT6U2H1" target="_blank" class="inline-flex items-center gap-2 text-white font-semibold text-xs px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:-translate-y-0.5 transition-all shadow-md">
           <i class="fab fa-whatsapp"></i> WhatsApp
         </a>
-        <a href="https://www.youtube.com/@VictorAg%C3%BCero-Dj-Operador" target="_blank" class="social-btn btn-yt">
+        <a href="https://www.youtube.com/@VictorAg%C3%BCero-Dj-Operador" target="_blank" class="inline-flex items-center gap-2 text-white font-semibold text-xs px-4 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:-translate-y-0.5 transition-all shadow-md">
           <i class="fab fa-youtube"></i> YouTube
         </a>
-        <a href="https://ultradanceonlineparaguay.blogspot.com/" target="_blank" class="social-btn btn-blog">
+        <a href="https://ultradanceonlineparaguay.blogspot.com/" target="_blank" class="inline-flex items-center gap-2 text-white font-semibold text-xs px-4 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 hover:-translate-y-0.5 transition-all shadow-md">
           <i class="fas fa-blog"></i> Blog
         </a>
       </div>
 
-      <button class="btn-fullscreen" onclick="togglePantallaCompleta()">
+      <button onclick="togglePantallaCompleta()" class="bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 font-bold px-5 py-2.5 rounded-xl text-xs hover:brightness-110 hover:scale-105 transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(0,242,254,0.35)]">
         <i class="fas fa-expand"></i> Pantalla Completa
       </button>
     </div>
 
-    <!-- PANEL PRONÓSTICO DE CLIMA A 3 DÍAS -->
-    <div class="weather-forecast-container">
-      <div class="weather-title">
-        <i class="fas fa-cloud-sun"></i> Pronóstico del Tiempo en Asunción (3 Días)
+    <!-- SECCIÓN PRONÓSTICO DE CLIMA CON ANIMACIONES REALISTAS -->
+    <section class="bg-slate-900/70 backdrop-blur-md p-5 rounded-2xl border border-white/10 flex flex-col gap-4">
+      <div class="text-lg font-bold flex items-center gap-3 text-white">
+        <i class="fas fa-cloud-sun text-amber-400"></i> Pronóstico Dinámico e Interactivo (Asunción)
       </div>
-      <div class="weather-days-grid" id="gridPronostico">
-        <div class="weather-card">
-          <div class="weather-card-info">
-            <div class="weather-card-day">Sábado, 10 Octubre</div>
-            <div class="weather-card-desc">Soleado</div>
-            <div class="weather-card-temps">Máx: 32°C / Mín: 22°C</div>
+
+      <!-- Weather Grid displaying SVGs with realistic motion -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="gridPronostico">
+        
+        <!-- CARD 1: Soleado Radiante -->
+        <div class="bg-white/[0.03] border border-white/10 rounded-xl p-4 flex items-center justify-between hover:bg-white/[0.06] transition-all hover:border-cyan-400/40 hover:-translate-y-1">
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-bold text-cyan-400">Hoy - Sábado, 10 Octubre</span>
+            <span class="text-sm font-semibold text-white">Soleado y Radiante</span>
+            <span class="text-xs font-mono text-slate-300">Máx: 32°C / Mín: 22°C</span>
           </div>
-          <i class="fas fa-sun weather-card-icon"></i>
+          <!-- SVG Weather Icon: Rotating Sun -->
+          <svg class="w-14 h-14" viewBox="0 0 60 60">
+            <circle cx="30" cy="30" r="12" fill="#f59e0b" class="animated-sun-core" />
+            <g class="animated-sun-rays" stroke="#fbbf24" stroke-width="3" stroke-linecap="round">
+              <line x1="30" y1="6" x2="30" y2="11" />
+              <line x1="30" y1="49" x2="30" y2="54" />
+              <line x1="6" y1="30" x2="11" y2="30" />
+              <line x1="49" y1="30" x2="54" y2="30" />
+              <line x1="13" y1="13" x2="16.5" y2="16.5" />
+              <line x1="43.5" y1="43.5" x2="47" y2="47" />
+              <line x1="13" y1="47" x2="16.5" y2="43.5" />
+              <line x1="43.5" y1="16.5" x2="47" y2="13" />
+            </g>
+          </svg>
         </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
-            <div class="weather-card-day">Domingo, 11 Octubre</div>
-            <div class="weather-card-desc">Parcialmente Nublado</div>
-            <div class="weather-card-temps">Máx: 29°C / Mín: 20°C</div>
+
+        <!-- CARD 2: Parcialmente Nublado con Nubes Flotantes -->
+        <div class="bg-white/[0.03] border border-white/10 rounded-xl p-4 flex items-center justify-between hover:bg-white/[0.06] transition-all hover:border-cyan-400/40 hover:-translate-y-1">
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-bold text-cyan-400">Mañana - Domingo, 11 Octubre</span>
+            <span class="text-sm font-semibold text-white">Parcialmente Nublado</span>
+            <span class="text-xs font-mono text-slate-300">Máx: 29°C / Mín: 20°C</span>
           </div>
-          <i class="fas fa-cloud-sun weather-card-icon"></i>
+          <!-- SVG Weather Icon: Sun behind Moving Cloud -->
+          <svg class="w-14 h-14" viewBox="0 0 60 60">
+            <!-- Sun in background -->
+            <g transform="translate(-4, -4)">
+              <circle cx="26" cy="24" r="10" fill="#f59e0b" class="animated-sun-core" />
+              <g class="animated-sun-rays" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round">
+                <line x1="26" y1="8" x2="26" y2="12" />
+                <line x1="10" y1="24" x2="14" y2="24" />
+                <line x1="14.7" y1="12.7" x2="17.5" y2="15.5" />
+                <line x1="37.3" y1="12.7" x2="34.5" y2="15.5" />
+              </g>
+            </g>
+            <!-- Animated Cloud in front -->
+            <path class="animated-cloud-front" fill="url(#cloudGrad)" d="M22 42 h20 a10 10 0 0 0 0 -20 a12 12 0 0 0 -22 -4 a8 8 0 0 0 -6 16 z" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.3))" />
+            <defs>
+              <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#94a3b8" />
+                <stop offset="100%" stop-color="#475569" />
+              </linearGradient>
+            </defs>
+          </svg>
         </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
-            <div class="weather-card-day">Lunes, 12 Octubre</div>
-            <div class="weather-card-desc">Lluvias dispersas</div>
-            <div class="weather-card-temps">Máx: 25°C / Mín: 18°C</div>
+
+        <!-- CARD 3: Tormenta con Rayos y Lluvia -->
+        <div class="bg-white/[0.03] border border-white/10 rounded-xl p-4 flex items-center justify-between hover:bg-white/[0.06] transition-all hover:border-cyan-400/40 hover:-translate-y-1">
+          <div class="flex flex-col gap-1">
+            <span class="text-xs font-bold text-cyan-400">Lunes, 12 Octubre</span>
+            <span class="text-sm font-semibold text-white">Tormenta Eléctrica</span>
+            <span class="text-xs font-mono text-slate-300">Máx: 25°C / Mín: 18°C</span>
           </div>
-          <i class="fas fa-cloud-rain weather-card-icon"></i>
+          <!-- SVG Weather Icon: Storm Cloud with Flash Lightning & Rain -->
+          <svg class="w-14 h-14" viewBox="0 0 60 60">
+            <!-- Storm Cloud -->
+            <path class="animated-cloud-back" fill="url(#stormGrad)" d="M16 32 h24 a9 9 0 0 0 0 -18 a11 11 0 0 0 -20 -3 a7 7 0 0 0 -6 13 z" />
+            <!-- Rain Drops -->
+            <line x1="22" y1="36" x2="20" y2="42" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" class="animated-rain-1" />
+            <line x1="30" y1="36" x2="28" y2="42" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" class="animated-rain-2" />
+            <line x1="38" y1="36" x2="36" y2="42" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" class="animated-rain-3" />
+            <!-- Flash Lightning Bolt -->
+            <polygon class="animated-lightning" points="32,28 24,40 29,40 26,52 38,36 32,36" fill="#facc15" />
+            <defs>
+              <linearGradient id="stormGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#475569" />
+                <stop offset="100%" stop-color="#1e293b" />
+              </linearGradient>
+            </defs>
+          </svg>
         </div>
+
       </div>
-    </div>
+    </section>
 
     <!-- SECCIÓN PROGRAMACIÓN -->
-    <div>
-      <div class="section-header">
-        <div class="section-title">
-          <i class="fas fa-tv"></i> Guía de Programación
+    <section>
+      <div class="flex flex-wrap justify-between items-center gap-4 mb-4">
+        <div class="text-xl font-bold flex items-center gap-2.5 text-white">
+          <i class="fas fa-tv text-cyan-400"></i> Guía de Programación
         </div>
         
-        <div class="tabs-container">
-          <button class="tab-btn active" id="btnSabado10" onclick="mostrarDia('sabado10')">
+        <div class="flex gap-2.5 flex-wrap">
+          <button class="bg-white/5 border border-white/10 text-slate-400 px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-white/10 hover:text-white transition-all flex items-center gap-2 active-tab" id="btnSabado10" onclick="mostrarDia('sabado10')">
             <i class="fas fa-calendar-day"></i> Sábado, 10 Octubre 2026
           </button>
-          <button class="tab-btn" id="btnDomingo11" onclick="mostrarDia('domingo11')">
+          <button class="bg-white/5 border border-white/10 text-slate-400 px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-white/10 hover:text-white transition-all flex items-center gap-2" id="btnDomingo11" onclick="mostrarDia('domingo11')">
             <i class="fas fa-calendar-day"></i> Domingo, 11 Octubre 2026
           </button>
         </div>
       </div>
 
-      <!-- GRILLA DE PROGRAMACIÓN -->
-      <div class="schedule-grid" id="grillaProgramacion"></div>
-    </div>
+      <!-- Schedule Cards List -->
+      <div class="flex flex-col gap-3" id="grillaProgramacion"></div>
+    </section>
 
-    <footer>
+    <!-- FOOTER -->
+    <footer class="mt-8 text-center text-xs text-slate-500 border-t border-white/10 pt-5">
       &copy; 2026 - 2032 UTV - Televisión Digital Oficial. Todos los derechos reservados.
     </footer>
-  </div>
+  </main>
 
   <script>
     const streamURL = "https://eu1.servers10.com:8081/8146/index.m3u8";
@@ -713,12 +383,12 @@
 
     function obtenerBadgeCategoria(cat) {
       const mapas = {
-        pelicula: '<span class="show-badge badge-pelicula"><i class="fas fa-film"></i> Película</span>',
-        serie: '<span class="show-badge badge-serie"><i class="fas fa-tv"></i> Serie</span>',
-        religioso: '<span class="show-badge badge-religioso"><i class="fas fa-church"></i> Religioso</span>',
-        animacion: '<span class="show-badge badge-animacion"><i class="fas fa-child"></i> Animación</span>',
-        especial: '<span class="show-badge badge-especial"><i class="fas fa-star"></i> Especial</span>',
-        general: '<span class="show-badge badge-general"><i class="fas fa-broadcast-tower"></i> Emisión</span>'
+        pelicula: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded text-purple-300 bg-purple-500/20 border border-purple-500/40"><i class="fas fa-film"></i> Película</span>',
+        serie: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded text-blue-300 bg-blue-500/20 border border-blue-500/40"><i class="fas fa-tv"></i> Serie</span>',
+        religioso: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded text-yellow-300 bg-yellow-500/20 border border-yellow-500/40"><i class="fas fa-church"></i> Religioso</span>',
+        animacion: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded text-pink-300 bg-pink-500/20 border border-pink-500/40"><i class="fas fa-child"></i> Animación</span>',
+        especial: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded text-teal-300 bg-teal-500/20 border border-teal-500/40"><i class="fas fa-star"></i> Especial</span>',
+        general: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded text-slate-300 bg-slate-500/20 border border-slate-500/40"><i class="fas fa-broadcast-tower"></i> Emisión</span>'
       };
       return mapas[cat] || mapas.general;
     }
@@ -731,15 +401,17 @@
       const btnSabado = document.getElementById("btnSabado10");
       const btnDomingo = document.getElementById("btnDomingo11");
 
-      if (btnSabado) btnSabado.classList.remove("active");
-      if (btnDomingo) btnDomingo.classList.remove("active");
+      const activeClasses = ["bg-gradient-to-r", "from-cyan-500/20", "to-blue-500/20", "text-cyan-400", "border-cyan-400", "shadow-[0_0_15px_rgba(0,242,254,0.25)]"];
+
+      btnSabado.classList.remove(...activeClasses);
+      btnDomingo.classList.remove(...activeClasses);
 
       let lista = programacionSabado10;
       if (dia === 'domingo11') {
         lista = programacionDomingo11;
-        if (btnDomingo) btnDomingo.classList.add("active");
+        btnDomingo.classList.add(...activeClasses);
       } else {
-        if (btnSabado) btnSabado.classList.add("active");
+        btnSabado.classList.add(...activeClasses);
       }
 
       const ahora = new Date();
@@ -757,17 +429,20 @@
         }
 
         html += `
-          <div class="schedule-card ${esEnVivo ? 'is-live' : ''}">
-            <div class="schedule-time"><i class="far fa-clock"></i> ${item.hora}</div>
-            <div class="schedule-details">
-              <div class="schedule-header-row">
+          <div class="flex items-center bg-slate-900/70 backdrop-blur-md p-4 rounded-xl border ${esEnVivo ? 'border-rose-500 bg-rose-500/10 shadow-[0_0_20px_rgba(255,42,95,0.15)] relative overflow-hidden' : 'border-white/10'} hover:border-cyan-400/40 transition-all gap-4">
+            ${esEnVivo ? '<div class="absolute left-0 top-0 bottom-0 w-1 bg-rose-500"></div>' : ''}
+            <div class="font-mono text-sm font-bold ${esEnVivo ? 'text-rose-400 bg-rose-500/10 border-rose-500/30' : 'text-cyan-400 bg-cyan-400/10 border-cyan-400/20'} px-3 py-2 rounded-lg border text-center min-w-[85px]">
+              <i class="far fa-clock"></i> ${item.hora}
+            </div>
+            <div class="flex flex-col gap-1 flex-grow">
+              <div class="flex items-center gap-2 flex-wrap">
                 ${obtenerBadgeCategoria(item.categoria)}
-                ${esEnVivo ? '<span class="live-tag"><i class="fas fa-play"></i> EN AIRE AHORA</span>' : ''}
+                ${esEnVivo ? '<span class="text-[10px] font-extrabold text-white bg-rose-500 px-2 py-0.5 rounded tracking-wide animate-pulse"><i class="fas fa-play"></i> EN AIRE AHORA</span>' : ''}
               </div>
-              <div class="schedule-show-title">${item.titulo}</div>
+              <div class="text-sm font-semibold text-white">${item.titulo}</div>
               ${esEnVivo ? `
-                <div class="progress-bar-container">
-                  <div class="progress-bar-fill" style="width: ${porcentajeProgreso}%"></div>
+                <div class="w-full h-1 bg-white/10 rounded overflow-hidden mt-1">
+                  <div class="h-full bg-gradient-to-r from-rose-500 to-pink-400 transition-all duration-500" style="width: ${porcentajeProgreso}%"></div>
                 </div>
               ` : ''}
             </div>
@@ -778,7 +453,7 @@
       grillaContainer.innerHTML = html;
     }
 
-    // Inicializar Reproductor HLS
+    // Inicializar HLS Video Stream
     function iniciarReproductor() {
       if (Hls.isSupported()) {
         const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
@@ -816,7 +491,7 @@
       }
     }
 
-    // Reloj
+    // Reloj en tiempo real
     function actualizarReloj() {
       const ahora = new Date();
       try {
@@ -838,17 +513,7 @@
       }
     }
 
-    // Carga de clima en segundo plano (asíncrona y ultra segura)
-    function obtenerCodigoClima(code) {
-      if (code === 0) return { desc: "Despejado", icon: "fa-sun" };
-      if (code <= 3) return { desc: "Parcialmente Nublado", icon: "fa-cloud-sun" };
-      if (code <= 48) return { desc: "Niebla", icon: "fa-smog" };
-      if (code <= 67) return { desc: "Lluvia Ligera", icon: "fa-cloud-rain" };
-      if (code <= 77) return { desc: "Lluvia Fuerte", icon: "fa-cloud-showers-heavy" };
-      if (code <= 99) return { desc: "Tormenta", icon: "fa-bolt" };
-      return { desc: "Soleado", icon: "fa-sun" };
-    }
-
+    // Fetch live weather data safely in background
     function cargarClimaAsuncion() {
       setTimeout(() => {
         const urlClima = "https://api.open-meteo.com/v1/forecast?latitude=-25.2637&longitude=-57.5759&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=America%2FAsuncion";
@@ -858,36 +523,9 @@
           .then(data => {
             if (data && data.current) {
               const tempActual = Math.round(data.current.temperature_2m);
-              const climaInfo = obtenerCodigoClima(data.current.weather_code);
               const headerWidget = document.getElementById("widgetClimaHeader");
               if (headerWidget) {
-                headerWidget.innerHTML = `<i class="fas ${climaInfo.icon}"></i> Asunción: ${tempActual}°C`;
-              }
-
-              const gridPronostico = document.getElementById("gridPronostico");
-              if (gridPronostico && data.daily) {
-                let htmlPronostico = "";
-                for (let i = 0; i < 3; i++) {
-                  const fechaObj = new Date(data.daily.time[i] + "T00:00:00");
-                  let nombreDia = fechaObj.toLocaleDateString("es-ES", { weekday: "long", day: "numeric" }).replace(/\bde\b/g, "");
-                  nombreDia = nombreDia.charAt(0).toUpperCase() + nombreDia.slice(1);
-
-                  const maxTemp = Math.round(data.daily.temperature_2m_max[i]);
-                  const minTemp = Math.round(data.daily.temperature_2m_min[i]);
-                  const infoDia = obtenerCodigoClima(data.daily.weather_code[i]);
-
-                  htmlPronostico += `
-                    <div class="weather-card">
-                      <div class="weather-card-info">
-                        <div class="weather-card-day">${nombreDia}</div>
-                        <div class="weather-card-desc">${infoDia.desc}</div>
-                        <div class="weather-card-temps">Máx: ${maxTemp}°C / Mín: ${minTemp}°C</div>
-                      </div>
-                      <i class="fas ${infoDia.icon} weather-card-icon"></i>
-                    </div>
-                  `;
-                }
-                gridPronostico.innerHTML = htmlPronostico;
+                headerWidget.querySelector('span').textContent = `Asunción: ${tempActual}°C`;
               }
             }
           })
@@ -895,7 +533,7 @@
       }, 500);
     }
 
-    // Contador de visitas
+    // Visitor Counter persistence
     function cargarVisitas() {
       const contadorEl = document.getElementById("contadorVisitas");
       if (!contadorEl) return;
@@ -911,17 +549,18 @@
       contadorEl.textContent = visitas.toLocaleString("es-PY") + " vistas";
     }
 
-    // Ejecución garantizada inmediata
-    mostrarDia('sabado10');
-    actualizarReloj();
-    iniciarReproductor();
-    cargarVisitas();
+    // Initialize application on load
+    window.onload = function() {
+      mostrarDia('sabado10');
+      actualizarReloj();
+      iniciarReproductor();
+      cargarVisitas();
+      cargarClimaAsuncion();
 
-    // Clima en segundo plano
-    cargarClimaAsuncion();
-
-    setInterval(actualizarReloj, 1000);
-    setInterval(() => mostrarDia(diaActualCargado), 60000);
+      setInterval(actualizarReloj, 1000);
+      setInterval(() => mostrarDia(diaActualCargado), 60000);
+    };
   </script>
 </body>
 </html>
+```
