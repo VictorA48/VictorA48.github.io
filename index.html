@@ -600,7 +600,7 @@
         <svg class="animated-weather-icon" viewBox="0 0 64 64">
           <path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#cbd5e1" />
         </svg>
-        <span id="textoClimaEncabezado">Asunción: 22°C</span>
+        <span id="textoClimaEncabezado">Asunción: --°C</span>
       </div>
       
       <div class="widget-pill visitor-counter">
@@ -650,7 +650,7 @@
       </button>
     </div>
 
-    <!-- PANEL PRONÓSTICO DE CLIMA REAL A 3 DÍAS EN ASUNCIÓN -->
+    <!-- PANEL PRONÓSTICO DE CLIMA REAL A 3 DÍAS EN ASUNCIÓN (DINÁMICO) -->
     <div class="weather-forecast-container">
       <div class="weather-title">
         <svg class="animated-weather-icon" viewBox="0 0 64 64">
@@ -659,46 +659,10 @@
           <line class="animated-rain-2" x1="32" y1="46" x2="30" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" />
           <line class="animated-rain-3" x1="42" y1="46" x2="40" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" />
         </svg>
-        <span>Pronóstico del Tiempo en Asunción (3 Días)</span>
+        <span>Pronóstico del Tiempo en Asunción (Próximos 3 Días)</span>
       </div>
-      <div class="weather-days-grid" id="gridPronostico">
-        <!-- Lunes 12 -->
-        <div class="weather-card">
-          <div class="weather-card-info">
-            <div class="weather-card-day">Lunes, 12 Octubre</div>
-            <div class="weather-card-desc">Lluvias Dispersas</div>
-            <div class="weather-card-temps">Máx: 22°C / Mín: 19°C</div>
-          </div>
-          <svg class="animated-weather-icon" viewBox="0 0 64 64">
-            <path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#94a3b8" />
-            <line class="animated-rain-1" x1="22" y1="46" x2="20" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" />
-            <line class="animated-rain-2" x1="32" y1="46" x2="30" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" />
-          </svg>
-        </div>
-
-        <!-- Martes 13 -->
-        <div class="weather-card">
-          <div class="weather-card-info">
-            <div class="weather-card-day">Martes, 13 Octubre</div>
-            <div class="weather-card-desc">Parcialmente Nublado</div>
-            <div class="weather-card-temps">Máx: 24°C / Mín: 18°C</div>
-          </div>
-          <svg class="animated-weather-icon" viewBox="0 0 64 64">
-            <path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#cbd5e1" />
-          </svg>
-        </div>
-
-        <!-- Miércoles 14 -->
-        <div class="weather-card">
-          <div class="weather-card-info">
-            <div class="weather-card-day">Miércoles, 14 Octubre</div>
-            <div class="weather-card-desc">Mayormente Soleado</div>
-            <div class="weather-card-temps">Máx: 26°C / Mín: 19°C</div>
-          </div>
-          <svg class="animated-weather-icon" viewBox="0 0 64 64">
-            <circle cx="32" cy="32" r="12" fill="#fbbf24" />
-          </svg>
-        </div>
+      <div class="weather-days-grid" id="gridPronosticoDinamico">
+        <!-- Se genera automáticamente mediante JavaScript -->
       </div>
     </div>
 
@@ -820,7 +784,6 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       
-      // Comprobar si el día de la pestaña coincide con el día real de hoy (Lunes = 1, Martes = 2, Miércoles = 3)
       var esHoyReal = (ah.getDay() === 1 && dia === "lunes12") || 
                       (ah.getDay() === 2 && dia === "martes13") || 
                       (ah.getDay() === 3 && dia === "miercoles14");
@@ -886,9 +849,10 @@
       contadorEl.textContent = visitasTotales.toLocaleString("es-PY") + " vistas";
     }
 
-    // Consulta automática a Open-Meteo cada 1 hora para Asunción
+    // Consulta automática y dinámica del clima (Temperatura actual y pronóstico de 3 días rotativos)
     function consultarClimaAuto() {
-      var urlClima = "https://api.open-meteo.com/v1/forecast?latitude=-25.2637&longitude=-57.5759&current=temperature_2m&timezone=America%2FAsuncion";
+      var urlClima = "https://api.open-meteo.com/v1/forecast?latitude=-25.2637&longitude=-57.5759&current=temperature_2m&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=America%2FAsuncion";
+      
       fetch(urlClima)
         .then(function(res) { return res.json(); })
         .then(function(data) {
@@ -898,6 +862,51 @@
             if (txtElem) {
               txtElem.textContent = "Asunción: " + tempG + "°C";
             }
+          }
+
+          if (data && data.daily) {
+            var grid = document.getElementById("gridPronosticoDinamico");
+            if (!grid) return;
+            
+            var diasNombres = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+            var mesesNombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+            
+            var htmlClima = "";
+            // Recorrer los próximos 3 días (índices 0, 1 y 2)
+            for (var i = 0; i < 3; i++) {
+              var fechaStr = data.daily.time[i]; // formato "YYYY-MM-DD"
+              var partesF = fechaStr.split("-");
+              var fObj = new Date(partesF[0], partesF[1] - 1, partesF[2]);
+              
+              var nombreDia = diasNombres[fObj.getDay()];
+              var numDia = fObj.getDate();
+              var nombreMes = mesesNombres[fObj.getMonth()];
+              
+              var tMax = Math.round(data.daily.temperature_2m_max[i]);
+              var tMin = Math.round(data.daily.temperature_2m_min[i]);
+              var wCode = data.daily.weathercode[i];
+              
+              var descClima = "Parcialmente Nublado";
+              var iconoSvg = '<svg class="animated-weather-icon" viewBox="0 0 64 64"><path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#cbd5e1" /></svg>';
+              
+              if (wCode === 0) {
+                descClima = "Mayormente Soleado";
+                iconoSvg = '<svg class="animated-weather-icon" viewBox="0 0 64 64"><circle cx="32" cy="32" r="12" fill="#fbbf24" /></svg>';
+              } else if (wCode >= 50 && wCode <= 67) {
+                descClima = "Lluvias Dispersas";
+                iconoSvg = '<svg class="animated-weather-icon" viewBox="0 0 64 64"><path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#94a3b8" /><line class="animated-rain-1" x1="22" y1="46" x2="20" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" /><line class="animated-rain-2" x1="32" y1="46" x2="30" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" /><line class="animated-rain-3" x1="42" y1="46" x2="40" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" /></svg>';
+              }
+
+              htmlClima += '<div class="weather-card">' +
+                             '<div class="weather-card-info">' +
+                               '<div class="weather-card-day">' + nombreDia + ", " + numDia + " " + nombreMes + '</div>' +
+                               '<div class="weather-card-desc">' + descClima + '</div>' +
+                               '<div class="weather-card-temps">Máx: ' + tMax + '°C / Mín: ' + tMin + '°C</div>' +
+                             '</div>' +
+                             iconoSvg +
+                           '</div>';
+            }
+            grid.innerHTML = htmlClima;
           }
         })
         .catch(function() {});
