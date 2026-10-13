@@ -894,14 +894,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn active" id="btnLunes12" onclick="mostrarDia('lunes12')">
-            <i class="fas fa-calendar-day"></i> Lunes, 12 Octubre 2026
-          </button>
-          <button class="tab-btn" id="btnMartes13" onclick="mostrarDia('martes13')">
+          <button class="tab-btn active" id="btnMartes13" onclick="mostrarDia('martes13')">
             <i class="fas fa-calendar-day"></i> Martes, 13 Octubre 2026
           </button>
           <button class="tab-btn" id="btnMiercoles14" onclick="mostrarDia('miercoles14')">
             <i class="fas fa-calendar-day"></i> Miércoles, 14 Octubre 2026
+          </button>
+          <button class="tab-btn" id="btnJueves15" onclick="mostrarDia('jueves15')">
+            <i class="fas fa-calendar-day"></i> Jueves, 15 Octubre 2026
           </button>
         </div>
       </div>
@@ -964,15 +964,6 @@
       window.open(urlWA, "_blank");
     }
 
-    var programacionLunes12 = [
-      { hora: "17:00", fin: "18:23", titulo: "Especial Concert : Mana", categoria: "especial" },
-      { hora: "18:23", fin: "19:01", titulo: "Santo Rosario Misterios Gozosos", categoria: "religioso" },
-      { hora: "19:01", fin: "19:44", titulo: "Series Temporada 6 : Un Doctor Diferente", categoria: "serie" },
-      { hora: "19:44", fin: "21:35", titulo: "Película : El Gigante de Piedra", categoria: "pelicula" },
-      { hora: "21:35", fin: "22:46", titulo: "Series Estreno : La Tierra Prometida", categoria: "serie" },
-      { hora: "22:46", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
-    ];
-
     var programacionMartes13 = [
       { hora: "17:00", fin: "18:43", titulo: "Especial Concert : Adele", categoria: "especial" },
       { hora: "18:43", fin: "19:16", titulo: "Santo Rosario Misterios Dolorosos", categoria: "religioso" },
@@ -991,7 +982,16 @@
       { hora: "22:13", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
     ];
 
-    var diaActual = "lunes12";
+    var programacionJueves15 = [
+      { hora: "16:00", fin: "18:08", titulo: "Especial Concert : Roger Sanchez", categoria: "especial" },
+      { hora: "18:08", fin: "18:46", titulo: "Santo Rosario \"Misterios Luminosos\"", categoria: "religioso" },
+      { hora: "18:46", fin: "19:29", titulo: "Series Temporada 6: Un Doctor Diferente", categoria: "serie" },
+      { hora: "19:29", fin: "21:31", titulo: "Pelicula : Okja", categoria: "pelicula" },
+      { hora: "21:31", fin: "22:27", titulo: "Series : La Tierra Prometida", categoria: "serie" },
+      { hora: "22:27", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
+    ];
+
+    var diaActual = "martes13";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1013,19 +1013,19 @@
       var gc = document.getElementById("grillaProgramacion");
       if (!gc) return;
 
-      var b1 = document.getElementById("btnLunes12");
-      var b2 = document.getElementById("btnMartes13");
-      var b3 = document.getElementById("btnMiercoles14");
+      var b1 = document.getElementById("btnMartes13");
+      var b2 = document.getElementById("btnMiercoles14");
+      var b3 = document.getElementById("btnJueves15");
       if (b1) b1.classList.remove("active");
       if (b2) b2.classList.remove("active");
       if (b3) b3.classList.remove("active");
 
-      var lista = programacionLunes12;
-      if (dia === "martes13") {
-        lista = programacionMartes13;
-        if (b2) b2.classList.add("active");
-      } else if (dia === "miercoles14") {
+      var lista = programacionMartes13;
+      if (dia === "miercoles14") {
         lista = programacionMiercoles14;
+        if (b2) b2.classList.add("active");
+      } else if (dia === "jueves15") {
+        lista = programacionJueves15;
         if (b3) b3.classList.add("active");
       } else {
         if (b1) b1.classList.add("active");
@@ -1034,9 +1034,9 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       
-      var esHoyReal = (ah.getDay() === 1 && dia === "lunes12") || 
-                      (ah.getDay() === 2 && dia === "martes13") || 
-                      (ah.getDay() === 3 && dia === "miercoles14");
+      var esHoyReal = (ah.getDay() === 2 && dia === "martes13") || 
+                      (ah.getDay() === 3 && dia === "miercoles14") || 
+                      (ah.getDay() === 4 && dia === "jueves15");
 
       var html = "";
 
@@ -1193,7 +1193,7 @@
     // Inicializar todo al cargar
     window.onload = function() {
       actualizarReloj();
-      mostrarDia("lunes12");
+      mostrarDia("martes13");
       iniciarPlayer();
       gestionarVisitas();
       consultarClimaAuto();
