@@ -187,6 +187,19 @@
       gap: 24px;
     }
 
+    /* SECCIÓN SUPERIOR: REPRODUCTOR + CHAT EN VIVO */
+    .broadcast-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 20px;
+    }
+
+    @media (max-width: 992px) {
+      .broadcast-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
     /* REPRODUCTOR DE VIDEO */
     .player-wrapper {
       position: relative;
@@ -229,6 +242,88 @@
     }
 
     .player-error i { font-size: 36px; color: var(--live-red); }
+
+    /* PANEL DE CHAT EN VIVO */
+    .live-chat-box {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      max-height: 500px;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      padding: 14px 18px;
+      background: rgba(0, 242, 254, 0.06);
+      border-bottom: 1px solid var(--card-border);
+      font-weight: 700;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+    }
+
+    .chat-messages {
+      flex-grow: 1;
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .chat-msg {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .chat-user {
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }
+
+    .chat-input-area {
+      padding: 12px;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .chat-input {
+      flex-grow: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .chat-input:focus { border-color: var(--primary); }
+
+    .chat-send-btn {
+      background: var(--primary);
+      color: #080b11;
+      border: none;
+      padding: 0 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: filter 0.2s;
+    }
+
+    .chat-send-btn:hover { filter: brightness(1.15); }
 
     /* BARRA DE ACCIONES Y REDES */
     .action-bar {
@@ -275,6 +370,32 @@
     .btn-yt { background: linear-gradient(135deg, #ff0000, #b30000); }
     .btn-blog { background: linear-gradient(135deg, #ff5722, #e64a19); }
 
+    .action-buttons-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-custom-action {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-custom-action:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--primary);
+    }
+
     .btn-fullscreen {
       background: linear-gradient(135deg, var(--primary), var(--accent));
       color: #080b11;
@@ -295,6 +416,64 @@
       filter: brightness(1.15);
       transform: scale(1.02);
     }
+
+    /* SECCIÓN MENSAJES AL AIRE WHATSAPP */
+    .card-panel {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      padding: 20px 24px;
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card-panel-title {
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--primary);
+    }
+
+    .form-saludos {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form-input, .form-textarea {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .form-input:focus, .form-textarea:focus { border-color: var(--primary); }
+    .form-textarea { resize: none; height: 85px; }
+
+    .btn-submit-wa {
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      color: #fff;
+      border: none;
+      padding: 11px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: filter 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .btn-submit-wa:hover { filter: brightness(1.15); }
 
     /* SECCIÓN SECTOR CLIMA PRONÓSTICO 3 DÍAS */
     .weather-forecast-container {
@@ -616,13 +795,36 @@
   <!-- CONTENEDOR PRINCIPAL -->
   <div class="main-container">
 
-    <!-- REPRODUCTOR -->
-    <div class="player-wrapper">
-      <div id="playerError" class="player-error">
-        <i class="fas fa-exclamation-triangle"></i>
-        <span>Señal fuera de línea o cargando transmisión...</span>
+    <!-- SECCIÓN SUPERIOR: REPRODUCTOR Y CHAT EN VIVO -->
+    <div class="broadcast-layout">
+      <div class="player-wrapper">
+        <div id="playerError" class="player-error">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>Señal fuera de línea o cargando transmisión...</span>
+        </div>
+        <video id="videoPlayer" controls autoplay muted playsinline></video>
       </div>
-      <video id="videoPlayer" controls autoplay muted playsinline></video>
+
+      <!-- PANEL DE CHAT EN VIVO INTERACTIVO -->
+      <div class="live-chat-box">
+        <div class="chat-header">
+          <i class="fas fa-comments"></i> Chat en Vivo UTV
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-msg">
+            <div class="chat-user">Sistema</div>
+            <div>¡Bienvenidos a la transmisión oficial de UTV! Comenta con respeto.</div>
+          </div>
+          <div class="chat-msg">
+            <div class="chat-user">Carlos_PY</div>
+            <div>¡Excelente señal hoy, saludos desde Asunción! 📺🔥</div>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <input type="text" id="chatInput" class="chat-input" placeholder="Escribe un mensaje..." />
+          <button class="chat-send-btn" onclick="enviarMensajeChat()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
     </div>
 
     <!-- BARRA DE ACCIONES Y REDES -->
@@ -645,9 +847,29 @@
         </a>
       </div>
 
-      <button class="btn-fullscreen" onclick="togglePantallaCompleta()">
-        <i class="fas fa-expand"></i> Pantalla Completa
-      </button>
+      <div class="action-buttons-right">
+        <button class="btn-custom-action" onclick="alert('¡Próximamente encuestas interactivas activas!')">
+          <i class="fas fa-poll"></i> Encuesta
+        </button>
+        <button class="btn-fullscreen" onclick="togglePantallaCompleta()">
+          <i class="fas fa-expand"></i> Pantalla Completa
+        </button>
+      </div>
+    </div>
+
+    <!-- SECCIÓN MENSAJES AL AIRE (CONECTADO A WHATSAPP) -->
+    <div class="card-panel">
+      <div class="card-panel-title">
+        <i class="fab fa-whatsapp"></i> Mensajes y Saludos al Aire (WhatsApp)
+      </div>
+      <p style="font-size: 13px; color: var(--text-muted);">Envía tu saludo, pedido musical o dedicatoria directamente al WhatsApp oficial del canal.</p>
+      <div class="form-saludos">
+        <input type="text" id="nombreRemitente" class="form-input" placeholder="Tu Nombre / Apodo" />
+        <textarea id="textoSaludo" class="form-textarea" placeholder="Escribe tu mensaje o pedido musical aquí..."></textarea>
+        <button class="btn-submit-wa" onclick="enviarSaludoWhatsApp()">
+          <i class="fab fa-whatsapp" style="font-size: 16px;"></i> Enviar Saludo por WhatsApp
+        </button>
+      </div>
     </div>
 
     <!-- PANEL PRONÓSTICO DE CLIMA REAL A 3 DÍAS EN ASUNCIÓN (DINÁMICO) -->
@@ -661,9 +883,7 @@
         </svg>
         <span>Pronóstico del Tiempo en Asunción (Próximos 3 Días)</span>
       </div>
-      <div class="weather-days-grid" id="gridPronosticoDinamico">
-        <!-- Se genera automáticamente mediante JavaScript -->
-      </div>
+      <div class="weather-days-grid" id="gridPronosticoDinamico"></div>
     </div>
 
     <!-- SECCIÓN PROGRAMACIÓN -->
@@ -712,6 +932,36 @@
       } else {
         if (document.exitFullscreen) document.exitFullscreen();
       }
+    }
+
+    // Funciones de Chat Interactivo
+    function enviarMensajeChat() {
+      var input = document.getElementById("chatInput");
+      var chatBox = document.getElementById("chatMessages");
+      if (!input || !input.value.trim()) return;
+
+      var msgDiv = document.createElement("div");
+      msgDiv.className = "chat-msg";
+      msgDiv.innerHTML = '<div class="chat-user">Espectador</div><div>' + input.value.replace(/</g, "&lt;").replace(/>/g, "&gt;") + '</div>';
+      chatBox.appendChild(msgDiv);
+      input.value = "";
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Función Mensajes al Aire conectado a WhatsApp (+595971880693)
+    function enviarSaludoWhatsApp() {
+      var nom = document.getElementById("nombreRemitente").value.trim();
+      var txt = document.getElementById("textoSaludo").value.trim();
+      
+      if (!nom || !txt) {
+        alert("Por favor completa tu nombre y mensaje antes de enviar.");
+        return;
+      }
+
+      var mensajeFinal = "Hola UTV! Mi nombre es *" + nom + "* y quiero enviar este saludo / pedido:\n\n" + txt;
+      var urlWA = "https://wa.me/595971880693?text=" + encodeURIComponent(mensajeFinal);
+      
+      window.open(urlWA, "_blank");
     }
 
     var programacionLunes12 = [
@@ -849,7 +1099,7 @@
       contadorEl.textContent = visitasTotales.toLocaleString("es-PY") + " vistas";
     }
 
-    // Consulta automática y dinámica del clima (Temperatura actual y pronóstico de 3 días rotativos)
+    // Consulta automática y dinámica del clima
     function consultarClimaAuto() {
       var urlClima = "https://api.open-meteo.com/v1/forecast?latitude=-25.2637&longitude=-57.5759&current=temperature_2m&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=America%2FAsuncion";
       
@@ -872,9 +1122,8 @@
             var mesesNombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             
             var htmlClima = "";
-            // Recorrer los próximos 3 días (índices 0, 1 y 2)
             for (var i = 0; i < 3; i++) {
-              var fechaStr = data.daily.time[i]; // formato "YYYY-MM-DD"
+              var fechaStr = data.daily.time[i];
               var partesF = fechaStr.split("-");
               var fObj = new Date(partesF[0], partesF[1] - 1, partesF[2]);
               
