@@ -812,7 +812,7 @@
         <i class="fas fa-eye"></i> <span id="contadorVisitas">1.258 vistas</span>
       </div>
       
-      <!-- INDICADOR SUPERIOR INTELIGENTE -->
+      <!-- INDICADOR SUPERIOR INDEPENDIENTE DEL DÍA REAL -->
       <div class="widget-pill live-indicator" id="indicadorHeaderLive">
         <span class="dot"></span> <span id="textoIndicadorHeader">EN VIVO</span>
       </div>
@@ -832,7 +832,7 @@
         <video id="videoPlayer" controls autoplay muted playsinline></video>
       </div>
 
-      <!-- PANEL DE CHAT EN VIVO INTERACTIVO -->
+      <!-- PANEL DE CHAT EN VIVO -->
       <div class="live-chat-box">
         <div class="chat-header">
           <i class="fas fa-comments"></i> Chat en Vivo UTV
@@ -884,7 +884,7 @@
       </div>
     </div>
 
-    <!-- SECCIÓN MENSAJES AL AIRE (CONECTADO A WHATSAPP) -->
+    <!-- SECCIÓN MENSAJES AL AIRE (WHATSAPP) -->
     <div class="card-panel">
       <div class="card-panel-title">
         <i class="fab fa-whatsapp"></i> Mensajes y Saludos al Aire (WhatsApp)
@@ -899,7 +899,7 @@
       </div>
     </div>
 
-    <!-- PANEL PRONÓSTICO DE CLIMA REAL A 3 DÍAS EN ASUNCIÓN (DINÁMICO) -->
+    <!-- PRONÓSTICO DE CLIMA -->
     <div class="weather-forecast-container">
       <div class="weather-title">
         <svg class="animated-weather-icon" viewBox="0 0 64 64">
@@ -961,7 +961,6 @@
       }
     }
 
-    // Funciones de Chat Interactivo
     function enviarMensajeChat() {
       var input = document.getElementById("chatInput");
       var chatBox = document.getElementById("chatMessages");
@@ -975,7 +974,6 @@
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // Función Mensajes al Aire conectado a WhatsApp (+595971880693)
     function enviarSaludoWhatsApp() {
       var nom = document.getElementById("nombreRemitente").value.trim();
       var txt = document.getElementById("textoSaludo").value.trim();
@@ -987,7 +985,6 @@
 
       var mensajeFinal = "Hola UTV! Mi nombre es *" + nom + "* y quiero enviar este saludo / pedido:\n\n" + txt;
       var urlWA = "https://wa.me/595971880693?text=" + encodeURIComponent(mensajeFinal);
-      
       window.open(urlWA, "_blank");
     }
 
@@ -1035,6 +1032,56 @@
       return '<span class="show-badge badge-general"><i class="fas fa-broadcast-tower"></i> Emisión</span>';
     }
 
+    // FUNCIÓN EXCLUSIVA PARA EVALUAR EL ESTADO REAL DEL DÍA ACTUAL EN EL HEADER
+    function actualizarIndicadorHeaderGlobal() {
+      var ah = new Date();
+      var diaSemana = ah.getDay(); // 3 = Miércoles, 4 = Jueves, 5 = Viernes
+      var hm = ah.getHours() * 60 + ah.getMinutes();
+
+      var listaHoy = null;
+      if (diaSemana === 3) listaHoy = programacionMiercoles14;
+      else if (diaSemana === 4) listaHoy = programacionJueves15;
+      else if (diaSemana === 5) listaHoy = programacionViernes16;
+
+      var indicadorPill = document.getElementById("indicadorHeaderLive");
+      var textoPill = document.getElementById("textoIndicadorHeader");
+      if (!indicadorPill || !textoPill) return;
+
+      if (!listaHoy) {
+        // Si es sábado, domingo o lunes/martes fuera de esta grilla específica, se muestra offline o neutro
+        indicadorPill.classList.add("offline");
+        textoPill.textContent = "FIN DE TRANSMISIÓN";
+        return;
+      }
+
+      var hayFinTransmisionActivo = false;
+      for (var i = 0; i < listaHoy.length; i++) {
+        var it = listaHoy[i];
+        var mi = obtenerMinutos(it.hora);
+        var mf = obtenerMinutos(it.fin);
+        
+        var enAire = false;
+        if (mf < mi) {
+          enAire = (hm >= mi || hm < mf);
+        } else {
+          enAire = (hm >= mi && hm < mf);
+        }
+
+        if (enAire && it.titulo.includes("Fin de la Transmisión")) {
+          hayFinTransmisionActivo = true;
+          break;
+        }
+      }
+
+      if (hayFinTransmisionActivo) {
+        indicadorPill.classList.add("offline");
+        textoPill.textContent = "FIN DE TRANSMISIÓN";
+      } else {
+        indicadorPill.classList.remove("offline");
+        textoPill.textContent = "EN VIVO";
+      }
+    }
+
     function mostrarDia(dia) {
       diaActual = dia;
       var gc = document.getElementById("grillaProgramacion");
@@ -1066,7 +1113,6 @@
                       (ah.getDay() === 5 && dia === "viernes16");
 
       var html = "";
-      var hayFinTransmisionActivo = false;
 
       for (var i = 0; i < lista.length; i++) {
         var it = lista[i];
@@ -1094,12 +1140,6 @@
         }
 
         var esFinTransmision = it.titulo.includes("Fin de la Transmisión");
-        
-        // Solo marcamos fin de transmisión activo si estamos viendo el día real actual y el bloque coincide
-        if (esHoyReal && enAire && esFinTransmision) {
-          hayFinTransmisionActivo = true;
-        }
-
         var claseCard = enAire ? 'is-live' : '';
         var etiquetaEstado = '';
 
@@ -1125,22 +1165,8 @@
       }
       gc.innerHTML = html;
 
-      // ACTUALIZAR EL INDICADOR SUPERIOR SOLO SI ESTÁ SELECCIONADO EL DÍA ACTUAL
-      var indicadorPill = document.getElementById("indicadorHeaderLive");
-      var textoPill = document.getElementById("textoIndicadorHeader");
-      if (indicadorPill && textoPill) {
-        var esDiaActualSeleccionado = (ah.getDay() === 3 && dia === "miercoles14") || 
-                                       (ah.getDay() === 4 && dia === "jueves15") || 
-                                       (ah.getDay() === 5 && dia === "viernes16");
-
-        if (esDiaActualSeleccionado && hayFinTransmisionActivo) {
-          indicadorPill.classList.add("offline");
-          textoPill.textContent = "FIN DE TRANSMISIÓN";
-        } else {
-          indicadorPill.classList.remove("offline");
-          textoPill.textContent = "EN VIVO";
-        }
-      }
+      // Actualizamos el header de forma independiente al cambiar de pestaña
+      actualizarIndicadorHeaderGlobal();
     }
 
     function actualizarReloj() {
@@ -1157,9 +1183,11 @@
       var eh = document.getElementById("relojHora");
       if (ef) ef.textContent = txtFecha;
       if (eh) eh.textContent = h + ":" + m + ":" + s;
+
+      // Mantener actualizado el indicador superior según el paso del tiempo y el día real
+      actualizarIndicadorHeaderGlobal();
     }
 
-    // Contador estable
     function gestionarVisitas() {
       var contadorEl = document.getElementById("contadorVisitas");
       if (!contadorEl) return;
@@ -1175,7 +1203,6 @@
       contadorEl.textContent = visitasTotales.toLocaleString("es-PY") + " vistas";
     }
 
-    // Consulta automática y dinámica del clima
     function consultarClimaAuto() {
       var urlClima = "https://api.open-meteo.com/v1/forecast?latitude=-25.2637&longitude=-57.5759&current=temperature_2m&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=America%2FAsuncion";
       
@@ -1266,7 +1293,6 @@
       }
     }
 
-    // Inicializar todo al cargar
     window.onload = function() {
       actualizarReloj();
       mostrarDia("miercoles14");
@@ -1274,10 +1300,9 @@
       gestionarVisitas();
       consultarClimaAuto();
 
-      // Timers automáticos
-      setInterval(actualizarReloj, 1000); // Reloj cada segundo
-      setInterval(function() { mostrarDia(diaActual); }, 30000); // Guía de programación cada 30s
-      setInterval(consultarClimaAuto, 3600000); // Clima de Asunción cada 1 hora
+      setInterval(actualizarReloj, 1000);
+      setInterval(function() { mostrarDia(diaActual); }, 30000);
+      setInterval(consultarClimaAuto, 3600000);
     };
   </script>
 </body>
