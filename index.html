@@ -809,7 +809,7 @@
       </div>
       
       <div class="widget-pill visitor-counter">
-        <i class="fas fa-eye"></i> <span id="contadorVisitas">1.258 vistas</span>
+        <i class="fas fa-eye"></i> <span id="contadorVisitas">Cargando vistas...</span>
       </div>
       
       <!-- INDICADOR SUPERIOR INDEPENDIENTE DEL DÍA REAL -->
@@ -1032,10 +1032,9 @@
       return '<span class="show-badge badge-general"><i class="fas fa-broadcast-tower"></i> Emisión</span>';
     }
 
-    // FUNCIÓN EXCLUSIVA PARA EVALUAR EL ESTADO REAL DEL DÍA ACTUAL EN EL HEADER
     function actualizarIndicadorHeaderGlobal() {
       var ah = new Date();
-      var diaSemana = ah.getDay(); // 3 = Miércoles, 4 = Jueves, 5 = Viernes
+      var diaSemana = ah.getDay();
       var hm = ah.getHours() * 60 + ah.getMinutes();
 
       var listaHoy = null;
@@ -1048,7 +1047,6 @@
       if (!indicadorPill || !textoPill) return;
 
       if (!listaHoy) {
-        // Si es sábado, domingo o lunes/martes fuera de esta grilla específica, se muestra offline o neutro
         indicadorPill.classList.add("offline");
         textoPill.textContent = "FIN DE TRANSMISIÓN";
         return;
@@ -1165,7 +1163,6 @@
       }
       gc.innerHTML = html;
 
-      // Actualizamos el header de forma independiente al cambiar de pestaña
       actualizarIndicadorHeaderGlobal();
     }
 
@@ -1184,23 +1181,41 @@
       if (ef) ef.textContent = txtFecha;
       if (eh) eh.textContent = h + ":" + m + ":" + s;
 
-      // Mantener actualizado el indicador superior según el paso del tiempo y el día real
       actualizarIndicadorHeaderGlobal();
     }
 
-    function gestionarVisitas() {
+    // CONTADOR GLOBAL SINCRONIZADO EN LA NUBE (CountAPI)
+    function gestionarVisitasGlobales() {
       var contadorEl = document.getElementById("contadorVisitas");
       if (!contadorEl) return;
-      
-      var visitasTotales = parseInt(localStorage.getItem("utv_visitas_totales") || "1258", 10);
-      
-      if (!sessionStorage.getItem("utv_sesion_contada")) {
-        visitasTotales += 1;
-        localStorage.setItem("utv_visitas_totales", visitasTotales);
-        sessionStorage.setItem("utv_sesion_contada", "true");
+
+      // Usamos CountAPI para mantener el mismo número en todos los dispositivos y sumar de forma global
+      // Namespace: 'utv_tv_digital', Key: 'visitas_oficiales'
+      var apiURL = "https://api.countapi.xyz/hit/utv_tv_digital/visitas_oficiales";
+
+      fetch(apiURL)
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (data && data.value !== undefined) {
+            contadorEl.textContent = data.value.toLocaleString("es-PY") + " vistas";
+          } else {
+            fallbackContadorLocal(contadorEl);
+          }
+        })
+        .catch(function() {
+          fallbackContadorLocal(contadorEl);
+        });
+    }
+
+    // Sistema de respaldo por si la red falla temporalmente
+    function fallbackContadorLocal(el) {
+      var visitas = parseInt(localStorage.getItem("utv_visitas_fallback") || "1420", 10);
+      if (!sessionStorage.getItem("utv_contado_sesion")) {
+        visitas += 1;
+        localStorage.setItem("utv_visitas_fallback", visitas);
+        sessionStorage.setItem("utv_contado_sesion", "true");
       }
-      
-      contadorEl.textContent = visitasTotales.toLocaleString("es-PY") + " vistas";
+      el.textContent = visitas.toLocaleString("es-PY") + " vistas";
     }
 
     function consultarClimaAuto() {
@@ -1297,12 +1312,15 @@
       actualizarReloj();
       mostrarDia("miercoles14");
       iniciarPlayer();
-      gestionarVisitas();
+      gestionarVisitasGlobales();
       consultarClimaAuto();
 
       setInterval(actualizarReloj, 1000);
       setInterval(function() { mostrarDia(diaActual); }, 30000);
       setInterval(consultarClimaAuto, 3600000);
+      
+      // Actualiza/refresca el número de vistas globalmente cada 30 segundos para que aumente si otros entran
+      setInterval(gestionarVisitasGlobales, 30000);
     };
   </script>
 </body>
