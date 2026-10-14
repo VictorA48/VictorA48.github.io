@@ -127,12 +127,20 @@
     .visitor-counter i { color: var(--accent); }
     .visitor-counter { color: #fff; font-weight: 600; }
 
+    /* ESTILOS DINÁMICOS PARA EL INDICADOR SUPERIOR */
     .live-indicator {
       background: rgba(255, 42, 95, 0.12);
       border: 1px solid var(--live-red);
       color: #ff5e82;
       font-weight: 700;
       letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+    }
+
+    .live-indicator.offline {
+      background: rgba(148, 163, 184, 0.12);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: #94a3b8;
     }
 
     .dot {
@@ -142,6 +150,12 @@
       border-radius: 50%;
       box-shadow: 0 0 10px var(--live-red);
       animation: pulse 1.5s infinite ease-in-out;
+    }
+
+    .live-indicator.offline .dot {
+      background: #94a3b8;
+      box-shadow: none;
+      animation: none;
     }
 
     @keyframes pulse {
@@ -798,8 +812,9 @@
         <i class="fas fa-eye"></i> <span id="contadorVisitas">1.258 vistas</span>
       </div>
       
-      <div class="widget-pill live-indicator">
-        <span class="dot"></span> EN VIVO
+      <!-- INDICADOR SUPERIOR DINÁMICO (EN VIVO / FIN DE TRANSMISIÓN) -->
+      <div class="widget-pill live-indicator" id="indicadorHeaderLive">
+        <span class="dot"></span> <span id="textoIndicadorHeader">EN VIVO</span>
       </div>
     </div>
   </header>
@@ -1051,6 +1066,7 @@
                       (ah.getDay() === 5 && dia === "viernes16");
 
       var html = "";
+      var hayFinTransmisionActivo = false;
 
       for (var i = 0; i < lista.length; i++) {
         var it = lista[i];
@@ -1078,6 +1094,11 @@
         }
 
         var esFinTransmision = it.titulo.includes("Fin de la Transmisión");
+        
+        if (enAire && esFinTransmision) {
+          hayFinTransmisionActivo = true;
+        }
+
         var claseCard = enAire ? 'is-live' : '';
         var etiquetaEstado = '';
 
@@ -1102,6 +1123,19 @@
                 '</div>';
       }
       gc.innerHTML = html;
+
+      // ACTUALIZAR EL INDICADOR SUPERIOR SEGÚN SI ESTÁ EN TRANSMISIÓN O NO
+      var indicadorPill = document.getElementById("indicadorHeaderLive");
+      var textoPill = document.getElementById("textoIndicadorHeader");
+      if (indicadorPill && textoPill) {
+        if (esHoyReal && hayFinTransmisionActivo) {
+          indicadorPill.classList.add("offline");
+          textoPill.textContent = "FIN DE TRANSMISIÓN";
+        } else {
+          indicadorPill.classList.remove("offline");
+          textoPill.textContent = "EN VIVO";
+        }
+      }
     }
 
     function actualizarReloj() {
