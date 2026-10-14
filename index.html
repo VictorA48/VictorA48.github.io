@@ -699,6 +699,18 @@
       animation: pulse 1.5s infinite;
     }
 
+    .offline-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: #94a3b8;
+      background: rgba(148, 163, 184, 0.15);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
     .schedule-show-title {
       font-size: 16px;
       font-weight: 600;
@@ -979,7 +991,7 @@
       { hora: "18:46", fin: "19:29", titulo: "Series Temporada 6: Un Doctor Diferente", categoria: "serie" },
       { hora: "19:29", fin: "21:31", titulo: "Pelicula : Okja", categoria: "pelicula" },
       { hora: "21:31", fin: "22:27", titulo: "Series : La Tierra Prometida", categoria: "serie" },
-      { hora: "22:27", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
+      { hora: "22:27", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" }
     ];
 
     var programacionViernes16 = [
@@ -988,7 +1000,7 @@
       { hora: "19:33", fin: "20:16", titulo: "Series Temporada 6: Un Doctor Diferente", categoria: "serie" },
       { hora: "20:16", fin: "22:09", titulo: "Película : Sector 9", categoria: "pelicula" },
       { hora: "22:09", fin: "23:05", titulo: "Series : La Tierra Prometida", categoria: "serie" },
-      { hora: "23:05", fin: "23:59", titulo: "Fin de la Transmisión", categoria: "general" }
+      { hora: "23:05", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" }
     ];
 
     var diaActual = "miercoles14";
@@ -1045,19 +1057,44 @@
         var mi = obtenerMinutos(it.hora);
         var mf = obtenerMinutos(it.fin);
         
-        var enAire = esHoyReal && (hm >= mi && hm < mf);
-        var pct = 0;
-
-        if (enAire && mf > mi) {
-          pct = Math.min(100, Math.max(0, ((hm - mi) / (mf - mi)) * 100));
+        var enAire = false;
+        if (esHoyReal) {
+          if (mf < mi) {
+            enAire = (hm >= mi || hm < mf);
+          } else {
+            enAire = (hm >= mi && hm < mf);
+          }
         }
 
-        html += '<div class="schedule-card ' + (enAire ? 'is-live' : '') + '">' +
+        var pct = 0;
+        if (enAire) {
+          if (mf < mi) {
+            var totalMinutos = (1440 - mi) + mf;
+            var transcurridos = hm >= mi ? (hm - mi) : (1440 - mi + hm);
+            pct = Math.min(100, Math.max(0, (transcurridos / totalMinutos) * 100));
+          } else if (mf > mi) {
+            pct = Math.min(100, Math.max(0, ((hm - mi) / (mf - mi)) * 100));
+          }
+        }
+
+        var esFinTransmision = it.titulo.includes("Fin de la Transmisión");
+        var claseCard = enAire ? 'is-live' : '';
+        var etiquetaEstado = '';
+
+        if (enAire) {
+          if (esFinTransmision) {
+            etiquetaEstado = '<span class="offline-tag"><i class="fas fa-moon"></i> FIN DE TRANSMISIÓN</span>';
+          } else {
+            etiquetaEstado = '<span class="live-tag"><i class="fas fa-play"></i> EN AIRE AHORA</span>';
+          }
+        }
+
+        html += '<div class="schedule-card ' + claseCard + '">' +
                   '<div class="schedule-time"><i class="far fa-clock"></i> ' + it.hora + '</div>' +
                   '<div class="schedule-details">' +
                     '<div class="schedule-header-row">' +
                       obtenerBadge(it.categoria) +
-                      (enAire ? '<span class="live-tag"><i class="fas fa-play"></i> EN AIRE AHORA</span>' : '') +
+                      etiquetaEstado +
                     '</div>' +
                     '<div class="schedule-show-title">' + it.titulo + '</div>' +
                     (enAire ? '<div class="progress-bar-container"><div class="progress-bar-fill" style="width:' + pct + '%"></div></div>' : '') +
