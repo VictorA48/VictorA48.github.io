@@ -812,7 +812,7 @@
         <i class="fas fa-eye"></i> <span id="contadorVisitas">Cargando vistas...</span>
       </div>
       
-      <!-- INDICADOR SUPERIOR INDEPENDIENTE DEL DÍA REAL -->
+      <!-- INDICADOR SUPERIOR -->
       <div class="widget-pill live-indicator" id="indicadorHeaderLive">
         <span class="dot"></span> <span id="textoIndicadorHeader">EN VIVO</span>
       </div>
@@ -822,7 +822,7 @@
   <!-- CONTENEDOR PRINCIPAL -->
   <div class="main-container">
 
-    <!-- SECCIÓN SUPERIOR: REPRODUCTOR Y CHAT EN VIVO -->
+    <!-- SECCIÓN SUPERIOR: REPRODUCTOR + CHAT EN VIVO -->
     <div class="broadcast-layout">
       <div class="player-wrapper">
         <div id="playerError" class="player-error">
@@ -988,31 +988,32 @@
       window.open(urlWA, "_blank");
     }
 
+    /* PROGRAMACIÓN ORDENADA: "Fin de la Transmisión" COLOCADO EN LA PRIMERA FILA DE CADA DÍA */
     var programacionMiercoles14 = [
+      { hora: "22:15", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" },
       { hora: "16:00", fin: "18:00", titulo: "Especial Concert : Michael Jackson", categoria: "especial" },
       { hora: "18:00", fin: "18:33", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
       { hora: "18:33", fin: "19:15", titulo: "Series Temporada 6: Un Doctor Diferente", categoria: "serie" },
       { hora: "19:15", fin: "21:18", titulo: "Película : Guerra Mundial Z", categoria: "pelicula" },
-      { hora: "21:18", fin: "22:15", titulo: "Series : La Tierra Prometida", categoria: "serie" },
-      { hora: "22:15", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" }
+      { hora: "21:18", fin: "22:15", titulo: "Series : La Tierra Prometida", categoria: "serie" }
     ];
 
     var programacionJueves15 = [
+      { hora: "22:27", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" },
       { hora: "16:00", fin: "18:08", titulo: "Especial Concert : Roger Sanchez", categoria: "especial" },
       { hora: "18:08", fin: "18:46", titulo: "Santo Rosario \"Misterios Luminosos\"", categoria: "religioso" },
       { hora: "18:46", fin: "19:29", titulo: "Series Temporada 6: Un Doctor Diferente", categoria: "serie" },
       { hora: "19:29", fin: "21:31", titulo: "Pelicula : Okja", categoria: "pelicula" },
-      { hora: "21:31", fin: "22:27", titulo: "Series : La Tierra Prometida", categoria: "serie" },
-      { hora: "22:27", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" }
+      { hora: "21:31", fin: "22:27", titulo: "Series : La Tierra Prometida", categoria: "serie" }
     ];
 
     var programacionViernes16 = [
+      { hora: "23:05", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" },
       { hora: "17:58", fin: "19:00", titulo: "Especial Concert : David Guetta", categoria: "especial" },
       { hora: "19:00", fin: "19:33", titulo: "Santo Rosario \"Misterios Dolorosos\"", categoria: "religioso" },
       { hora: "19:33", fin: "20:16", titulo: "Series Temporada 6: Un Doctor Diferente", categoria: "serie" },
       { hora: "20:16", fin: "22:09", titulo: "Película : Sector 9", categoria: "pelicula" },
-      { hora: "22:09", fin: "23:05", titulo: "Series : La Tierra Prometida", categoria: "serie" },
-      { hora: "23:05", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" }
+      { hora: "22:09", fin: "23:05", titulo: "Series : La Tierra Prometida", categoria: "serie" }
     ];
 
     var diaActual = "miercoles14";
@@ -1184,13 +1185,10 @@
       actualizarIndicadorHeaderGlobal();
     }
 
-    // CONTADOR GLOBAL SINCRONIZADO EN LA NUBE (CountAPI)
     function gestionarVisitasGlobales() {
       var contadorEl = document.getElementById("contadorVisitas");
       if (!contadorEl) return;
 
-      // Usamos CountAPI para mantener el mismo número en todos los dispositivos y sumar de forma global
-      // Namespace: 'utv_tv_digital', Key: 'visitas_oficiales'
       var apiURL = "https://api.countapi.xyz/hit/utv_tv_digital/visitas_oficiales";
 
       fetch(apiURL)
@@ -1207,7 +1205,6 @@
         });
     }
 
-    // Sistema de respaldo por si la red falla temporalmente
     function fallbackContadorLocal(el) {
       var visitas = parseInt(localStorage.getItem("utv_visitas_fallback") || "1420", 10);
       if (!sessionStorage.getItem("utv_contado_sesion")) {
@@ -1318,8 +1315,6 @@
       setInterval(actualizarReloj, 1000);
       setInterval(function() { mostrarDia(diaActual); }, 30000);
       setInterval(consultarClimaAuto, 3600000);
-      
-      // Actualiza/refresca el número de vistas globalmente cada 30 segundos para que aumente si otros entran
       setInterval(gestionarVisitasGlobales, 30000);
     };
   </script>
