@@ -796,7 +796,7 @@
     <div class="header-status">
       <div class="widget-pill clock-widget">
         <i class="fas fa-clock"></i>
-        <span class="clock-date" id="relojFecha">Lunes, 19 Octubre 2026</span>
+        <span class="clock-date" id="relojFecha">Martes, 20 Octubre 2026</span>
         <span class="clock-time" id="relojHora">00:00:00</span>
       </div>
 
@@ -914,14 +914,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn" id="btnSabado17" onclick="mostrarDia('sabado17')">
-            <i class="fas fa-calendar-day"></i> Sábado, 17 Octubre 2026
-          </button>
           <button class="tab-btn" id="btnDomingo18" onclick="mostrarDia('domingo18')">
             <i class="fas fa-calendar-day"></i> Domingo, 18 Octubre 2026
           </button>
-          <button class="tab-btn active" id="btnLunes19" onclick="mostrarDia('lunes19')">
+          <button class="tab-btn" id="btnLunes19" onclick="mostrarDia('lunes19')">
             <i class="fas fa-calendar-day"></i> Lunes, 19 Octubre 2026
+          </button>
+          <button class="tab-btn active" id="btnMartes20" onclick="mostrarDia('martes20')">
+            <i class="fas fa-calendar-day"></i> Martes, 20 Octubre 2026
           </button>
         </div>
       </div>
@@ -980,18 +980,6 @@
       window.open(urlWA, "_blank");
     }
 
-    var programacionSabado17 = [
-      { hora: "22:31", fin: "11:59", titulo: "Fin de la Transmisión", categoria: "general" },
-      { hora: "12:00", fin: "13:07", titulo: "Serie Comedia : Los Tres Chiflados", categoria: "serie" },
-      { hora: "13:07", fin: "14:14", titulo: "Anime : Los Thundercast", categoria: "animacion" },
-      { hora: "14:14", fin: "16:15", titulo: "Película : Constatine", categoria: "pelicula" },
-      { hora: "16:15", fin: "17:36", titulo: "Especial Concert : Faithless", categoria: "musical" },
-      { hora: "17:36", fin: "18:14", titulo: "Santo Rosario \"Misterios Gozosos\"", categoria: "religioso" },
-      { hora: "18:14", fin: "19:20", titulo: "Series Temporada 1 : Hanna Montana", categoria: "serie" },
-      { hora: "19:20", fin: "20:50", titulo: "Película : Robots", categoria: "pelicula" },
-      { hora: "20:50", fin: "22:31", titulo: "Película : Si Te Casas Te Mato", categoria: "pelicula" }
-    ];
-
     var programacionDomingo18 = [
       { hora: "23:20", fin: "11:59", titulo: "Fin de la Transmisión", categoria: "general" },
       { hora: "12:00", fin: "13:14", titulo: "Anime : Dragon Ball", categoria: "animacion" },
@@ -1014,7 +1002,16 @@
       { hora: "21:06", fin: "22:03", titulo: "Series : La Tierra Prometida", categoria: "serie" }
     ];
 
-    var diaActual = "lunes19";
+    var programacionMartes20 = [
+      { hora: "22:37", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" },
+      { hora: "17:00", fin: "18:24", titulo: "Especial : Thomas Anders \"Modern Talking\"", categoria: "musical" },
+      { hora: "18:24", fin: "18:57", titulo: "Santo Rosario \"Misterios Dolorosos\"", categoria: "religioso" },
+      { hora: "18:57", fin: "19:40", titulo: "Series Temporada 6: Un Doctor Diferente", categoria: "serie" },
+      { hora: "19:40", fin: "21:37", titulo: "Película : 3 Días Para Matar", categoria: "pelicula" },
+      { hora: "21:37", fin: "22:37", titulo: "Series : La Tierra Prometida", categoria: "serie" }
+    ];
+
+    var diaActual = "martes20";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1037,9 +1034,9 @@
       var hm = ah.getHours() * 60 + ah.getMinutes();
 
       var listaHoy = null;
-      if (diaSemana === 6) listaHoy = programacionSabado17;
-      else if (diaSemana === 0) listaHoy = programacionDomingo18;
+      if (diaSemana === 0) listaHoy = programacionDomingo18;
       else if (diaSemana === 1) listaHoy = programacionLunes19;
+      else if (diaSemana === 2) listaHoy = programacionMartes20;
 
       var indicadorPill = document.getElementById("indicadorHeaderLive");
       var textoPill = document.getElementById("textoIndicadorHeader");
@@ -1084,19 +1081,19 @@
       var gc = document.getElementById("grillaProgramacion");
       if (!gc) return;
 
-      var b1 = document.getElementById("btnSabado17");
-      var b2 = document.getElementById("btnDomingo18");
-      var b3 = document.getElementById("btnLunes19");
+      var b1 = document.getElementById("btnDomingo18");
+      var b2 = document.getElementById("btnLunes19");
+      var b3 = document.getElementById("btnMartes20");
       if (b1) b1.classList.remove("active");
       if (b2) b2.classList.remove("active");
       if (b3) b3.classList.remove("active");
 
-      var lista = programacionSabado17;
-      if (dia === "domingo18") {
-        lista = programacionDomingo18;
-        if (b2) b2.classList.add("active");
-      } else if (dia === "lunes19") {
+      var lista = programacionDomingo18;
+      if (dia === "lunes19") {
         lista = programacionLunes19;
+        if (b2) b2.classList.add("active");
+      } else if (dia === "martes20") {
+        lista = programacionMartes20;
         if (b3) b3.classList.add("active");
       } else {
         if (b1) b1.classList.add("active");
@@ -1105,9 +1102,9 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       
-      var esHoyReal = (ah.getDay() === 6 && dia === "sabado17") || 
-                      (ah.getDay() === 0 && dia === "domingo18") || 
-                      (ah.getDay() === 1 && dia === "lunes19");
+      var esHoyReal = (ah.getDay() === 0 && dia === "domingo18") || 
+                      (ah.getDay() === 1 && dia === "lunes19") || 
+                      (ah.getDay() === 2 && dia === "martes20");
 
       var html = "";
 
@@ -1298,7 +1295,7 @@
 
     window.onload = function() {
       actualizarReloj();
-      mostrarDia("lunes19");
+      mostrarDia("martes20");
       iniciarPlayer();
       gestionarVisitasGlobales();
       consultarClimaAuto();
