@@ -796,7 +796,7 @@
     <div class="header-status">
       <div class="widget-pill clock-widget">
         <i class="fas fa-clock"></i>
-        <span class="clock-date" id="relojFecha">Martes, 20 Octubre 2026</span>
+        <span class="clock-date" id="relojFecha">Miércoles, 21 Octubre 2026</span>
         <span class="clock-time" id="relojHora">00:00:00</span>
       </div>
 
@@ -827,7 +827,7 @@
           <span>Cargando señal en vivo o fuera de línea...</span>
           <button class="btn-retry" onclick="iniciarPlayer()">Reintentar Conexión</button>
         </div>
-        <video id="videoPlayer" controls autoplay muted playsinline></video>
+        <video id="videoPlayer" controls autoplay playsinline></video>
       </div>
 
       <div class="live-chat-box">
@@ -914,14 +914,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn" id="btnDomingo18" onclick="mostrarDia('domingo18')">
-            <i class="fas fa-calendar-day"></i> Domingo, 18 Octubre 2026
-          </button>
           <button class="tab-btn" id="btnLunes19" onclick="mostrarDia('lunes19')">
             <i class="fas fa-calendar-day"></i> Lunes, 19 Octubre 2026
           </button>
-          <button class="tab-btn active" id="btnMartes20" onclick="mostrarDia('martes20')">
+          <button class="tab-btn" id="btnMartes20" onclick="mostrarDia('martes20')">
             <i class="fas fa-calendar-day"></i> Martes, 20 Octubre 2026
+          </button>
+          <button class="tab-btn active" id="btnMiercoles21" onclick="mostrarDia('miercoles21')">
+            <i class="fas fa-calendar-day"></i> Miércoles, 21 Octubre 2026
           </button>
         </div>
       </div>
@@ -980,19 +980,6 @@
       window.open(urlWA, "_blank");
     }
 
-    var programacionDomingo18 = [
-      { hora: "23:20", fin: "11:59", titulo: "Fin de la Transmisión", categoria: "general" },
-      { hora: "12:00", fin: "13:14", titulo: "Anime : Dragon Ball", categoria: "animacion" },
-      { hora: "13:14", fin: "14:19", titulo: "Anime : Mazinger Z", categoria: "animacion" },
-      { hora: "14:19", fin: "16:00", titulo: "Película : Zathura (Una Aventura Espacial)", categoria: "pelicula" },
-      { hora: "16:00", fin: "17:16", titulo: "Especial Concert : Rihanna", categoria: "musical" },
-      { hora: "17:16", fin: "18:03", titulo: "Santa Misa", categoria: "religioso" },
-      { hora: "18:03", fin: "18:35", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
-      { hora: "18:35", fin: "19:43", titulo: "Series Temporada 1 : Hannah Montana", categoria: "serie" },
-      { hora: "19:43", fin: "20:58", titulo: "Película Paraguaya : Mita'í", categoria: "pelicula" },
-      { hora: "20:58", fin: "23:20", titulo: "Película : Cabrini", categoria: "pelicula" }
-    ];
-
     var programacionLunes19 = [
       { hora: "22:03", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" },
       { hora: "17:00", fin: "17:51", titulo: "Especial : Baltimora", categoria: "musical" },
@@ -1011,7 +998,16 @@
       { hora: "21:37", fin: "22:37", titulo: "Series : La Tierra Prometida", categoria: "serie" }
     ];
 
-    var diaActual = "martes20";
+    var programacionMiercoles21 = [
+      { hora: "23:38", fin: "18:59", titulo: "Fin de la Transmisión", categoria: "general" },
+      { hora: "19:00", fin: "19:33", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
+      { hora: "19:33", fin: "20:16", titulo: "Series Temporada 6: Un Doctor Diferente", categoria: "serie" },
+      { hora: "20:16", fin: "21:43", titulo: "Película: Tormenta Mortal \"A 500 Millas por Hora\"", categoria: "pelicula" },
+      { hora: "21:43", fin: "22:39", titulo: "Series: La Tierra Prometida", categoria: "serie" },
+      { hora: "22:39", fin: "23:38", titulo: "Especial : Bad Boys Blue", categoria: "musical" }
+    ];
+
+    var diaActual = "miercoles21";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1034,9 +1030,9 @@
       var hm = ah.getHours() * 60 + ah.getMinutes();
 
       var listaHoy = null;
-      if (diaSemana === 0) listaHoy = programacionDomingo18;
-      else if (diaSemana === 1) listaHoy = programacionLunes19;
+      if (diaSemana === 1) listaHoy = programacionLunes19;
       else if (diaSemana === 2) listaHoy = programacionMartes20;
+      else if (diaSemana === 3) listaHoy = programacionMiercoles21;
 
       var indicadorPill = document.getElementById("indicadorHeaderLive");
       var textoPill = document.getElementById("textoIndicadorHeader");
@@ -1081,19 +1077,19 @@
       var gc = document.getElementById("grillaProgramacion");
       if (!gc) return;
 
-      var b1 = document.getElementById("btnDomingo18");
-      var b2 = document.getElementById("btnLunes19");
-      var b3 = document.getElementById("btnMartes20");
+      var b1 = document.getElementById("btnLunes19");
+      var b2 = document.getElementById("btnMartes20");
+      var b3 = document.getElementById("btnMiercoles21");
       if (b1) b1.classList.remove("active");
       if (b2) b2.classList.remove("active");
       if (b3) b3.classList.remove("active");
 
-      var lista = programacionDomingo18;
-      if (dia === "lunes19") {
-        lista = programacionLunes19;
-        if (b2) b2.classList.add("active");
-      } else if (dia === "martes20") {
+      var lista = programacionLunes19;
+      if (dia === "martes20") {
         lista = programacionMartes20;
+        if (b2) b2.classList.add("active");
+      } else if (dia === "miercoles21") {
+        lista = programacionMiercoles21;
         if (b3) b3.classList.add("active");
       } else {
         if (b1) b1.classList.add("active");
@@ -1102,9 +1098,9 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       
-      var esHoyReal = (ah.getDay() === 0 && dia === "domingo18") || 
-                      (ah.getDay() === 1 && dia === "lunes19") || 
-                      (ah.getDay() === 2 && dia === "martes20");
+      var esHoyReal = (ah.getDay() === 1 && dia === "lunes19") || 
+                      (ah.getDay() === 2 && dia === "martes20") || 
+                      (ah.getDay() === 3 && dia === "miercoles21");
 
       var html = "";
 
@@ -1268,7 +1264,7 @@
       var err = document.getElementById("playerError");
       if (!v) return;
 
-      v.muted = true; // Obligatorio para autoplay en navegadores modernos
+      v.muted = false; // Audio activo al iniciar
 
       if (typeof Hls !== 'undefined' && Hls.isSupported()) {
         var hls = new Hls({ enableWorker: true, lowLatencyMode: true });
@@ -1276,7 +1272,10 @@
         hls.attachMedia(v);
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
           if (err) err.style.display = "none";
-          v.play().catch(function() {});
+          v.play().catch(function() {
+            v.muted = true;
+            v.play();
+          });
         });
         hls.on(Hls.Events.ERROR, function (e, data) {
           if (data.fatal && err) err.style.display = "flex";
@@ -1285,7 +1284,10 @@
         v.src = url;
         v.addEventListener("loadedmetadata", function () {
           if (err) err.style.display = "none";
-          v.play().catch(function() {});
+          v.play().catch(function() {
+            v.muted = true;
+            v.play();
+          });
         });
         v.addEventListener("error", function () {
           if (err) err.style.display = "flex";
@@ -1295,7 +1297,7 @@
 
     window.onload = function() {
       actualizarReloj();
-      mostrarDia("martes20");
+      mostrarDia("miercoles21");
       iniciarPlayer();
       gestionarVisitasGlobales();
       consultarClimaAuto();
