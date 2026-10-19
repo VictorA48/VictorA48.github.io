@@ -780,7 +780,7 @@
     <div class="header-status">
       <div class="widget-pill clock-widget">
         <i class="fas fa-clock"></i>
-        <span class="clock-date" id="relojFecha">Miércoles, 21 Octubre 2026</span>
+        <span class="clock-date" id="relojFecha">Cargando fecha...</span>
         <span class="clock-time" id="relojHora">00:00:00</span>
       </div>
 
@@ -806,7 +806,7 @@
 
     <div class="broadcast-layout">
       <div class="player-wrapper">
-        <div id="playerError" class="player-error">
+        <div id="playerError" class="player-error" style="display: none;">
           <i class="fas fa-exclamation-triangle"></i>
           <span>Cargando señal en vivo o fuera de línea...</span>
           <button class="btn-retry" onclick="iniciarPlayer()">Reintentar Conexión</button>
@@ -919,6 +919,92 @@
   </div>
 
   <script class="notranslate">
+    // --- CONFIGURACIÓN Y REPRODUCTOR HLS DE TRANSMISIÓN ---
+    var streamUrl = "https://eu1.servers10.com:8081/8146/index.m3u8";
+    var hlsPlayer = null;
+
+    function iniciarPlayer() {
+      var video = document.getElementById("videoPlayer");
+      var errorOverlay = document.getElementById("playerError");
+      if (!video) return;
+
+      if (errorOverlay) errorOverlay.style.display = "none";
+
+      if (hlsPlayer) {
+        hlsPlayer.destroy();
+      }
+
+      if (Hls.isSupported()) {
+        hlsPlayer = new Hls({
+          enableWorker: true,
+          lowLatencyMode: true
+        });
+
+        hlsPlayer.loadSource(streamUrl);
+        hlsPlayer.attachMedia(video);
+
+        hlsPlayer.on(Hls.Events.MANIFEST_PARSED, function() {
+          video.play().catch(function(e) {
+            console.log("Autoplay bloqueado o requiere interacción:", e);
+          });
+        });
+
+        hlsPlayer.on(Hls.Events.ERROR, function(event, data) {
+          if (data.fatal) {
+            console.error("Error fatal HLS:", data);
+            if (errorOverlay) errorOverlay.style.display = "flex";
+            switch (data.type) {
+              case Hls.ErrorTypes.NETWORK_ERROR:
+                hlsPlayer.startLoad();
+                break;
+              case Hls.ErrorTypes.MEDIA_ERROR:
+                hlsPlayer.recoverMediaError();
+                break;
+              default:
+                hlsPlayer.destroy();
+                break;
+            }
+          }
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        // Compatibilidad nativa con Safari / iOS
+        video.src = streamUrl;
+        video.addEventListener('loadedmetadata', function() {
+          video.play().catch(function(e) { console.log("Autoplay bloqueado:", e); });
+        });
+        video.onerror = function() {
+          if (errorOverlay) errorOverlay.style.display = "flex";
+        };
+      } else {
+        if (errorOverlay) errorOverlay.style.display = "flex";
+      }
+    }
+
+    // --- FUNCIÓN DEL RELOJ ---
+    function actualizarReloj() {
+      var ahora = new Date();
+
+      // Formatear Fecha
+      var opcionesFecha = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+      var fechaTexto = ahora.toLocaleDateString('es-ES', opcionesFecha);
+
+      // Formatear Hora
+      var horas = String(ahora.getHours()).padStart(2, '0');
+      var minutos = String(ahora.getMinutes()).padStart(2, '0');
+      var segundos = String(ahora.getSeconds()).padStart(2, '0');
+      var horaTexto = horas + ':' + minutos + ':' + segundos;
+
+      var elFecha = document.getElementById("relojFecha");
+      var elHora = document.getElementById("relojHora");
+
+      if (elFecha) elFecha.textContent = fechaTexto;
+      if (elHora) elHora.textContent = horaTexto;
+    }
+
+    actualizarReloj();
+    setInterval(actualizarReloj, 1000);
+
+    // --- OTRAS FUNCIONES ---
     function mostrarLogoFallback() {
       var img = document.getElementById("channelLogo");
       var fallback = document.getElementById("logoFallback");
@@ -982,7 +1068,6 @@
       { hora: "21:37", fin: "22:37", titulo: "Series : La Tierra Prometida", categoria: "serie" }
     ];
 
-    /* Programación actualizada del Miércoles 21 */
     var programacionMiercoles21 = [
       { hora: "17:00", fin: "17:58", titulo: "Especial : Bad Boys Blue", categoria: "musical" },
       { hora: "17:58", fin: "18:30", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
@@ -1059,99 +1144,70 @@
 
     function mostrarDia(dia) {
       diaActual = dia;
-      
       var btnL = document.getElementById("btnLunes19");
       var btnM = document.getElementById("btnMartes20");
       var btnMi = document.getElementById("btnMiercoles21");
 
-      if (btnL) btnL.className = "tab-btn" + (dia === "lunes19" ? " active" : "");
-      if (btnM) btnM.className = "tab-btn" + (dia === "martes20" ? " active" : "");
-      if (btnMi) btnMi.className = "tab-btn" + (dia === "miercoles21" ? " active" : "");
+      if (btnL) btnL.classList.remove("active");
+      if (btnM) btnM.classList.remove("active");
+      if (btnMi) btnMi.classList.remove("active");
 
-      var lista = programacionLunes19;
-      if (dia === "martes20") lista = programacionMartes20;
-      if (dia === "miercoles21") lista = programacionMiercoles21;
+      var lista = [];
+      if (dia === "lunes19") {
+        if (btnL) btnL.classList.add("active");
+        lista = programacionLunes19;
+      } else if (dia === "martes20") {
+        if (btnM) btnM.classList.add("active");
+        lista = programacionMartes20;
+      } else if (dia === "miercoles21") {
+        if (btnMi) btnMi.classList.add("active");
+        lista = programacionMiercoles21;
+      }
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
       contenedor.innerHTML = "";
 
-      var ah = new Date();
-      var hm = ah.getHours() * 60 + ah.getMinutes();
-      var diaSemana = ah.getDay();
-      var esHoy = (dia === "lunes19" && diaSemana === 1) || (dia === "martes20" && diaSemana === 2) || (dia === "miercoles21" && diaSemana === 3);
+      var ahora = new Date();
+      var hm = ahora.getHours() * 60 + ahora.getMinutes();
 
-      for (var i = 0; i < lista.length; i++) {
-        var item = lista[i];
+      lista.forEach(function(item) {
         var mi = obtenerMinutos(item.hora);
         var mf = obtenerMinutos(item.fin);
 
         var enAire = false;
-        if (esHoy) {
-          if (mf < mi) {
-            enAire = (hm >= mi || hm < mf);
-          } else {
-            enAire = (hm >= mi && hm < mf);
-          }
+        if (mf < mi) {
+          enAire = (hm >= mi || hm < mf);
+        } else {
+          enAire = (hm >= mi && hm < mf);
         }
 
-        var cardClass = "schedule-card" + (enAire ? " is-live" : "");
-        var tagHtml = enAire ? '<span class="live-tag">EN VIVO</span>' : '<span class="offline-tag">PROGRAMADO</span>';
+        var card = document.createElement("div");
+        card.className = "schedule-card" + (enAire ? " is-live" : "");
 
-        var htmlCard = 
-          '<div class="' + cardClass + '">' +
-            '<div class="schedule-time">' + item.hora + ' - ' + item.fin + '</div>' +
-            '<div class="schedule-details">' +
-              '<div class="schedule-header-row">' +
-                obtenerBadge(item.categoria) +
-                tagHtml +
-              '</div>' +
-              '<div class="schedule-show-title">' + item.titulo + '</div>' +
-            '</div>' +
-          '</div>';
+        var html = '<div class="schedule-time">' + item.hora + ' hs</div>';
+        html += '<div class="schedule-details">';
+        html += '<div class="schedule-header-row">';
+        html += obtenerBadge(item.categoria);
+        if (enAire) {
+          html += '<span class="live-tag">EN AIRE</span>';
+        }
+        html += '</div>';
+        html += '<div class="schedule-show-title">' + item.titulo + '</div>';
+        html += '</div>';
 
-        contenedor.innerHTML += htmlCard;
-      }
+        card.innerHTML = html;
+        contenedor.appendChild(card);
+      });
+
+      actualizarIndicadorHeaderGlobal();
     }
 
-    /* Reproductor HLS configurado con tu enlace oficial */
-    function iniciarPlayer() {
-      var video = document.getElementById('videoPlayer');
-      var errorDiv = document.getElementById('playerError');
-      if (!video) return;
-
-      var streamUrl = "https://eu1.servers10.com:8081/8146/index.m3u8";
-
-      if (Hls.isSupported()) {
-        var hls = new Hls();
-        hls.loadSource(streamUrl);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, function() {
-          if (errorDiv) errorDiv.style.display = 'none';
-          video.play().catch(function(e) { console.log("Autoplay bloqueado:", e); });
-        });
-        hls.on(Hls.Events.ERROR, function(event, data) {
-          if (data.fatal && errorDiv) errorDiv.style.display = 'flex';
-        });
-      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = streamUrl;
-        video.addEventListener('loadedmetadata', function() {
-          if (errorDiv) errorDiv.style.display = 'none';
-          video.play().catch(function(e) { console.log("Autoplay bloqueado:", e); });
-        });
-        video.addEventListener('error', function() {
-          if (errorDiv) errorDiv.style.display = 'flex';
-        });
-      } else {
-        if (errorDiv) errorDiv.style.display = 'flex';
-      }
-    }
-
-    window.onload = function() {
+    // Inicializar reproductor y programación al cargar
+    document.addEventListener("DOMContentLoaded", function() {
       iniciarPlayer();
       mostrarDia('miercoles21');
-      actualizarIndicadorHeaderGlobal();
-    };
+    });
   </script>
 </body>
 </html>
