@@ -732,22 +732,6 @@
       line-height: 1.4;
     }
 
-    .progress-bar-container {
-      width: 100%;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 2px;
-      margin-top: 8px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--live-red), #ff7597);
-      border-radius: 2px;
-      transition: width 0.4s ease;
-    }
-
     footer {
       margin-top: 35px;
       text-align: center;
@@ -998,13 +982,14 @@
       { hora: "21:37", fin: "22:37", titulo: "Series : La Tierra Prometida", categoria: "serie" }
     ];
 
+    /* Programación actualizada del Miércoles 21 */
     var programacionMiercoles21 = [
-      { hora: "23:38", fin: "18:59", titulo: "Fin de la Transmisión", categoria: "general" },
-      { hora: "19:00", fin: "19:33", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
-      { hora: "19:33", fin: "20:16", titulo: "Series Temporada 6: Un Doctor Diferente", categoria: "serie" },
-      { hora: "20:16", fin: "21:43", titulo: "Película: Tormenta Mortal \"A 500 Millas por Hora\"", categoria: "pelicula" },
-      { hora: "21:43", fin: "22:39", titulo: "Series: La Tierra Prometida", categoria: "serie" },
-      { hora: "22:39", fin: "23:38", titulo: "Especial : Bad Boys Blue", categoria: "musical" }
+      { hora: "17:00", fin: "17:58", titulo: "Especial : Bad Boys Blue", categoria: "musical" },
+      { hora: "17:58", fin: "18:30", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
+      { hora: "18:30", fin: "19:14", titulo: "Series Temporada 6: Un Doctor Diferente", categoria: "serie" },
+      { hora: "19:14", fin: "20:41", titulo: "Película: Tormenta Mortal \"A 500 Millas por Hora\"", categoria: "pelicula" },
+      { hora: "20:41", fin: "21:38", titulo: "Series: La Tierra Prometida", categoria: "serie" },
+      { hora: "21:38", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" }
     ];
 
     var diaActual = "miercoles21";
@@ -1074,43 +1059,35 @@
 
     function mostrarDia(dia) {
       diaActual = dia;
-      var gc = document.getElementById("grillaProgramacion");
-      if (!gc) return;
+      
+      var btnL = document.getElementById("btnLunes19");
+      var btnM = document.getElementById("btnMartes20");
+      var btnMi = document.getElementById("btnMiercoles21");
 
-      var b1 = document.getElementById("btnLunes19");
-      var b2 = document.getElementById("btnMartes20");
-      var b3 = document.getElementById("btnMiercoles21");
-      if (b1) b1.classList.remove("active");
-      if (b2) b2.classList.remove("active");
-      if (b3) b3.classList.remove("active");
+      if (btnL) btnL.className = "tab-btn" + (dia === "lunes19" ? " active" : "");
+      if (btnM) btnM.className = "tab-btn" + (dia === "martes20" ? " active" : "");
+      if (btnMi) btnMi.className = "tab-btn" + (dia === "miercoles21" ? " active" : "");
 
       var lista = programacionLunes19;
-      if (dia === "martes20") {
-        lista = programacionMartes20;
-        if (b2) b2.classList.add("active");
-      } else if (dia === "miercoles21") {
-        lista = programacionMiercoles21;
-        if (b3) b3.classList.add("active");
-      } else {
-        if (b1) b1.classList.add("active");
-      }
+      if (dia === "martes20") lista = programacionMartes20;
+      if (dia === "miercoles21") lista = programacionMiercoles21;
+
+      var contenedor = document.getElementById("grillaProgramacion");
+      if (!contenedor) return;
+      contenedor.innerHTML = "";
 
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
-      
-      var esHoyReal = (ah.getDay() === 1 && dia === "lunes19") || 
-                      (ah.getDay() === 2 && dia === "martes20") || 
-                      (ah.getDay() === 3 && dia === "miercoles21");
-
-      var html = "";
+      var diaSemana = ah.getDay();
+      var esHoy = (dia === "lunes19" && diaSemana === 1) || (dia === "martes20" && diaSemana === 2) || (dia === "miercoles21" && diaSemana === 3);
 
       for (var i = 0; i < lista.length; i++) {
-        var it = lista[i];
-        var mi = obtenerMinutos(it.hora);
-        var mf = obtenerMinutos(it.fin);
-        
+        var item = lista[i];
+        var mi = obtenerMinutos(item.hora);
+        var mf = obtenerMinutos(item.fin);
+
         var enAire = false;
-        if (esHoyReal) {
+        if (esHoy) {
           if (mf < mi) {
             enAire = (hm >= mi || hm < mf);
           } else {
@@ -1118,193 +1095,62 @@
           }
         }
 
-        var pct = 0;
-        if (enAire) {
-          if (mf < mi) {
-            var totalMinutos = (1440 - mi) + mf;
-            var transcurridos = hm >= mi ? (hm - mi) : (1440 - mi + hm);
-            pct = Math.min(100, Math.max(0, (transcurridos / totalMinutos) * 100));
-          } else if (mf > mi) {
-            pct = Math.min(100, Math.max(0, ((hm - mi) / (mf - mi)) * 100));
-          }
-        }
+        var cardClass = "schedule-card" + (enAire ? " is-live" : "");
+        var tagHtml = enAire ? '<span class="live-tag">EN VIVO</span>' : '<span class="offline-tag">PROGRAMADO</span>';
 
-        var esFinTransmision = it.titulo.includes("Fin de la Transmisión");
-        var claseCard = enAire ? 'is-live' : '';
-        var etiquetaEstado = '';
+        var htmlCard = 
+          '<div class="' + cardClass + '">' +
+            '<div class="schedule-time">' + item.hora + ' - ' + item.fin + '</div>' +
+            '<div class="schedule-details">' +
+              '<div class="schedule-header-row">' +
+                obtenerBadge(item.categoria) +
+                tagHtml +
+              '</div>' +
+              '<div class="schedule-show-title">' + item.titulo + '</div>' +
+            '</div>' +
+          '</div>';
 
-        if (enAire) {
-          if (esFinTransmision) {
-            etiquetaEstado = '<span class="offline-tag"><i class="fas fa-moon"></i> FIN DE TRANSMISIÓN</span>';
-          } else {
-            etiquetaEstado = '<span class="live-tag"><i class="fas fa-play"></i> EN AIRE AHORA</span>';
-          }
-        }
-
-        html += '<div class="schedule-card ' + claseCard + '">' +
-                  '<div class="schedule-time"><i class="far fa-clock"></i> ' + it.hora + '</div>' +
-                  '<div class="schedule-details">' +
-                    '<div class="schedule-header-row">' +
-                      obtenerBadge(it.categoria) +
-                      etiquetaEstado +
-                    '</div>' +
-                    '<div class="schedule-show-title">' + it.titulo + '</div>' +
-                    (enAire ? '<div class="progress-bar-container"><div class="progress-bar-fill" style="width:' + pct + '%"></div></div>' : '') +
-                  '</div>' +
-                '</div>';
+        contenedor.innerHTML += htmlCard;
       }
-      gc.innerHTML = html;
-
-      actualizarIndicadorHeaderGlobal();
     }
 
-    function actualizarReloj() {
-      var d = new Date();
-      var dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-      var meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-      
-      var txtFecha = dias[d.getDay()] + ", " + d.getDate() + " " + meses[d.getMonth()] + " " + d.getFullYear();
-      var h = String(d.getHours()).padStart(2, '0');
-      var m = String(d.getMinutes()).padStart(2, '0');
-      var s = String(d.getSeconds()).padStart(2, '0');
-      
-      var ef = document.getElementById("relojFecha");
-      var eh = document.getElementById("relojHora");
-      if (ef) ef.textContent = txtFecha;
-      if (eh) eh.textContent = h + ":" + m + ":" + s;
-
-      actualizarIndicadorHeaderGlobal();
-    }
-
-    function gestionarVisitasGlobales() {
-      var contadorEl = document.getElementById("contadorVisitas");
-      if (!contadorEl) return;
-
-      var baseVisitas = 1420;
-      var visitas = parseInt(localStorage.getItem("utv_visitas_oficiales") || baseVisitas, 10);
-      
-      if (!sessionStorage.getItem("utv_sesion_activa")) {
-        visitas += 1;
-        localStorage.setItem("utv_visitas_oficiales", visitas);
-        sessionStorage.setItem("utv_sesion_activa", "true");
-      }
-
-      contadorEl.textContent = visitas.toLocaleString("es-PY") + " vistas";
-    }
-
-    function consultarClimaAuto() {
-      var urlClima = "https://api.open-meteo.com/v1/forecast?latitude=-25.2637&longitude=-57.5759&current=temperature_2m&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=America%2FAsuncion";
-      
-      fetch(urlClima)
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
-          if (data && data.current && data.current.temperature_2m !== undefined) {
-            var tempG = Math.round(data.current.temperature_2m);
-            var txtElem = document.getElementById("textoClimaEncabezado");
-            if (txtElem) {
-              txtElem.textContent = "Asunción: " + tempG + "°C";
-            }
-          }
-
-          if (data && data.daily) {
-            var grid = document.getElementById("gridPronosticoDinamico");
-            if (!grid) return;
-            
-            var diasNombres = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-            var mesesNombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-            
-            var htmlClima = "";
-            for (var i = 0; i < 3; i++) {
-              var fechaStr = data.daily.time[i];
-              var partesF = fechaStr.split("-");
-              var fObj = new Date(partesF[0], partesF[1] - 1, partesF[2]);
-              
-              var nombreDia = diasNombres[fObj.getDay()];
-              var numDia = fObj.getDate();
-              var nombreMes = mesesNombres[fObj.getMonth()];
-              
-              var tMax = Math.round(data.daily.temperature_2m_max[i]);
-              var tMin = Math.round(data.daily.temperature_2m_min[i]);
-              var wCode = data.daily.weathercode[i];
-              
-              var descClima = "Parcialmente Nublado";
-              var iconoSvg = '<svg class="animated-weather-icon" viewBox="0 0 64 64"><path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#cbd5e1" /></svg>';
-              
-              if (wCode === 0) {
-                descClima = "Mayormente Soleado";
-                iconoSvg = '<svg class="animated-weather-icon" viewBox="0 0 64 64"><circle cx="32" cy="32" r="12" fill="#fbbf24" /></svg>';
-              } else if (wCode >= 50 && wCode <= 67) {
-                descClima = "Lluvias Dispersas";
-                iconoSvg = '<svg class="animated-weather-icon" viewBox="0 0 64 64"><path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#94a3b8" /><line class="animated-rain-1" x1="22" y1="46" x2="20" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" /><line class="animated-rain-2" x1="32" y1="46" x2="30" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" /><line class="animated-rain-3" x1="42" y1="46" x2="40" y2="54" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" /></svg>';
-              }
-
-              htmlClima += '<div class="weather-card">' +
-                             '<div class="weather-card-info">' +
-                               '<div class="weather-card-day">' + nombreDia + ", " + numDia + " " + nombreMes + '</div>' +
-                               '<div class="weather-card-desc">' + descClima + '</div>' +
-                               '<div class="weather-card-temps">Máx: ' + tMax + '°C / Mín: ' + tMin + '°C</div>' +
-                             '</div>' +
-                             iconoSvg +
-                           '</div>';
-            }
-            grid.innerHTML = htmlClima;
-          }
-        })
-        .catch(function() {
-          var grid = document.getElementById("gridPronosticoDinamico");
-          if(grid) {
-            grid.innerHTML = '<div class="weather-card"><div class="weather-card-info"><div class="weather-card-day">Asunción</div><div class="weather-card-desc">Cálido y Parcialmente Nublado</div><div class="weather-card-temps">Máx: 31°C / Mín: 20°C</div></div></div>';
-          }
-        });
-    }
-
+    /* Reproductor HLS configurado con tu enlace oficial */
     function iniciarPlayer() {
-      var url = "https://eu1.servers10.com:8081/8146/index.m3u8";
-      var v = document.getElementById("videoPlayer");
-      var err = document.getElementById("playerError");
-      if (!v) return;
+      var video = document.getElementById('videoPlayer');
+      var errorDiv = document.getElementById('playerError');
+      if (!video) return;
 
-      v.muted = false; // Audio activo al iniciar
+      var streamUrl = "https://eu1.servers10.com:8081/8146/index.m3u8";
 
-      if (typeof Hls !== 'undefined' && Hls.isSupported()) {
-        var hls = new Hls({ enableWorker: true, lowLatencyMode: true });
-        hls.loadSource(url);
-        hls.attachMedia(v);
-        hls.on(Hls.Events.MANIFEST_PARSED, function () {
-          if (err) err.style.display = "none";
-          v.play().catch(function() {
-            v.muted = true;
-            v.play();
-          });
+      if (Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(streamUrl);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          if (errorDiv) errorDiv.style.display = 'none';
+          video.play().catch(function(e) { console.log("Autoplay bloqueado:", e); });
         });
-        hls.on(Hls.Events.ERROR, function (e, data) {
-          if (data.fatal && err) err.style.display = "flex";
+        hls.on(Hls.Events.ERROR, function(event, data) {
+          if (data.fatal && errorDiv) errorDiv.style.display = 'flex';
         });
-      } else if (v.canPlayType && v.canPlayType("application/vnd.apple.mpegurl")) {
-        v.src = url;
-        v.addEventListener("loadedmetadata", function () {
-          if (err) err.style.display = "none";
-          v.play().catch(function() {
-            v.muted = true;
-            v.play();
-          });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = streamUrl;
+        video.addEventListener('loadedmetadata', function() {
+          if (errorDiv) errorDiv.style.display = 'none';
+          video.play().catch(function(e) { console.log("Autoplay bloqueado:", e); });
         });
-        v.addEventListener("error", function () {
-          if (err) err.style.display = "flex";
+        video.addEventListener('error', function() {
+          if (errorDiv) errorDiv.style.display = 'flex';
         });
+      } else {
+        if (errorDiv) errorDiv.style.display = 'flex';
       }
     }
 
     window.onload = function() {
-      actualizarReloj();
-      mostrarDia("miercoles21");
       iniciarPlayer();
-      gestionarVisitasGlobales();
-      consultarClimaAuto();
-
-      setInterval(actualizarReloj, 1000);
-      setInterval(function() { mostrarDia(diaActual); }, 30000);
-      setInterval(consultarClimaAuto, 3600000);
+      mostrarDia('miercoles21');
+      actualizarIndicadorHeaderGlobal();
     };
   </script>
 </body>
