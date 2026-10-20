@@ -22,7 +22,7 @@
       --primary-glow: rgba(0, 242, 254, 0.35);
       --accent: #4facfe;
       --live-red: #ff2a5f;
-      --live-glow: rgba(255, 42, 95, 0.5);
+      --live-green: #00e676; /* Verde brillante para EN VIVO */
       --text-main: #f1f5f9;
       --text-muted: #94a3b8;
     }
@@ -636,12 +636,29 @@
     }
 
     .schedule-card.is-live {
+      border-color: var(--live-green);
+      background: rgba(0, 230, 118, 0.06);
+      box-shadow: 0 0 25px rgba(0, 230, 118, 0.15);
+    }
+
+    .schedule-card.is-live::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--live-green);
+    }
+
+    /* Estilo especial cuando el programa en vivo es Fin de Transmisión */
+    .schedule-card.is-offline-live {
       border-color: var(--live-red);
       background: rgba(255, 42, 95, 0.06);
       box-shadow: 0 0 25px rgba(255, 42, 95, 0.15);
     }
 
-    .schedule-card.is-live::before {
+    .schedule-card.is-offline-live::before {
       content: '';
       position: absolute;
       left: 0;
@@ -666,6 +683,12 @@
     }
 
     .schedule-card.is-live .schedule-time {
+      color: var(--live-green);
+      background: rgba(0, 230, 118, 0.1);
+      border-color: rgba(0, 230, 118, 0.3);
+    }
+
+    .schedule-card.is-offline-live .schedule-time {
       color: var(--live-red);
       background: rgba(255, 42, 95, 0.1);
       border-color: rgba(255, 42, 95, 0.3);
@@ -701,7 +724,18 @@
     .badge-musical { background: rgba(20, 184, 166, 0.2); color: #2dd4bf; border: 1px solid rgba(20, 184, 166, 0.4); }
     .badge-general { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.4); }
 
-    .live-tag {
+    .live-tag-green {
+      font-size: 11px;
+      font-weight: 800;
+      color: #080b11;
+      background: var(--live-green);
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .live-tag-red {
       font-size: 11px;
       font-weight: 800;
       color: #fff;
@@ -723,7 +757,7 @@
       border-radius: 4px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      animation: none; /* Evita cualquier parpadeo */
+      animation: none;
     }
 
     .schedule-show-title {
@@ -1130,8 +1164,22 @@
           }
         }
 
-        var cardClass = "schedule-card" + (enAire ? " is-live" : "");
-        var tagHtml = enAire ? '<span class="live-tag">EN VIVO</span>' : '<span class="offline-tag">PROGRAMADO</span>';
+        var esFinTransmision = item.titulo.includes("Fin de la Transmisión");
+
+        var cardClass = "schedule-card";
+        var tagHtml = "";
+
+        if (enAire) {
+          if (esFinTransmision) {
+            cardClass += " is-offline-live";
+            tagHtml = '<span class="live-tag-red">FIN DE TRANSMISIÓN</span>';
+          } else {
+            cardClass += " is-live";
+            tagHtml = '<span class="live-tag-green">EN VIVO</span>';
+          }
+        } else {
+          tagHtml = '<span class="offline-tag">PROGRAMADO</span>';
+        }
 
         var htmlCard = 
           '<div class="' + cardClass + '">' +
