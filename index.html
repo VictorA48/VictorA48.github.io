@@ -723,6 +723,7 @@
       border-radius: 4px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      animation: none; /* Evita cualquier parpadeo */
     }
 
     .schedule-show-title {
@@ -888,7 +889,29 @@
         </svg>
         <span>Pronóstico del Tiempo en Asunción (Próximos 3 Días)</span>
       </div>
-      <div class="weather-days-grid" id="gridPronosticoDinamico"></div>
+      <div class="weather-days-grid" id="gridPronosticoDinamico">
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Martes, 20 Oct</span>
+            <span class="weather-card-desc">Parcialmente Nublado</span>
+          </div>
+          <span class="weather-card-temps">30°C / 21°C</span>
+        </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Miércoles, 21 Oct</span>
+            <span class="weather-card-desc">Soleado</span>
+          </div>
+          <span class="weather-card-temps">32°C / 22°C</span>
+        </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Jueves, 22 Oct</span>
+            <span class="weather-card-desc">Lluvias aisladas</span>
+          </div>
+          <span class="weather-card-temps">28°C / 20°C</span>
+        </div>
+      </div>
     </div>
 
     <div>
@@ -898,14 +921,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn" id="btnLunes19" onclick="mostrarDia('lunes19')">
-            <i class="fas fa-calendar-day"></i> Lunes, 19 Octubre 2026
-          </button>
-          <button class="tab-btn" id="btnMartes20" onclick="mostrarDia('martes20')">
+          <button class="tab-btn active" id="btnMartes20" onclick="mostrarDia('martes20')">
             <i class="fas fa-calendar-day"></i> Martes, 20 Octubre 2026
           </button>
-          <button class="tab-btn active" id="btnMiercoles21" onclick="mostrarDia('miercoles21')">
+          <button class="tab-btn" id="btnMiercoles21" onclick="mostrarDia('miercoles21')">
             <i class="fas fa-calendar-day"></i> Miércoles, 21 Octubre 2026
+          </button>
+          <button class="tab-btn" id="btnJueves22" onclick="mostrarDia('jueves22')">
+            <i class="fas fa-calendar-day"></i> Jueves, 22 Octubre 2026
           </button>
         </div>
       </div>
@@ -919,92 +942,6 @@
   </div>
 
   <script class="notranslate">
-    // --- CONFIGURACIÓN Y REPRODUCTOR HLS DE TRANSMISIÓN ---
-    var streamUrl = "https://eu1.servers10.com:8081/8146/index.m3u8";
-    var hlsPlayer = null;
-
-    function iniciarPlayer() {
-      var video = document.getElementById("videoPlayer");
-      var errorOverlay = document.getElementById("playerError");
-      if (!video) return;
-
-      if (errorOverlay) errorOverlay.style.display = "none";
-
-      if (hlsPlayer) {
-        hlsPlayer.destroy();
-      }
-
-      if (Hls.isSupported()) {
-        hlsPlayer = new Hls({
-          enableWorker: true,
-          lowLatencyMode: true
-        });
-
-        hlsPlayer.loadSource(streamUrl);
-        hlsPlayer.attachMedia(video);
-
-        hlsPlayer.on(Hls.Events.MANIFEST_PARSED, function() {
-          video.play().catch(function(e) {
-            console.log("Autoplay bloqueado o requiere interacción:", e);
-          });
-        });
-
-        hlsPlayer.on(Hls.Events.ERROR, function(event, data) {
-          if (data.fatal) {
-            console.error("Error fatal HLS:", data);
-            if (errorOverlay) errorOverlay.style.display = "flex";
-            switch (data.type) {
-              case Hls.ErrorTypes.NETWORK_ERROR:
-                hlsPlayer.startLoad();
-                break;
-              case Hls.ErrorTypes.MEDIA_ERROR:
-                hlsPlayer.recoverMediaError();
-                break;
-              default:
-                hlsPlayer.destroy();
-                break;
-            }
-          }
-        });
-      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        // Compatibilidad nativa con Safari / iOS
-        video.src = streamUrl;
-        video.addEventListener('loadedmetadata', function() {
-          video.play().catch(function(e) { console.log("Autoplay bloqueado:", e); });
-        });
-        video.onerror = function() {
-          if (errorOverlay) errorOverlay.style.display = "flex";
-        };
-      } else {
-        if (errorOverlay) errorOverlay.style.display = "flex";
-      }
-    }
-
-    // --- FUNCIÓN DEL RELOJ ---
-    function actualizarReloj() {
-      var ahora = new Date();
-
-      // Formatear Fecha
-      var opcionesFecha = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-      var fechaTexto = ahora.toLocaleDateString('es-ES', opcionesFecha);
-
-      // Formatear Hora
-      var horas = String(ahora.getHours()).padStart(2, '0');
-      var minutos = String(ahora.getMinutes()).padStart(2, '0');
-      var segundos = String(ahora.getSeconds()).padStart(2, '0');
-      var horaTexto = horas + ':' + minutos + ':' + segundos;
-
-      var elFecha = document.getElementById("relojFecha");
-      var elHora = document.getElementById("relojHora");
-
-      if (elFecha) elFecha.textContent = fechaTexto;
-      if (elHora) elHora.textContent = horaTexto;
-    }
-
-    actualizarReloj();
-    setInterval(actualizarReloj, 1000);
-
-    // --- OTRAS FUNCIONES ---
     function mostrarLogoFallback() {
       var img = document.getElementById("channelLogo");
       var fallback = document.getElementById("logoFallback");
@@ -1050,14 +987,18 @@
       window.open(urlWA, "_blank");
     }
 
-    var programacionLunes19 = [
-      { hora: "22:03", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" },
-      { hora: "17:00", fin: "17:51", titulo: "Especial : Baltimora", categoria: "musical" },
-      { hora: "17:51", fin: "18:33", titulo: "Santo Rosario \"Misterios Gozosos\"", categoria: "religioso" },
-      { hora: "18:33", fin: "19:15", titulo: "Series Temporada 6: Un Doctor Diferente", categoria: "serie" },
-      { hora: "19:15", fin: "21:06", titulo: "Película : La Bella y la Bestia", categoria: "pelicula" },
-      { hora: "21:06", fin: "22:03", titulo: "Series : La Tierra Prometida", categoria: "serie" }
-    ];
+    function actualizarReloj() {
+      var ahora = new Date();
+      var opcionesFecha = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      var fechaStr = ahora.toLocaleDateString('es-ES', opcionesFecha);
+      var horaStr = ahora.toTimeString().split(' ')[0];
+
+      var elFecha = document.getElementById("relojFecha");
+      var elHora = document.getElementById("relojHora");
+
+      if (elFecha) elFecha.textContent = fechaStr;
+      if (elHora) elHora.textContent = horaStr;
+    }
 
     var programacionMartes20 = [
       { hora: "22:37", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" },
@@ -1069,15 +1010,24 @@
     ];
 
     var programacionMiercoles21 = [
+      { hora: "21:38", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" },
       { hora: "17:00", fin: "17:58", titulo: "Especial : Bad Boys Blue", categoria: "musical" },
       { hora: "17:58", fin: "18:30", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
       { hora: "18:30", fin: "19:14", titulo: "Series Temporada 6: Un Doctor Diferente", categoria: "serie" },
       { hora: "19:14", fin: "20:41", titulo: "Película: Tormenta Mortal \"A 500 Millas por Hora\"", categoria: "pelicula" },
-      { hora: "20:41", fin: "21:38", titulo: "Series: La Tierra Prometida", categoria: "serie" },
-      { hora: "21:38", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" }
+      { hora: "20:41", fin: "21:38", titulo: "Series: La Tierra Prometida", categoria: "serie" }
     ];
 
-    var diaActual = "miercoles21";
+    var programacionJueves22 = [
+      { hora: "21:41", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" },
+      { hora: "17:00", fin: "17:57", titulo: "Especial : 2 Unlimited", categoria: "musical" },
+      { hora: "17:57", fin: "18:35", titulo: "Santo Rosario \"Misterios Luminosos\"", categoria: "religioso" },
+      { hora: "18:35", fin: "19:18", titulo: "Series Temporada 6: Un Doctor Diferente", categoria: "serie" },
+      { hora: "19:18", fin: "20:44", titulo: "Película : En los 90", categoria: "pelicula" },
+      { hora: "20:44", fin: "21:41", titulo: "Series : La Tierra Prometida", categoria: "serie" }
+    ];
+
+    var diaActual = "martes20";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1100,9 +1050,9 @@
       var hm = ah.getHours() * 60 + ah.getMinutes();
 
       var listaHoy = null;
-      if (diaSemana === 1) listaHoy = programacionLunes19;
-      else if (diaSemana === 2) listaHoy = programacionMartes20;
+      if (diaSemana === 2) listaHoy = programacionMartes20;
       else if (diaSemana === 3) listaHoy = programacionMiercoles21;
+      else if (diaSemana === 4) listaHoy = programacionJueves22;
 
       var indicadorPill = document.getElementById("indicadorHeaderLive");
       var textoPill = document.getElementById("textoIndicadorHeader");
@@ -1144,70 +1094,100 @@
 
     function mostrarDia(dia) {
       diaActual = dia;
-      var btnL = document.getElementById("btnLunes19");
+      
       var btnM = document.getElementById("btnMartes20");
       var btnMi = document.getElementById("btnMiercoles21");
+      var btnJ = document.getElementById("btnJueves22");
 
-      if (btnL) btnL.classList.remove("active");
-      if (btnM) btnM.classList.remove("active");
-      if (btnMi) btnMi.classList.remove("active");
+      if (btnM) btnM.className = "tab-btn" + (dia === "martes20" ? " active" : "");
+      if (btnMi) btnMi.className = "tab-btn" + (dia === "miercoles21" ? " active" : "");
+      if (btnJ) btnJ.className = "tab-btn" + (dia === "jueves22" ? " active" : "");
 
-      var lista = [];
-      if (dia === "lunes19") {
-        if (btnL) btnL.classList.add("active");
-        lista = programacionLunes19;
-      } else if (dia === "martes20") {
-        if (btnM) btnM.classList.add("active");
-        lista = programacionMartes20;
-      } else if (dia === "miercoles21") {
-        if (btnMi) btnMi.classList.add("active");
-        lista = programacionMiercoles21;
-      }
+      var lista = programacionMartes20;
+      if (dia === "miercoles21") lista = programacionMiercoles21;
+      if (dia === "jueves22") lista = programacionJueves22;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
       contenedor.innerHTML = "";
 
-      var ahora = new Date();
-      var hm = ahora.getHours() * 60 + ahora.getMinutes();
+      var ah = new Date();
+      var hm = ah.getHours() * 60 + ah.getMinutes();
+      var diaSemana = ah.getDay();
+      var esHoy = (dia === "martes20" && diaSemana === 2) || (dia === "miercoles21" && diaSemana === 3) || (dia === "jueves22" && diaSemana === 4);
 
-      lista.forEach(function(item) {
+      for (var i = 0; i < lista.length; i++) {
+        var item = lista[i];
         var mi = obtenerMinutos(item.hora);
         var mf = obtenerMinutos(item.fin);
 
         var enAire = false;
-        if (mf < mi) {
-          enAire = (hm >= mi || hm < mf);
-        } else {
-          enAire = (hm >= mi && hm < mf);
+        if (esHoy) {
+          if (mf < mi) {
+            enAire = (hm >= mi || hm < mf);
+          } else {
+            enAire = (hm >= mi && hm < mf);
+          }
         }
 
-        var card = document.createElement("div");
-        card.className = "schedule-card" + (enAire ? " is-live" : "");
+        var cardClass = "schedule-card" + (enAire ? " is-live" : "");
+        var tagHtml = enAire ? '<span class="live-tag">EN VIVO</span>' : '<span class="offline-tag">PROGRAMADO</span>';
 
-        var html = '<div class="schedule-time">' + item.hora + ' hs</div>';
-        html += '<div class="schedule-details">';
-        html += '<div class="schedule-header-row">';
-        html += obtenerBadge(item.categoria);
-        if (enAire) {
-          html += '<span class="live-tag">EN AIRE</span>';
-        }
-        html += '</div>';
-        html += '<div class="schedule-show-title">' + item.titulo + '</div>';
-        html += '</div>';
+        var htmlCard = 
+          '<div class="' + cardClass + '">' +
+            '<div class="schedule-time">' + item.hora + ' - ' + item.fin + '</div>' +
+            '<div class="schedule-details">' +
+              '<div class="schedule-header-row">' +
+                obtenerBadge(item.categoria) +
+                tagHtml +
+              '</div>' +
+              '<div class="schedule-show-title">' + item.titulo + '</div>' +
+            '</div>' +
+          '</div>';
 
-        card.innerHTML = html;
-        contenedor.appendChild(card);
-      });
-
-      actualizarIndicadorHeaderGlobal();
+        contenedor.innerHTML += htmlCard;
+      }
     }
 
-    // Inicializar reproductor y programación al cargar
-    document.addEventListener("DOMContentLoaded", function() {
+    function iniciarPlayer() {
+      var video = document.getElementById('videoPlayer');
+      var errorDiv = document.getElementById('playerError');
+      if (!video) return;
+
+      var streamUrl = "https://eu1.servers10.com:8081/8146/index.m3u8";
+
+      if (Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(streamUrl);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          if (errorDiv) errorDiv.style.display = 'none';
+          video.play().catch(function(e) { console.log("Autoplay bloqueado:", e); });
+        });
+        hls.on(Hls.Events.ERROR, function(event, data) {
+          if (data.fatal && errorDiv) errorDiv.style.display = 'flex';
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = streamUrl;
+        video.addEventListener('loadedmetadata', function() {
+          if (errorDiv) errorDiv.style.display = 'none';
+          video.play().catch(function(e) { console.log("Autoplay bloqueado:", e); });
+        });
+        video.addEventListener('error', function() {
+          if (errorDiv) errorDiv.style.display = 'flex';
+        });
+      } else {
+        if (errorDiv) errorDiv.style.display = 'flex';
+      }
+    }
+
+    window.onload = function() {
+      actualizarReloj();
+      setInterval(actualizarReloj, 1000);
       iniciarPlayer();
-      mostrarDia('miercoles21');
-    });
+      mostrarDia('martes20');
+      actualizarIndicadorHeaderGlobal();
+    };
   </script>
 </body>
 </html>
