@@ -925,13 +925,6 @@
       <div class="weather-days-grid" id="gridPronosticoDinamico">
         <div class="weather-card">
           <div class="weather-card-info">
-            <span class="weather-card-day">Lunes, 26 Oct</span>
-            <span class="weather-card-desc">Parcialmente Nublado</span>
-          </div>
-          <span class="weather-card-temps">30°C / 21°C</span>
-        </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
             <span class="weather-card-day">Martes, 27 Oct</span>
             <span class="weather-card-desc">Soleado</span>
           </div>
@@ -944,6 +937,13 @@
           </div>
           <span class="weather-card-temps">32°C / 22°C</span>
         </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Jueves, 29 Oct</span>
+            <span class="weather-card-desc">Parcialmente Nublado</span>
+          </div>
+          <span class="weather-card-temps">29°C / 20°C</span>
+        </div>
       </div>
     </div>
 
@@ -954,14 +954,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn active" id="btnLunes26" onclick="mostrarDia('lunes26')">
-            <i class="fas fa-calendar-day"></i> Lunes, 26 Octubre 2026
-          </button>
-          <button class="tab-btn" id="btnMartes27" onclick="mostrarDia('martes27')">
+          <button class="tab-btn active" id="btnMartes27" onclick="mostrarDia('martes27')">
             <i class="fas fa-calendar-day"></i> Martes, 27 Octubre 2026
           </button>
           <button class="tab-btn" id="btnMiercoles28" onclick="mostrarDia('miercoles28')">
             <i class="fas fa-calendar-day"></i> Miércoles, 28 Octubre 2026
+          </button>
+          <button class="tab-btn" id="btnJueves29" onclick="mostrarDia('jueves29')">
+            <i class="fas fa-calendar-day"></i> Jueves, 29 Octubre 2026
           </button>
         </div>
       </div>
@@ -1033,15 +1033,6 @@
       if (elHora) elHora.textContent = horaStr;
     }
 
-    var programacionLunes26 = [
-      { hora: "21:59", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" },
-      { hora: "17:00", fin: "18:00", titulo: "Especial : Boney M", categoria: "musical" },
-      { hora: "18:00", fin: "18:38", titulo: "Santo Rosario \"Misterios Gozosos\"", categoria: "religioso" },
-      { hora: "18:38", fin: "19:21", titulo: "Series Temporada 6: Un Doctor Diferente", categoria: "serie" },
-      { hora: "19:21", fin: "21:06", titulo: "Película: Pokémon \"Detective Pikachu\"", categoria: "pelicula" },
-      { hora: "21:06", fin: "21:59", titulo: "Series: La Tierra Prometida", categoria: "serie" }
-    ];
-
     var programacionMartes27 = [
       { hora: "22:10", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" },
       { hora: "16:00", fin: "17:24", titulo: "Especial Concert : Toto", categoria: "musical" },
@@ -1062,7 +1053,17 @@
       { hora: "20:59", fin: "21:40", titulo: "Series: La Tierra Prometida", categoria: "serie" }
     ];
 
-    var diaActual = "lunes26";
+    var programacionJueves29 = [
+      { hora: "22:38", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" },
+      { hora: "16:00", fin: "17:51", titulo: "Especial Concert : Jamiroquai", categoria: "musical" },
+      { hora: "17:51", fin: "18:29", titulo: "Santo Rosario \"Misterios Luminosos\"", categoria: "religioso" },
+      { hora: "18:29", fin: "19:11", titulo: "Series Temporada 7: Un Doctor Diferente", categoria: "serie" },
+      { hora: "19:11", fin: "20:09", titulo: "Series Temporada 1: Juego de Tronos", categoria: "serie" },
+      { hora: "20:09", fin: "21:37", titulo: "Película : Slenderman", categoria: "pelicula" },
+      { hora: "21:37", fin: "22:38", titulo: "Series : La Tierra Prometida", categoria: "serie" }
+    ];
+
+    var diaActual = "martes27";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1085,9 +1086,9 @@
       var hm = ah.getHours() * 60 + ah.getMinutes();
 
       var listaHoy = null;
-      if (diaSemana === 1) listaHoy = programacionLunes26;
-      else if (diaSemana === 2) listaHoy = programacionMartes27;
+      if (diaSemana === 2) listaHoy = programacionMartes27;
       else if (diaSemana === 3) listaHoy = programacionMiercoles28;
+      else if (diaSemana === 4) listaHoy = programacionJueves29;
 
       var indicadorPill = document.getElementById("indicadorHeaderLive");
       var textoPill = document.getElementById("textoIndicadorHeader");
@@ -1130,17 +1131,17 @@
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnL = document.getElementById("btnLunes26");
       var btnM = document.getElementById("btnMartes27");
       var btnMi = document.getElementById("btnMiercoles28");
+      var btnJ = document.getElementById("btnJueves29");
 
-      if (btnL) btnL.className = "tab-btn" + (dia === "lunes26" ? " active" : "");
       if (btnM) btnM.className = "tab-btn" + (dia === "martes27" ? " active" : "");
       if (btnMi) btnMi.className = "tab-btn" + (dia === "miercoles28" ? " active" : "");
+      if (btnJ) btnJ.className = "tab-btn" + (dia === "jueves29" ? " active" : "");
 
-      var lista = programacionLunes26;
-      if (dia === "martes27") lista = programacionMartes27;
+      var lista = programacionMartes27;
       if (dia === "miercoles28") lista = programacionMiercoles28;
+      if (dia === "jueves29") lista = programacionJueves29;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
@@ -1149,7 +1150,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "lunes26" && diaSemana === 1) || (dia === "martes27" && diaSemana === 2) || (dia === "miercoles28" && diaSemana === 3);
+      var esHoy = (dia === "martes27" && diaSemana === 2) || (dia === "miercoles28" && diaSemana === 3) || (dia === "jueves29" && diaSemana === 4);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1234,7 +1235,7 @@
       actualizarReloj();
       setInterval(actualizarReloj, 1000);
       iniciarPlayer();
-      mostrarDia('lunes26');
+      mostrarDia('martes27');
       actualizarIndicadorHeaderGlobal();
     };
   </script>
