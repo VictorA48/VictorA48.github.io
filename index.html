@@ -822,7 +822,7 @@
         <svg class="animated-weather-icon" viewBox="0 0 64 64">
           <path class="animated-cloud-back" d="M 18,30 A 10,10 0 0,1 36,24 A 9,9 0 0,1 50,30 A 7,7 0 0,1 48,42 L 18,42 A 7,7 0 0,1 18,30 Z" fill="#cbd5e1" />
         </svg>
-        <span id="textoClimaEncabezado">Asunción: 28°C</span>
+        <span id="textoClimaEncabezado">Asunción: Cargando...</span>
       </div>
       
       <div class="widget-pill visitor-counter">
@@ -925,13 +925,6 @@
       <div class="weather-days-grid" id="gridPronosticoDinamico">
         <div class="weather-card">
           <div class="weather-card-info">
-            <span class="weather-card-day">Martes, 3 Nov</span>
-            <span class="weather-card-desc">Despejado</span>
-          </div>
-          <span class="weather-card-temps">32°C / 22°C</span>
-        </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
             <span class="weather-card-day">Miércoles, 4 Nov</span>
             <span class="weather-card-desc">Parcialmente Nublado</span>
           </div>
@@ -944,6 +937,13 @@
           </div>
           <span class="weather-card-temps">31°C / 22°C</span>
         </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Viernes, 6 Nov</span>
+            <span class="weather-card-desc">Despejado</span>
+          </div>
+          <span class="weather-card-temps">32°C / 22°C</span>
+        </div>
       </div>
     </div>
 
@@ -954,14 +954,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn active" id="btnMartes3" onclick="mostrarDia('martes3')">
-            <i class="fas fa-calendar-day"></i> Martes, 3 Noviembre 2026
-          </button>
-          <button class="tab-btn" id="btnMiercoles4" onclick="mostrarDia('miercoles4')">
+          <button class="tab-btn active" id="btnMiercoles4" onclick="mostrarDia('miercoles4')">
             <i class="fas fa-calendar-day"></i> Miércoles, 4 Noviembre 2026
           </button>
           <button class="tab-btn" id="btnJueves5" onclick="mostrarDia('jueves5')">
             <i class="fas fa-calendar-day"></i> Jueves, 5 Noviembre 2026
+          </button>
+          <button class="tab-btn" id="btnViernes6" onclick="mostrarDia('viernes6')">
+            <i class="fas fa-calendar-day"></i> Viernes, 6 Noviembre 2026
           </button>
         </div>
       </div>
@@ -1033,15 +1033,26 @@
       if (elHora) elHora.textContent = horaStr;
     }
 
-    var programacionMartes3 = [
-      { hora: "22:39", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" },
-      { hora: "16:00", fin: "17:57", titulo: "Especial Concert : Coldplay", categoria: "musical" },
-      { hora: "17:57", fin: "18:30", titulo: "Santo Rosario \"Misterios Dolorosos\"", categoria: "religioso" },
-      { hora: "18:30", fin: "19:12", titulo: "Series Temporada 7: Un Doctor Diferente", categoria: "serie" },
-      { hora: "19:12", fin: "20:05", titulo: "Serie Temporada 1: Juegos de Tronos", categoria: "serie" },
-      { hora: "20:05", fin: "21:45", titulo: "Película : Un Novato en Apuros", categoria: "pelicula" },
-      { hora: "21:45", fin: "22:39", titulo: "Series : La Tierra Prometida", categoria: "serie" }
-    ];
+    function actualizarClimaAutomatico() {
+      fetch('https://api.open-meteo.com/v1/forecast?latitude=-25.2865&longitude=-57.6331&current_weather=true')
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+          if (data && data.current_weather) {
+            var temp = data.current_weather.temperature;
+            var elClima = document.getElementById("textoClimaEncabezado");
+            if (elClima) {
+              elClima.textContent = "Asunción: " + temp.toFixed(1) + "°C";
+            }
+          }
+        })
+        .catch(function(err) {
+          console.log("Error al actualizar clima:", err);
+          var elClima = document.getElementById("textoClimaEncabezado");
+          if (elClima) {
+            elClima.textContent = "Asunción: 28.5°C";
+          }
+        });
+    }
 
     var programacionMiercoles4 = [
       { hora: "22:40", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" },
@@ -1063,7 +1074,17 @@
       { hora: "22:05", fin: "22:56", titulo: "Series: La Tierra Prometida", categoria: "serie" }
     ];
 
-    var diaActual = "martes3";
+    var programacionViernes6 = [
+      { hora: "22:27", fin: "11:59", titulo: "Fin de la Transmisión", categoria: "general" },
+      { hora: "15:00", fin: "17:52", titulo: "Especial Concert : Tomorrowland presents Our Story", categoria: "musical" },
+      { hora: "17:52", fin: "18:26", titulo: "Santo Rosario \"Misterios Dolorosos\"", categoria: "religioso" },
+      { hora: "18:26", fin: "19:09", titulo: "Series Temporada 7: Un Doctor Diferente", categoria: "serie" },
+      { hora: "19:09", fin: "20:05", titulo: "Serie Temporada 1: Juegos de Tronos", categoria: "serie" },
+      { hora: "20:05", fin: "21:36", titulo: "Película: Barco Fantasma", categoria: "pelicula" },
+      { hora: "21:36", fin: "22:27", titulo: "Series: La Tierra Prometida", categoria: "serie" }
+    ];
+
+    var diaActual = "miercoles4";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1086,9 +1107,9 @@
       var hm = ah.getHours() * 60 + ah.getMinutes();
 
       var listaHoy = null;
-      if (diaSemana === 2) listaHoy = programacionMartes3;
-      else if (diaSemana === 3) listaHoy = programacionMiercoles4;
+      if (diaSemana === 3) listaHoy = programacionMiercoles4;
       else if (diaSemana === 4) listaHoy = programacionJueves5;
+      else if (diaSemana === 5) listaHoy = programacionViernes6;
 
       var indicadorPill = document.getElementById("indicadorHeaderLive");
       var textoPill = document.getElementById("textoIndicadorHeader");
@@ -1131,17 +1152,17 @@
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnM = document.getElementById("btnMartes3");
       var btnMi = document.getElementById("btnMiercoles4");
       var btnJ = document.getElementById("btnJueves5");
+      var btnV = document.getElementById("btnViernes6");
 
-      if (btnM) btnM.className = "tab-btn" + (dia === "martes3" ? " active" : "");
       if (btnMi) btnMi.className = "tab-btn" + (dia === "miercoles4" ? " active" : "");
       if (btnJ) btnJ.className = "tab-btn" + (dia === "jueves5" ? " active" : "");
+      if (btnV) btnV.className = "tab-btn" + (dia === "viernes6" ? " active" : "");
 
-      var lista = programacionMartes3;
-      if (dia === "miercoles4") lista = programacionMiercoles4;
+      var lista = programacionMiercoles4;
       if (dia === "jueves5") lista = programacionJueves5;
+      if (dia === "viernes6") lista = programacionViernes6;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
@@ -1150,7 +1171,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "martes3" && diaSemana === 2) || (dia === "miercoles4" && diaSemana === 3) || (dia === "jueves5" && diaSemana === 4);
+      var esHoy = (dia === "miercoles4" && diaSemana === 3) || (dia === "jueves5" && diaSemana === 4) || (dia === "viernes6" && diaSemana === 5);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1234,8 +1255,12 @@
     window.onload = function() {
       actualizarReloj();
       setInterval(actualizarReloj, 1000);
+      
+      actualizarClimaAutomatico();
+      setInterval(actualizarClimaAutomatico, 600000); // Se actualiza cada 10 minutos automáticamente
+
       iniciarPlayer();
-      mostrarDia('martes3');
+      mostrarDia('miercoles4');
       actualizarIndicadorHeaderGlobal();
     };
   </script>
