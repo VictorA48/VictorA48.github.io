@@ -126,7 +126,7 @@
     .visitor-counter i { color: var(--accent); }
     .visitor-counter { color: #fff; font-weight: 600; }
 
-    /* Indicador del Header Inteligente (Verde = En Vivo, Rojo = Fin de Transmisión) */
+    /* Indicador del Header conectado al estado del reproductor de video */
     .live-indicator {
       background: rgba(0, 230, 118, 0.12);
       border: 1px solid var(--live-green);
@@ -155,6 +155,7 @@
     .live-indicator.offline .dot {
       background: var(--live-red);
       box-shadow: 0 0 10px var(--live-red);
+      animation: pulseRed 1.5s infinite ease-in-out;
     }
 
     @keyframes pulseGreen {
@@ -835,6 +836,7 @@
         <i class="fas fa-eye"></i> <span id="contadorVisitas">1,425 vistas</span>
       </div>
       
+      <!-- Indicador superior conectado al reproductor -->
       <div class="widget-pill live-indicator" id="indicadorHeaderLive">
         <span class="dot"></span> <span id="textoIndicadorHeader">EN VIVO</span>
       </div>
@@ -1110,51 +1112,18 @@
       return '<span class="show-badge badge-general"><i class="fas fa-broadcast-tower"></i> Emisión</span>';
     }
 
-    function actualizarIndicadorHeaderGlobal() {
-      var ah = new Date();
-      var diaSemana = ah.getDay();
-      var hm = ah.getHours() * 60 + ah.getMinutes();
-
-      var listaHoy = null;
-      if (diaSemana === 0) listaHoy = programacionDomingo8;
-      else if (diaSemana === 1) listaHoy = programacionLunes9;
-      else if (diaSemana === 2) listaHoy = programacionMartes10;
-
+    // El indicador superior se controla por el estado real del reproductor (HLS)
+    function actualizarEstadoReproductorUI(enVivo) {
       var indicadorPill = document.getElementById("indicadorHeaderLive");
       var textoPill = document.getElementById("textoIndicadorHeader");
       if (!indicadorPill || !textoPill) return;
 
-      if (!listaHoy) {
-        indicadorPill.classList.add("offline");
-        textoPill.textContent = "FIN DE TRANSMISIÓN";
-        return;
-      }
-
-      var hayFinTransmisionActivo = false;
-      for (var i = 0; i < listaHoy.length; i++) {
-        var it = listaHoy[i];
-        var mi = obtenerMinutos(it.hora);
-        var mf = obtenerMinutos(it.fin);
-        
-        var enAire = false;
-        if (mf < mi) {
-          enAire = (hm >= mi || hm < mf);
-        } else {
-          enAire = (hm >= mi && hm < mf);
-        }
-
-        if (enAire && it.titulo.includes("Fin de la Transmisión")) {
-          hayFinTransmisionActivo = true;
-          break;
-        }
-      }
-
-      if (hayFinTransmisionActivo) {
-        indicadorPill.classList.add("offline");
-        textoPill.textContent = "FIN DE TRANSMISIÓN";
-      } else {
+      if (enVivo) {
         indicadorPill.classList.remove("offline");
         textoPill.textContent = "EN VIVO";
+      } else {
+        indicadorPill.classList.add("offline");
+        textoPill.textContent = "FIN DE TRANSMISIÓN";
       }
     }
 
@@ -1242,22 +1211,29 @@
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, function() {
           if (errorDiv) errorDiv.style.display = 'none';
+          actualizarEstadoReproductorUI(true);
           video.play().catch(function(e) { console.log("Autoplay bloqueado:", e); });
         });
         hls.on(Hls.Events.ERROR, function(event, data) {
-          if (data.fatal && errorDiv) errorDiv.style.display = 'flex';
+          if (data.fatal) {
+            if (errorDiv) errorDiv.style.display = 'flex';
+            actualizarEstadoReproductorUI(false);
+          }
         });
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = streamUrl;
         video.addEventListener('loadedmetadata', function() {
           if (errorDiv) errorDiv.style.display = 'none';
+          actualizarEstadoReproductorUI(true);
           video.play().catch(function(e) { console.log("Autoplay bloqueado:", e); });
         });
         video.addEventListener('error', function() {
           if (errorDiv) errorDiv.style.display = 'flex';
+          actualizarEstadoReproductorUI(false);
         });
       } else {
         if (errorDiv) errorDiv.style.display = 'flex';
+        actualizarEstadoReproductorUI(false);
       }
     }
 
@@ -1266,12 +1242,17 @@
       setInterval(actualizarReloj, 1000);
       
       actualizarClimaAutomatico();
-      setInterval(actualizarClimaAutomatico, 600000); // Se actualiza automáticamente cada 10 minutos
+      setInterval(actualizarClimaAutomatico, 600000); // Clima cada 10 min
 
       iniciarPlayer();
       mostrarDia('domingo8');
-      actualizarIndicadorHeaderGlobal();
-      setInterval(actualizarIndicadorHeaderGlobal, 30000); // Revisa el estado en vivo cada 30 segundos
+      
+      // Actualiza la grilla cada minuto para reflejar el programa en vivo actual
+      setInterval(function() {
+        if (diaActual === 'domingo8') mostrarDia('domingo8');
+        else if (diaActual === 'lunes9') mostrarDia('lunes9');
+        else if (diaActual === 'martes10') mostrarDia('martes10');
+      }, 60000);
     };
   </script>
 </body>
