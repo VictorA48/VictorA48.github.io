@@ -126,39 +126,45 @@
     .visitor-counter i { color: var(--accent); }
     .visitor-counter { color: #fff; font-weight: 600; }
 
+    /* Indicador del Header Inteligente (Verde = En Vivo, Rojo = Fin de Transmisión) */
     .live-indicator {
-      background: rgba(255, 42, 95, 0.12);
-      border: 1px solid var(--live-red);
-      color: #ff5e82;
+      background: rgba(0, 230, 118, 0.12);
+      border: 1px solid var(--live-green);
+      color: var(--live-green);
       font-weight: 700;
       letter-spacing: 0.5px;
       transition: all 0.3s ease;
     }
 
     .live-indicator.offline {
-      background: rgba(148, 163, 184, 0.12);
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      color: #94a3b8;
+      background: rgba(255, 42, 95, 0.12);
+      border: 1px solid var(--live-red);
+      color: #ff5e82;
+      animation: pulseRed 1.5s infinite ease-in-out;
     }
 
     .dot {
       width: 9px;
       height: 9px;
-      background: var(--live-red);
+      background: var(--live-green);
       border-radius: 50%;
-      box-shadow: 0 0 10px var(--live-red);
-      animation: pulse 1.5s infinite ease-in-out;
+      box-shadow: 0 0 10px var(--live-green);
+      animation: pulseGreen 1.5s infinite ease-in-out;
     }
 
     .live-indicator.offline .dot {
-      background: #94a3b8;
-      box-shadow: none;
-      animation: none;
+      background: var(--live-red);
+      box-shadow: 0 0 10px var(--live-red);
     }
 
-    @keyframes pulse {
+    @keyframes pulseGreen {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.3; transform: scale(0.85); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    @keyframes pulseRed {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
     }
 
     .animated-weather-icon {
@@ -743,7 +749,7 @@
       border-radius: 4px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      animation: pulse 1.5s infinite;
+      animation: pulseRed 1.5s infinite;
     }
 
     .offline-tag {
@@ -925,13 +931,6 @@
       <div class="weather-days-grid" id="gridPronosticoDinamico">
         <div class="weather-card">
           <div class="weather-card-info">
-            <span class="weather-card-day">Sábado, 7 Nov</span>
-            <span class="weather-card-desc">Parcialmente Nublado</span>
-          </div>
-          <span class="weather-card-temps">30°C / 21°C</span>
-        </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
             <span class="weather-card-day">Domingo, 8 Nov</span>
             <span class="weather-card-desc">Soleado</span>
           </div>
@@ -944,6 +943,13 @@
           </div>
           <span class="weather-card-temps">32°C / 22°C</span>
         </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Martes, 10 Nov</span>
+            <span class="weather-card-desc">Parcialmente Nublado</span>
+          </div>
+          <span class="weather-card-temps">30°C / 21°C</span>
+        </div>
       </div>
     </div>
 
@@ -954,14 +960,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn active" id="btnSabado7" onclick="mostrarDia('sabado7')">
-            <i class="fas fa-calendar-day"></i> Sábado, 7 Noviembre 2026
-          </button>
-          <button class="tab-btn" id="btnDomingo8" onclick="mostrarDia('domingo8')">
+          <button class="tab-btn active" id="btnDomingo8" onclick="mostrarDia('domingo8')">
             <i class="fas fa-calendar-day"></i> Domingo, 8 Noviembre 2026
           </button>
           <button class="tab-btn" id="btnLunes9" onclick="mostrarDia('lunes9')">
             <i class="fas fa-calendar-day"></i> Lunes, 9 Noviembre 2026
+          </button>
+          <button class="tab-btn" id="btnMartes10" onclick="mostrarDia('martes10')">
+            <i class="fas fa-calendar-day"></i> Martes, 10 Noviembre 2026
           </button>
         </div>
       </div>
@@ -1054,17 +1060,6 @@
         });
     }
 
-    var programacionSabado7 = [
-      { hora: "21:45", fin: "11:59", titulo: "Fin de la Transmisión", categoria: "general" },
-      { hora: "12:00", fin: "13:07", titulo: "Serie Comedia: Los Tres Chiflados", categoria: "serie" },
-      { hora: "13:07", fin: "14:13", titulo: "Anime: Los Thundercat", categoria: "animacion" },
-      { hora: "14:13", fin: "15:41", titulo: "Película: Moby Dick (Adaptación)", categoria: "pelicula" },
-      { hora: "15:41", fin: "17:42", titulo: "Especial Concert: Madonna", categoria: "musical" },
-      { hora: "17:42", fin: "18:21", titulo: "Santo Rosario \"Misterios Gozosos\"", categoria: "religioso" },
-      { hora: "18:21", fin: "19:28", titulo: "Series Temporada 1 : Hanna Montana", categoria: "serie" },
-      { hora: "19:28", fin: "21:45", titulo: "Película: Empty Man El Mensajero Del Ultimo Día", categoria: "pelicula" }
-    ];
-
     var programacionDomingo8 = [
       { hora: "23:01", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" },
       { hora: "12:00", fin: "13:14", titulo: "Anime: Dragon Ball", categoria: "animacion" },
@@ -1088,7 +1083,17 @@
       { hora: "21:48", fin: "22:30", titulo: "Series: La Tierra Prometida", categoria: "serie" }
     ];
 
-    var diaActual = "sabado7";
+    var programacionMartes10 = [
+      { hora: "22:39", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" },
+      { hora: "16:00", fin: "17:57", titulo: "Especial Concert : Coldplay", categoria: "musical" },
+      { hora: "17:57", fin: "18:30", titulo: "Santo Rosario \"Misterios Dolorosos\"", categoria: "religioso" },
+      { hora: "18:30", fin: "19:12", titulo: "Series Temporada 7: Un Doctor Diferente", categoria: "serie" },
+      { hora: "19:12", fin: "20:05", titulo: "Serie Temporada 1: Juegos de Tronos", categoria: "serie" },
+      { hora: "20:05", fin: "21:45", titulo: "Película : Un Novato en Apuros", categoria: "pelicula" },
+      { hora: "21:45", fin: "22:39", titulo: "Series : La Tierra Prometida", categoria: "serie" }
+    ];
+
+    var diaActual = "domingo8";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1111,9 +1116,9 @@
       var hm = ah.getHours() * 60 + ah.getMinutes();
 
       var listaHoy = null;
-      if (diaSemana === 6) listaHoy = programacionSabado7;
-      else if (diaSemana === 0) listaHoy = programacionDomingo8;
+      if (diaSemana === 0) listaHoy = programacionDomingo8;
       else if (diaSemana === 1) listaHoy = programacionLunes9;
+      else if (diaSemana === 2) listaHoy = programacionMartes10;
 
       var indicadorPill = document.getElementById("indicadorHeaderLive");
       var textoPill = document.getElementById("textoIndicadorHeader");
@@ -1156,17 +1161,17 @@
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnS = document.getElementById("btnSabado7");
       var btnD = document.getElementById("btnDomingo8");
       var btnL = document.getElementById("btnLunes9");
+      var btnMar = document.getElementById("btnMartes10");
 
-      if (btnS) btnS.className = "tab-btn" + (dia === "sabado7" ? " active" : "");
       if (btnD) btnD.className = "tab-btn" + (dia === "domingo8" ? " active" : "");
       if (btnL) btnL.className = "tab-btn" + (dia === "lunes9" ? " active" : "");
+      if (btnMar) btnMar.className = "tab-btn" + (dia === "martes10" ? " active" : "");
 
-      var lista = programacionSabado7;
-      if (dia === "domingo8") lista = programacionDomingo8;
+      var lista = programacionDomingo8;
       if (dia === "lunes9") lista = programacionLunes9;
+      if (dia === "martes10") lista = programacionMartes10;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
@@ -1175,7 +1180,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "sabado7" && diaSemana === 6) || (dia === "domingo8" && diaSemana === 0) || (dia === "lunes9" && diaSemana === 1);
+      var esHoy = (dia === "domingo8" && diaSemana === 0) || (dia === "lunes9" && diaSemana === 1) || (dia === "martes10" && diaSemana === 2);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1261,11 +1266,12 @@
       setInterval(actualizarReloj, 1000);
       
       actualizarClimaAutomatico();
-      setInterval(actualizarClimaAutomatico, 600000); // Se actualiza cada 10 minutos automáticamente
+      setInterval(actualizarClimaAutomatico, 600000); // Se actualiza automáticamente cada 10 minutos
 
       iniciarPlayer();
-      mostrarDia('sabado7');
+      mostrarDia('domingo8');
       actualizarIndicadorHeaderGlobal();
+      setInterval(actualizarIndicadorHeaderGlobal, 30000); // Revisa el estado en vivo cada 30 segundos
     };
   </script>
 </body>
