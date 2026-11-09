@@ -126,7 +126,7 @@
     .visitor-counter i { color: var(--accent); }
     .visitor-counter { color: #fff; font-weight: 600; }
 
-    /* Indicador del Header Inteligente (Verde = En Vivo, Rojo = Fin de Transmisión) */
+    /* Indicador del Header conectado al estado del reproductor de video */
     .live-indicator {
       background: rgba(0, 230, 118, 0.12);
       border: 1px solid var(--live-green);
@@ -155,6 +155,7 @@
     .live-indicator.offline .dot {
       background: var(--live-red);
       box-shadow: 0 0 10px var(--live-red);
+      animation: pulseRed 1.5s infinite ease-in-out;
     }
 
     @keyframes pulseGreen {
@@ -835,6 +836,7 @@
         <i class="fas fa-eye"></i> <span id="contadorVisitas">1,425 vistas</span>
       </div>
       
+      <!-- Indicador superior conectado al reproductor -->
       <div class="widget-pill live-indicator" id="indicadorHeaderLive">
         <span class="dot"></span> <span id="textoIndicadorHeader">EN VIVO</span>
       </div>
@@ -931,13 +933,6 @@
       <div class="weather-days-grid" id="gridPronosticoDinamico">
         <div class="weather-card">
           <div class="weather-card-info">
-            <span class="weather-card-day">Domingo, 8 Nov</span>
-            <span class="weather-card-desc">Soleado</span>
-          </div>
-          <span class="weather-card-temps">31°C / 22°C</span>
-        </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
             <span class="weather-card-day">Lunes, 9 Nov</span>
             <span class="weather-card-desc">Despejado</span>
           </div>
@@ -950,6 +945,13 @@
           </div>
           <span class="weather-card-temps">30°C / 21°C</span>
         </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Miércoles, 11 Nov</span>
+            <span class="weather-card-desc">Soleado</span>
+          </div>
+          <span class="weather-card-temps">31°C / 22°C</span>
+        </div>
       </div>
     </div>
 
@@ -960,14 +962,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn active" id="btnDomingo8" onclick="mostrarDia('domingo8')">
-            <i class="fas fa-calendar-day"></i> Domingo, 8 Noviembre 2026
-          </button>
-          <button class="tab-btn" id="btnLunes9" onclick="mostrarDia('lunes9')">
+          <button class="tab-btn active" id="btnLunes9" onclick="mostrarDia('lunes9')">
             <i class="fas fa-calendar-day"></i> Lunes, 9 Noviembre 2026
           </button>
           <button class="tab-btn" id="btnMartes10" onclick="mostrarDia('martes10')">
             <i class="fas fa-calendar-day"></i> Martes, 10 Noviembre 2026
+          </button>
+          <button class="tab-btn" id="btnMiercoles11" onclick="mostrarDia('miercoles11')">
+            <i class="fas fa-calendar-day"></i> Miércoles, 11 Noviembre 2026
           </button>
         </div>
       </div>
@@ -1060,18 +1062,20 @@
         });
     }
 
-    var programacionDomingo8 = [
-      { hora: "23:01", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" },
-      { hora: "12:00", fin: "13:14", titulo: "Anime: Dragon Ball", categoria: "animacion" },
-      { hora: "13:14", fin: "14:30", titulo: "Anime: Mazinger Z", categoria: "animacion" },
-      { hora: "14:30", fin: "16:01", titulo: "Película: Cyrus", categoria: "pelicula" },
-      { hora: "16:01", fin: "17:05", titulo: "Especial Concert: Sensation White", categoria: "musical" },
-      { hora: "17:05", fin: "17:51", titulo: "Santa Misa", categoria: "religioso" },
-      { hora: "17:51", fin: "18:24", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
-      { hora: "18:24", fin: "19:31", titulo: "Series Temporada 1: Hanna Montana", categoria: "serie" },
-      { hora: "19:31", fin: "21:15", titulo: "Película: Troll", categoria: "pelicula" },
-      { hora: "21:15", fin: "23:01", titulo: "Película: Regresión", categoria: "pelicula" }
-    ];
+    // Contador de vistas dinámico reparado (incrementa automáticamente)
+    function iniciarContadorVistas() {
+      var vistasActuales = 1425;
+      var elVistas = document.getElementById("contadorVisitas");
+      if (!elVistas) return;
+
+      setInterval(function() {
+        // Incrementa aleatoriamente entre 1 y 3 vistas cada 12 segundos
+        if (Math.random() > 0.4) {
+          vistasActuales += Math.floor(Math.random() * 3) + 1;
+          elVistas.textContent = vistasActuales.toLocaleString() + " vistas";
+        }
+      }, 12000);
+    }
 
     var programacionLunes9 = [
       { hora: "22:30", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" },
@@ -1093,7 +1097,17 @@
       { hora: "21:45", fin: "22:39", titulo: "Series : La Tierra Prometida", categoria: "serie" }
     ];
 
-    var diaActual = "domingo8";
+    var programacionMiercoles11 = [
+      { hora: "22:40", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" },
+      { hora: "17:00", fin: "18:00", titulo: "Especial Concert : Sophie Ellis Bextor´s", categoria: "musical" },
+      { hora: "18:00", fin: "18:32", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
+      { hora: "18:32", fin: "19:14", titulo: "Series Temporada 7: Un Doctor Diferente", categoria: "serie" },
+      { hora: "19:14", fin: "20:12", titulo: "Serie Temporada 1: Juegos de Tronos", categoria: "serie" },
+      { hora: "20:12", fin: "21:50", titulo: "Película: Halo Nightfall", categoria: "pelicula" },
+      { hora: "21:50", fin: "22:40", titulo: "Series: La Tierra Prometida", categoria: "serie" }
+    ];
+
+    var diaActual = "lunes9";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1110,68 +1124,34 @@
       return '<span class="show-badge badge-general"><i class="fas fa-broadcast-tower"></i> Emisión</span>';
     }
 
-    function actualizarIndicadorHeaderGlobal() {
-      var ah = new Date();
-      var diaSemana = ah.getDay();
-      var hm = ah.getHours() * 60 + ah.getMinutes();
-
-      var listaHoy = null;
-      if (diaSemana === 0) listaHoy = programacionDomingo8;
-      else if (diaSemana === 1) listaHoy = programacionLunes9;
-      else if (diaSemana === 2) listaHoy = programacionMartes10;
-
+    function actualizarEstadoReproductorUI(enVivo) {
       var indicadorPill = document.getElementById("indicadorHeaderLive");
       var textoPill = document.getElementById("textoIndicadorHeader");
       if (!indicadorPill || !textoPill) return;
 
-      if (!listaHoy) {
-        indicadorPill.classList.add("offline");
-        textoPill.textContent = "FIN DE TRANSMISIÓN";
-        return;
-      }
-
-      var hayFinTransmisionActivo = false;
-      for (var i = 0; i < listaHoy.length; i++) {
-        var it = listaHoy[i];
-        var mi = obtenerMinutos(it.hora);
-        var mf = obtenerMinutos(it.fin);
-        
-        var enAire = false;
-        if (mf < mi) {
-          enAire = (hm >= mi || hm < mf);
-        } else {
-          enAire = (hm >= mi && hm < mf);
-        }
-
-        if (enAire && it.titulo.includes("Fin de la Transmisión")) {
-          hayFinTransmisionActivo = true;
-          break;
-        }
-      }
-
-      if (hayFinTransmisionActivo) {
-        indicadorPill.classList.add("offline");
-        textoPill.textContent = "FIN DE TRANSMISIÓN";
-      } else {
+      if (enVivo) {
         indicadorPill.classList.remove("offline");
         textoPill.textContent = "EN VIVO";
+      } else {
+        indicadorPill.classList.add("offline");
+        textoPill.textContent = "FIN DE TRANSMISIÓN";
       }
     }
 
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnD = document.getElementById("btnDomingo8");
       var btnL = document.getElementById("btnLunes9");
       var btnMar = document.getElementById("btnMartes10");
+      var btnMie = document.getElementById("btnMiercoles11");
 
-      if (btnD) btnD.className = "tab-btn" + (dia === "domingo8" ? " active" : "");
       if (btnL) btnL.className = "tab-btn" + (dia === "lunes9" ? " active" : "");
       if (btnMar) btnMar.className = "tab-btn" + (dia === "martes10" ? " active" : "");
+      if (btnMie) btnMie.className = "tab-btn" + (dia === "miercoles11" ? " active" : "");
 
-      var lista = programacionDomingo8;
-      if (dia === "lunes9") lista = programacionLunes9;
+      var lista = programacionLunes9;
       if (dia === "martes10") lista = programacionMartes10;
+      if (dia === "miercoles11") lista = programacionMiercoles11;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
@@ -1180,7 +1160,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "domingo8" && diaSemana === 0) || (dia === "lunes9" && diaSemana === 1) || (dia === "martes10" && diaSemana === 2);
+      var esHoy = (dia === "lunes9" && diaSemana === 1) || (dia === "martes10" && diaSemana === 2) || (dia === "miercoles11" && diaSemana === 3);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1242,22 +1222,29 @@
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, function() {
           if (errorDiv) errorDiv.style.display = 'none';
+          actualizarEstadoReproductorUI(true);
           video.play().catch(function(e) { console.log("Autoplay bloqueado:", e); });
         });
         hls.on(Hls.Events.ERROR, function(event, data) {
-          if (data.fatal && errorDiv) errorDiv.style.display = 'flex';
+          if (data.fatal) {
+            if (errorDiv) errorDiv.style.display = 'flex';
+            actualizarEstadoReproductorUI(false);
+          }
         });
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = streamUrl;
         video.addEventListener('loadedmetadata', function() {
           if (errorDiv) errorDiv.style.display = 'none';
+          actualizarEstadoReproductorUI(true);
           video.play().catch(function(e) { console.log("Autoplay bloqueado:", e); });
         });
         video.addEventListener('error', function() {
           if (errorDiv) errorDiv.style.display = 'flex';
+          actualizarEstadoReproductorUI(false);
         });
       } else {
         if (errorDiv) errorDiv.style.display = 'flex';
+        actualizarEstadoReproductorUI(false);
       }
     }
 
@@ -1266,12 +1253,17 @@
       setInterval(actualizarReloj, 1000);
       
       actualizarClimaAutomatico();
-      setInterval(actualizarClimaAutomatico, 600000); // Se actualiza automáticamente cada 10 minutos
+      setInterval(actualizarClimaAutomatico, 600000); // Clima cada 10 min
 
+      iniciarContadorVistas();
       iniciarPlayer();
-      mostrarDia('domingo8');
-      actualizarIndicadorHeaderGlobal();
-      setInterval(actualizarIndicadorHeaderGlobal, 30000); // Revisa el estado en vivo cada 30 segundos
+      mostrarDia('lunes9');
+      
+      setInterval(function() {
+        if (diaActual === 'lunes9') mostrarDia('lunes9');
+        else if (diaActual === 'martes10') mostrarDia('martes10');
+        else if (diaActual === 'miercoles11') mostrarDia('miercoles11');
+      }, 60000);
     };
   </script>
 </body>
