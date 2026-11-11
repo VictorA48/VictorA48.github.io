@@ -933,13 +933,6 @@
       <div class="weather-days-grid" id="gridPronosticoDinamico">
         <div class="weather-card">
           <div class="weather-card-info">
-            <span class="weather-card-day">Martes, 10 Nov</span>
-            <span class="weather-card-desc">Parcialmente Nublado</span>
-          </div>
-          <span class="weather-card-temps">30°C / 21°C</span>
-        </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
             <span class="weather-card-day">Miércoles, 11 Nov</span>
             <span class="weather-card-desc">Soleado</span>
           </div>
@@ -952,6 +945,13 @@
           </div>
           <span class="weather-card-temps">33°C / 23°C</span>
         </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Viernes, 13 Nov</span>
+            <span class="weather-card-desc">Parcialmente Nublado</span>
+          </div>
+          <span class="weather-card-temps">32°C / 21°C</span>
+        </div>
       </div>
     </div>
 
@@ -962,14 +962,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn active" id="btnMartes10" onclick="mostrarDia('martes10')">
-            <i class="fas fa-calendar-day"></i> Martes, 10 Noviembre 2026
-          </button>
-          <button class="tab-btn" id="btnMiercoles11" onclick="mostrarDia('miercoles11')">
+          <button class="tab-btn active" id="btnMiercoles11" onclick="mostrarDia('miercoles11')">
             <i class="fas fa-calendar-day"></i> Miércoles, 11 Noviembre 2026
           </button>
           <button class="tab-btn" id="btnJueves12" onclick="mostrarDia('jueves12')">
             <i class="fas fa-calendar-day"></i> Jueves, 12 Noviembre 2026
+          </button>
+          <button class="tab-btn" id="btnViernes13" onclick="mostrarDia('viernes13')">
+            <i class="fas fa-calendar-day"></i> Viernes, 13 Noviembre 2026
           </button>
         </div>
       </div>
@@ -1075,16 +1075,6 @@
       }, 12000);
     }
 
-    var programacionMartes10 = [
-      { hora: "22:39", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" },
-      { hora: "16:00", fin: "17:57", titulo: "Especial Concert : Coldplay", categoria: "musical" },
-      { hora: "17:57", fin: "18:30", titulo: "Santo Rosario \"Misterios Dolorosos\"", categoria: "religioso" },
-      { hora: "18:30", fin: "19:12", titulo: "Series Temporada 7: Un Doctor Diferente", categoria: "serie" },
-      { hora: "19:12", fin: "20:05", titulo: "Serie Temporada 1: Juegos de Tronos", categoria: "serie" },
-      { hora: "20:05", fin: "21:45", titulo: "Película : Un Novato en Apuros", categoria: "pelicula" },
-      { hora: "21:45", fin: "22:39", titulo: "Series : La Tierra Prometida", categoria: "serie" }
-    ];
-
     var programacionMiercoles11 = [
       { hora: "22:40", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" },
       { hora: "17:00", fin: "18:00", titulo: "Especial Concert : Sophie Ellis Bextor´s", categoria: "musical" },
@@ -1105,7 +1095,17 @@
       { hora: "21:50", fin: "22:40", titulo: "Series: La Tierra Prometida", categoria: "serie" }
     ];
 
-    var diaActual = "martes10";
+    var programacionViernes13 = [
+      { hora: "23:00", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" },
+      { hora: "17:00", fin: "18:00", titulo: "Especial Concert : David Guetta Live", categoria: "musical" },
+      { hora: "18:00", fin: "18:32", titulo: "Santo Rosario \"Misterios Dolorosos\"", categoria: "religioso" },
+      { hora: "18:32", fin: "19:14", titulo: "Series Temporada 7: Un Doctor Diferente", categoria: "serie" },
+      { hora: "19:14", fin: "20:12", titulo: "Serie Temporada 1: Juegos de Tronos", categoria: "serie" },
+      { hora: "20:12", fin: "21:50", titulo: "Película: Titanes del Pacífico", categoria: "pelicula" },
+      { hora: "21:50", fin: "23:00", titulo: "Series: La Tierra Prometida", categoria: "serie" }
+    ];
+
+    var diaActual = "miercoles11";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1139,17 +1139,17 @@
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnMar = document.getElementById("btnMartes10");
       var btnMie = document.getElementById("btnMiercoles11");
       var btnJue = document.getElementById("btnJueves12");
+      var btnVie = document.getElementById("btnViernes13");
 
-      if (btnMar) btnMar.className = "tab-btn" + (dia === "martes10" ? " active" : "");
       if (btnMie) btnMie.className = "tab-btn" + (dia === "miercoles11" ? " active" : "");
       if (btnJue) btnJue.className = "tab-btn" + (dia === "jueves12" ? " active" : "");
+      if (btnVie) btnVie.className = "tab-btn" + (dia === "viernes13" ? " active" : "");
 
-      var lista = programacionMartes10;
-      if (dia === "miercoles11") lista = programacionMiercoles11;
+      var lista = programacionMiercoles11;
       if (dia === "jueves12") lista = programacionJueves12;
+      if (dia === "viernes13") lista = programacionViernes13;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
@@ -1158,7 +1158,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "martes10" && diaSemana === 2) || (dia === "miercoles11" && diaSemana === 3) || (dia === "jueves12" && diaSemana === 4);
+      var esHoy = (dia === "miercoles11" && diaSemana === 3) || (dia === "jueves12" && diaSemana === 4) || (dia === "viernes13" && diaSemana === 5);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1255,12 +1255,12 @@
 
       iniciarContadorVistas();
       iniciarPlayer();
-      mostrarDia('martes10');
+      mostrarDia('miercoles11');
       
       setInterval(function() {
-        if (diaActual === 'martes10') mostrarDia('martes10');
-        else if (diaActual === 'miercoles11') mostrarDia('miercoles11');
+        if (diaActual === 'miercoles11') mostrarDia('miercoles11');
         else if (diaActual === 'jueves12') mostrarDia('jueves12');
+        else if (diaActual === 'viernes13') mostrarDia('viernes13');
       }, 60000);
     };
   </script>
