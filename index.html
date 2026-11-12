@@ -848,7 +848,7 @@
       <div class="player-wrapper">
         <div id="playerError" class="player-error" style="display: none;">
           <i class="fas fa-exclamation-triangle"></i>
-          <span>Cargando señal en vivo o fuera de línea...</span>
+          <span>Fin de la Programación / Fuera de Línea...</span>
           <button class="btn-retry" onclick="iniciarPlayer()">Reintentar Conexión</button>
         </div>
         <video id="videoPlayer" controls autoplay playsinline></video>
@@ -931,13 +931,6 @@
       <div class="weather-days-grid" id="gridPronosticoDinamico">
         <div class="weather-card">
           <div class="weather-card-info">
-            <span class="weather-card-day">Miércoles, 11 Nov</span>
-            <span class="weather-card-desc">Soleado</span>
-          </div>
-          <span class="weather-card-temps">31°C / 22°C</span>
-        </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
             <span class="weather-card-day">Jueves, 12 Nov</span>
             <span class="weather-card-desc">Despejado</span>
           </div>
@@ -950,6 +943,13 @@
           </div>
           <span class="weather-card-temps">32°C / 21°C</span>
         </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Sábado, 14 Nov</span>
+            <span class="weather-card-desc">Soleado / Caluroso</span>
+          </div>
+          <span class="weather-card-temps">34°C / 23°C</span>
+        </div>
       </div>
     </div>
 
@@ -960,14 +960,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn active" id="btnMiercoles11" onclick="mostrarDia('miercoles11')">
-            <i class="fas fa-calendar-day"></i> Miércoles, 11 Noviembre 2026
-          </button>
-          <button class="tab-btn" id="btnJueves12" onclick="mostrarDia('jueves12')">
+          <button class="tab-btn active" id="btnJueves12" onclick="mostrarDia('jueves12')">
             <i class="fas fa-calendar-day"></i> Jueves, 12 Noviembre 2026
           </button>
           <button class="tab-btn" id="btnViernes13" onclick="mostrarDia('viernes13')">
             <i class="fas fa-calendar-day"></i> Viernes, 13 Noviembre 2026
+          </button>
+          <button class="tab-btn" id="btnSabado14" onclick="mostrarDia('sabado14')">
+            <i class="fas fa-calendar-day"></i> Sábado, 14 Noviembre 2026
           </button>
         </div>
       </div>
@@ -1073,34 +1073,37 @@
       }, 12000);
     }
 
-    var programacionMiercoles11 = [
-      { hora: "22:35", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" },
-      { hora: "17:00", fin: "18:05", titulo: "Especial : Kylie Minogue", categoria: "musical" },
-      { hora: "18:05", fin: "18:37", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
-      { hora: "18:37", fin: "19:31", titulo: "Serie Temporada 2: Juegos de Tronos", categoria: "serie" },
-      { hora: "19:31", fin: "21:44", titulo: "Película: Hacker Amenaza en la Red Online", categoria: "pelicula" },
-      { hora: "21:44", fin: "22:35", titulo: "Series : La Tierra Prometida", categoria: "serie" }
-    ];
-
+    /* Programación extraída exactamente de los videos proporcionados */
     var programacionJueves12 = [
-      { hora: "21:44", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" },
       { hora: "17:00", fin: "17:50", titulo: "Especial : Faithless", categoria: "musical" },
       { hora: "17:50", fin: "18:29", titulo: "Santo Rosario \"Misterios Luminosos\"", categoria: "religioso" },
       { hora: "18:29", fin: "19:21", titulo: "Serie Temporada 2: Juegos de Tronos", categoria: "serie" },
       { hora: "19:21", fin: "21:06", titulo: "Película: Milagro en la Cueva", categoria: "pelicula" },
-      { hora: "21:06", fin: "21:44", titulo: "Series : La Tierra Prometida", categoria: "serie" }
+      { hora: "21:06", fin: "21:44", titulo: "Series : La Tierra Prometida", categoria: "serie" },
+      { hora: "21:44", fin: "15:59", titulo: "Fin de la Programación", categoria: "general" }
     ];
 
     var programacionViernes13 = [
-      { hora: "21:52", fin: "11:59", titulo: "Fin de la Transmisión", categoria: "general" },
       { hora: "16:00", fin: "18:19", titulo: "Especial : Tiesto", categoria: "musical" },
       { hora: "18:19", fin: "18:53", titulo: "Santo Rosario \"Misterios Dolorosos\"", categoria: "religioso" },
       { hora: "18:53", fin: "19:43", titulo: "Serie Temporada 2: Juegos de Tronos", categoria: "serie" },
-      { hora: "19:43", fin: "21:13", titulo: "Película: Terror en Amityville", categoria: "pelicula" },
-      { hora: "21:13", fin: "21:52", titulo: "Series : La Tierra Prometida", categoria: "serie" }
+      { hora: "19:43", fin: "21:13", titulo: "Película: Terror En Amityville", categoria: "pelicula" },
+      { hora: "21:13", fin: "21:52", titulo: "Series : La Tierra Prometida", categoria: "serie" },
+      { hora: "21:52", fin: "11:59", titulo: "Fin de la Programación", categoria: "general" }
     ];
 
-    var diaActual = "miercoles11";
+    var programacionSabado14 = [
+      { hora: "12:00", fin: "13:06", titulo: "Serie Comedia: Los Tres Chiflados", categoria: "serie" },
+      { hora: "13:06", fin: "13:50", titulo: "Anime: Los Thundercast", categoria: "animacion" },
+      { hora: "13:50", fin: "16:17", titulo: "Película: La Casa de los Espíritus", categoria: "pelicula" },
+      { hora: "16:17", fin: "18:19", titulo: "Especial Concert: Michael Jackson - Dangerous World Tour Live", categoria: "musical" },
+      { hora: "18:19", fin: "18:57", titulo: "Santo Rosario \"Misterios Gozosos\"", categoria: "religioso" },
+      { hora: "18:57", fin: "20:05", titulo: "Serie Temporada 2: Hanna Montana", categoria: "serie" },
+      { hora: "20:05", fin: "21:34", titulo: "Película: Embrujo De La Casa Whaley (Sobrevivirán A Una Noche Paranormal)", categoria: "pelicula" },
+      { hora: "21:34", fin: "11:59", titulo: "Fin de la Programación", categoria: "general" }
+    ];
+
+    var diaActual = "jueves12";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1120,31 +1123,34 @@
     function actualizarEstadoReproductorUI(enVivo) {
       var indicadorPill = document.getElementById("indicadorHeaderLive");
       var textoPill = document.getElementById("textoIndicadorHeader");
+      var errorDiv = document.getElementById("playerError");
       if (!indicadorPill || !textoPill) return;
 
       if (enVivo) {
         indicadorPill.classList.remove("offline");
         textoPill.textContent = "EN VIVO";
+        if (errorDiv) errorDiv.style.display = 'none';
       } else {
         indicadorPill.classList.add("offline");
-        textoPill.textContent = "FIN DE TRANSMISIÓN";
+        textoPill.textContent = "FIN DE PROGRAMACIÓN";
+        if (errorDiv) errorDiv.style.display = 'flex';
       }
     }
 
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnMie = document.getElementById("btnMiercoles11");
       var btnJue = document.getElementById("btnJueves12");
       var btnVie = document.getElementById("btnViernes13");
+      var btnSab = document.getElementById("btnSabado14");
 
-      if (btnMie) btnMie.className = "tab-btn" + (dia === "miercoles11" ? " active" : "");
       if (btnJue) btnJue.className = "tab-btn" + (dia === "jueves12" ? " active" : "");
       if (btnVie) btnVie.className = "tab-btn" + (dia === "viernes13" ? " active" : "");
+      if (btnSab) btnSab.className = "tab-btn" + (dia === "sabado14" ? " active" : "");
 
-      var lista = programacionMiercoles11;
-      if (dia === "jueves12") lista = programacionJueves12;
+      var lista = programacionJueves12;
       if (dia === "viernes13") lista = programacionViernes13;
+      if (dia === "sabado14") lista = programacionSabado14;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
@@ -1153,7 +1159,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "miercoles11" && diaSemana === 3) || (dia === "jueves12" && diaSemana === 4) || (dia === "viernes13" && diaSemana === 5);
+      var esHoy = (dia === "jueves12" && diaSemana === 4) || (dia === "viernes13" && diaSemana === 5) || (dia === "sabado14" && diaSemana === 6);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1169,7 +1175,7 @@
           }
         }
 
-        var esFinTransmision = item.titulo.includes("Fin de la Transmisión");
+        var esFinTransmision = item.titulo.includes("Fin de la Programación");
 
         var cardClass = "schedule-card";
         var tagHtml = "";
@@ -1177,13 +1183,17 @@
         if (enAire) {
           if (esFinTransmision) {
             cardClass += " is-offline-live";
-            tagHtml = '<span class="live-tag-red">FIN DE TRANSMISIÓN</span>';
+            tagHtml = '<span class="live-tag-red">FIN DE PROGRAMACIÓN</span>';
           } else {
             cardClass += " is-live";
             tagHtml = '<span class="live-tag-green">EN VIVO</span>';
           }
         } else {
-          tagHtml = '<span class="offline-tag">PROGRAMADO</span>';
+          if (esFinTransmision) {
+            tagHtml = '<span class="offline-tag" style="color:var(--live-red); border-color:var(--live-red);">FINALIZADO</span>';
+          } else {
+            tagHtml = '<span class="offline-tag">PROGRAMADO</span>';
+          }
         }
 
         var htmlCard = 
@@ -1204,7 +1214,6 @@
 
     function iniciarPlayer() {
       var video = document.getElementById('videoPlayer');
-      var errorDiv = document.getElementById('playerError');
       if (!video) return;
 
       var streamUrl = "https://eu1.servers10.com:8081/8146/index.m3u8";
@@ -1214,29 +1223,24 @@
         hls.loadSource(streamUrl);
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, function() {
-          if (errorDiv) errorDiv.style.display = 'none';
           actualizarEstadoReproductorUI(true);
           video.play().catch(function(e) { console.log("Autoplay bloqueado:", e); });
         });
         hls.on(Hls.Events.ERROR, function(event, data) {
           if (data.fatal) {
-            if (errorDiv) errorDiv.style.display = 'flex';
             actualizarEstadoReproductorUI(false);
           }
         });
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = streamUrl;
         video.addEventListener('loadedmetadata', function() {
-          if (errorDiv) errorDiv.style.display = 'none';
           actualizarEstadoReproductorUI(true);
           video.play().catch(function(e) { console.log("Autoplay bloqueado:", e); });
         });
         video.addEventListener('error', function() {
-          if (errorDiv) errorDiv.style.display = 'flex';
           actualizarEstadoReproductorUI(false);
         });
       } else {
-        if (errorDiv) errorDiv.style.display = 'flex';
         actualizarEstadoReproductorUI(false);
       }
     }
@@ -1250,12 +1254,12 @@
 
       iniciarContadorVistas();
       iniciarPlayer();
-      mostrarDia('miercoles11');
+      mostrarDia('jueves12');
       
       setInterval(function() {
-        if (diaActual === 'miercoles11') mostrarDia('miercoles11');
-        else if (diaActual === 'jueves12') mostrarDia('jueves12');
+        if (diaActual === 'jueves12') mostrarDia('jueves12');
         else if (diaActual === 'viernes13') mostrarDia('viernes13');
+        else if (diaActual === 'sabado14') mostrarDia('sabado14');
       }, 60000);
     };
   </script>
