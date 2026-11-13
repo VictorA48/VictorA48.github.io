@@ -848,7 +848,7 @@
       <div class="player-wrapper">
         <div id="playerError" class="player-error" style="display: none;">
           <i class="fas fa-exclamation-triangle"></i>
-          <span>Fin de la Programación / Fuera de Línea...</span>
+          <span>Fin de la Transmisión / Fuera de Línea...</span>
           <button class="btn-retry" onclick="iniciarPlayer()">Reintentar Conexión</button>
         </div>
         <video id="videoPlayer" controls autoplay playsinline></video>
@@ -931,13 +931,6 @@
       <div class="weather-days-grid" id="gridPronosticoDinamico">
         <div class="weather-card">
           <div class="weather-card-info">
-            <span class="weather-card-day">Jueves, 12 Nov</span>
-            <span class="weather-card-desc">Despejado</span>
-          </div>
-          <span class="weather-card-temps">33°C / 23°C</span>
-        </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
             <span class="weather-card-day">Viernes, 13 Nov</span>
             <span class="weather-card-desc">Parcialmente Nublado</span>
           </div>
@@ -950,6 +943,13 @@
           </div>
           <span class="weather-card-temps">34°C / 23°C</span>
         </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Domingo, 15 Nov</span>
+            <span class="weather-card-desc">Despejado</span>
+          </div>
+          <span class="weather-card-temps">33°C / 22°C</span>
+        </div>
       </div>
     </div>
 
@@ -960,14 +960,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn active" id="btnJueves12" onclick="mostrarDia('jueves12')">
-            <i class="fas fa-calendar-day"></i> Jueves, 12 Noviembre 2026
-          </button>
           <button class="tab-btn" id="btnViernes13" onclick="mostrarDia('viernes13')">
             <i class="fas fa-calendar-day"></i> Viernes, 13 Noviembre 2026
           </button>
           <button class="tab-btn" id="btnSabado14" onclick="mostrarDia('sabado14')">
             <i class="fas fa-calendar-day"></i> Sábado, 14 Noviembre 2026
+          </button>
+          <button class="tab-btn active" id="btnDomingo15" onclick="mostrarDia('domingo15')">
+            <i class="fas fa-calendar-day"></i> Domingo, 15 Noviembre 2026
           </button>
         </div>
       </div>
@@ -1073,16 +1073,7 @@
       }, 12000);
     }
 
-    /* Programación extraída exactamente de los videos proporcionados */
-    var programacionJueves12 = [
-      { hora: "17:00", fin: "17:50", titulo: "Especial : Faithless", categoria: "musical" },
-      { hora: "17:50", fin: "18:29", titulo: "Santo Rosario \"Misterios Luminosos\"", categoria: "religioso" },
-      { hora: "18:29", fin: "19:21", titulo: "Serie Temporada 2: Juegos de Tronos", categoria: "serie" },
-      { hora: "19:21", fin: "21:06", titulo: "Película: Milagro en la Cueva", categoria: "pelicula" },
-      { hora: "21:06", fin: "21:44", titulo: "Series : La Tierra Prometida", categoria: "serie" },
-      { hora: "21:44", fin: "15:59", titulo: "Fin de la Programación", categoria: "general" }
-    ];
-
+    /* Programación extraída exactamente del video de Domingo 15 Noviembre 2026 */
     var programacionViernes13 = [
       { hora: "16:00", fin: "18:19", titulo: "Especial : Tiesto", categoria: "musical" },
       { hora: "18:19", fin: "18:53", titulo: "Santo Rosario \"Misterios Dolorosos\"", categoria: "religioso" },
@@ -1103,7 +1094,19 @@
       { hora: "21:34", fin: "11:59", titulo: "Fin de la Programación", categoria: "general" }
     ];
 
-    var diaActual = "jueves12";
+    var programacionDomingo15 = [
+      { hora: "12:00", fin: "13:14", titulo: "Anime: Dragon Ball", categoria: "animacion" },
+      { hora: "13:14", fin: "14:29", titulo: "Anime: Mazinger Z", categoria: "animacion" },
+      { hora: "14:29", fin: "17:26", titulo: "Película: 100 Grados Bajo Cero", categoria: "pelicula" },
+      { hora: "17:26", fin: "19:10", titulo: "Especial Concert: Ministry of Sound Classical, live from Sidney", categoria: "musical" },
+      { hora: "19:10", fin: "19:56", titulo: "Santa Misa", categoria: "religioso" },
+      { hora: "19:56", fin: "20:29", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
+      { hora: "20:29", fin: "21:36", titulo: "Series Temporada 1: Hannah Montana", categoria: "serie" },
+      { hora: "21:36", fin: "23:02", titulo: "Película: Tierra Marciana (Tormenta Letal)", categoria: "pelicula" },
+      { hora: "23:02", fin: "16:59", titulo: "Fin de la Programación", categoria: "general" }
+    ];
+
+    var diaActual = "domingo15";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1140,15 +1143,15 @@
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnJue = document.getElementById("btnJueves12");
       var btnVie = document.getElementById("btnViernes13");
       var btnSab = document.getElementById("btnSabado14");
+      var btnDom = document.getElementById("btnDomingo15");
 
-      if (btnJue) btnJue.className = "tab-btn" + (dia === "jueves12" ? " active" : "");
       if (btnVie) btnVie.className = "tab-btn" + (dia === "viernes13" ? " active" : "");
       if (btnSab) btnSab.className = "tab-btn" + (dia === "sabado14" ? " active" : "");
+      if (btnDom) btnDom.className = "tab-btn" + (dia === "domingo15" ? " active" : "");
 
-      var lista = programacionJueves12;
+      var lista = programacionDomingo15;
       if (dia === "viernes13") lista = programacionViernes13;
       if (dia === "sabado14") lista = programacionSabado14;
 
@@ -1159,7 +1162,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "jueves12" && diaSemana === 4) || (dia === "viernes13" && diaSemana === 5) || (dia === "sabado14" && diaSemana === 6);
+      var esHoy = (dia === "viernes13" && diaSemana === 5) || (dia === "sabado14" && diaSemana === 6) || (dia === "domingo15" && diaSemana === 0);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1254,12 +1257,12 @@
 
       iniciarContadorVistas();
       iniciarPlayer();
-      mostrarDia('jueves12');
+      mostrarDia('domingo15');
       
       setInterval(function() {
-        if (diaActual === 'jueves12') mostrarDia('jueves12');
-        else if (diaActual === 'viernes13') mostrarDia('viernes13');
+        if (diaActual === 'viernes13') mostrarDia('viernes13');
         else if (diaActual === 'sabado14') mostrarDia('sabado14');
+        else if (diaActual === 'domingo15') mostrarDia('domingo15');
       }, 60000);
     };
   </script>
