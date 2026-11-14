@@ -931,13 +931,6 @@
       <div class="weather-days-grid" id="gridPronosticoDinamico">
         <div class="weather-card">
           <div class="weather-card-info">
-            <span class="weather-card-day">Viernes, 13 Nov</span>
-            <span class="weather-card-desc">Parcialmente Nublado</span>
-          </div>
-          <span class="weather-card-temps">32°C / 21°C</span>
-        </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
             <span class="weather-card-day">Sábado, 14 Nov</span>
             <span class="weather-card-desc">Soleado / Caluroso</span>
           </div>
@@ -950,6 +943,13 @@
           </div>
           <span class="weather-card-temps">33°C / 22°C</span>
         </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Lunes, 16 Nov</span>
+            <span class="weather-card-desc">Parcialmente Nublado</span>
+          </div>
+          <span class="weather-card-temps">32°C / 21°C</span>
+        </div>
       </div>
     </div>
 
@@ -960,14 +960,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn" id="btnViernes13" onclick="mostrarDia('viernes13')">
-            <i class="fas fa-calendar-day"></i> Viernes, 13 Noviembre 2026
-          </button>
           <button class="tab-btn" id="btnSabado14" onclick="mostrarDia('sabado14')">
             <i class="fas fa-calendar-day"></i> Sábado, 14 Noviembre 2026
           </button>
-          <button class="tab-btn active" id="btnDomingo15" onclick="mostrarDia('domingo15')">
+          <button class="tab-btn" id="btnDomingo15" onclick="mostrarDia('domingo15')">
             <i class="fas fa-calendar-day"></i> Domingo, 15 Noviembre 2026
+          </button>
+          <button class="tab-btn active" id="btnLunes16" onclick="mostrarDia('lunes16')">
+            <i class="fas fa-calendar-day"></i> Lunes, 16 Noviembre 2026
           </button>
         </div>
       </div>
@@ -1073,16 +1073,7 @@
       }, 12000);
     }
 
-    /* Programación extraída exactamente del video de Domingo 15 Noviembre 2026 */
-    var programacionViernes13 = [
-      { hora: "16:00", fin: "18:19", titulo: "Especial : Tiesto", categoria: "musical" },
-      { hora: "18:19", fin: "18:53", titulo: "Santo Rosario \"Misterios Dolorosos\"", categoria: "religioso" },
-      { hora: "18:53", fin: "19:43", titulo: "Serie Temporada 2: Juegos de Tronos", categoria: "serie" },
-      { hora: "19:43", fin: "21:13", titulo: "Película: Terror En Amityville", categoria: "pelicula" },
-      { hora: "21:13", fin: "21:52", titulo: "Series : La Tierra Prometida", categoria: "serie" },
-      { hora: "21:52", fin: "11:59", titulo: "Fin de la Programación", categoria: "general" }
-    ];
-
+    /* Programación extraída exactamente del video para Sábado, Domingo y Lunes */
     var programacionSabado14 = [
       { hora: "12:00", fin: "13:06", titulo: "Serie Comedia: Los Tres Chiflados", categoria: "serie" },
       { hora: "13:06", fin: "13:50", titulo: "Anime: Los Thundercast", categoria: "animacion" },
@@ -1106,7 +1097,16 @@
       { hora: "23:02", fin: "16:59", titulo: "Fin de la Programación", categoria: "general" }
     ];
 
-    var diaActual = "domingo15";
+    var programacionLunes16 = [
+      { hora: "17:00", fin: "18:02", titulo: "Especial : Cyndi Lauper", categoria: "musical" },
+      { hora: "18:02", fin: "18:41", titulo: "Santo Rosario \"Misterios Gozosos\"", categoria: "religioso" },
+      { hora: "18:41", fin: "19:36", titulo: "Serie Temporada 2: Juegos de Tronos", categoria: "serie" },
+      { hora: "19:36", fin: "21:20", titulo: "Película: Éxodo (La Ultima Marea)", categoria: "pelicula" },
+      { hora: "21:20", fin: "21:58", titulo: "Series : La Tierra Prometida", categoria: "serie" },
+      { hora: "21:58", fin: "15:59", titulo: "Fin de la Programación", categoria: "general" }
+    ];
+
+    var diaActual = "lunes16";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1143,17 +1143,17 @@
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnVie = document.getElementById("btnViernes13");
       var btnSab = document.getElementById("btnSabado14");
       var btnDom = document.getElementById("btnDomingo15");
+      var btnLun = document.getElementById("btnLunes16");
 
-      if (btnVie) btnVie.className = "tab-btn" + (dia === "viernes13" ? " active" : "");
       if (btnSab) btnSab.className = "tab-btn" + (dia === "sabado14" ? " active" : "");
       if (btnDom) btnDom.className = "tab-btn" + (dia === "domingo15" ? " active" : "");
+      if (btnLun) btnLun.className = "tab-btn" + (dia === "lunes16" ? " active" : "");
 
-      var lista = programacionDomingo15;
-      if (dia === "viernes13") lista = programacionViernes13;
+      var lista = programacionLunes16;
       if (dia === "sabado14") lista = programacionSabado14;
+      if (dia === "domingo15") lista = programacionDomingo15;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
@@ -1162,7 +1162,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "viernes13" && diaSemana === 5) || (dia === "sabado14" && diaSemana === 6) || (dia === "domingo15" && diaSemana === 0);
+      var esHoy = (dia === "sabado14" && diaSemana === 6) || (dia === "domingo15" && diaSemana === 0) || (dia === "lunes16" && diaSemana === 1);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1257,12 +1257,12 @@
 
       iniciarContadorVistas();
       iniciarPlayer();
-      mostrarDia('domingo15');
+      mostrarDia('lunes16');
       
       setInterval(function() {
-        if (diaActual === 'viernes13') mostrarDia('viernes13');
-        else if (diaActual === 'sabado14') mostrarDia('sabado14');
+        if (diaActual === 'sabado14') mostrarDia('sabado14');
         else if (diaActual === 'domingo15') mostrarDia('domingo15');
+        else if (diaActual === 'lunes16') mostrarDia('lunes16');
       }, 60000);
     };
   </script>
