@@ -931,13 +931,6 @@
       <div class="weather-days-grid" id="gridPronosticoDinamico">
         <div class="weather-card">
           <div class="weather-card-info">
-            <span class="weather-card-day">Sábado, 14 Nov</span>
-            <span class="weather-card-desc">Soleado / Caluroso</span>
-          </div>
-          <span class="weather-card-temps">34°C / 23°C</span>
-        </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
             <span class="weather-card-day">Domingo, 15 Nov</span>
             <span class="weather-card-desc">Despejado</span>
           </div>
@@ -950,6 +943,13 @@
           </div>
           <span class="weather-card-temps">32°C / 21°C</span>
         </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Martes, 17 Nov</span>
+            <span class="weather-card-desc">Soleado</span>
+          </div>
+          <span class="weather-card-temps">34°C / 22°C</span>
+        </div>
       </div>
     </div>
 
@@ -960,14 +960,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn" id="btnSabado14" onclick="mostrarDia('sabado14')">
-            <i class="fas fa-calendar-day"></i> Sábado, 14 Noviembre 2026
-          </button>
           <button class="tab-btn" id="btnDomingo15" onclick="mostrarDia('domingo15')">
             <i class="fas fa-calendar-day"></i> Domingo, 15 Noviembre 2026
           </button>
-          <button class="tab-btn active" id="btnLunes16" onclick="mostrarDia('lunes16')">
+          <button class="tab-btn" id="btnLunes16" onclick="mostrarDia('lunes16')">
             <i class="fas fa-calendar-day"></i> Lunes, 16 Noviembre 2026
+          </button>
+          <button class="tab-btn active" id="btnMartes17" onclick="mostrarDia('martes17')">
+            <i class="fas fa-calendar-day"></i> Martes, 17 Noviembre 2026
           </button>
         </div>
       </div>
@@ -1073,18 +1073,7 @@
       }, 12000);
     }
 
-    /* Programación extraída exactamente del video para Sábado, Domingo y Lunes */
-    var programacionSabado14 = [
-      { hora: "12:00", fin: "13:06", titulo: "Serie Comedia: Los Tres Chiflados", categoria: "serie" },
-      { hora: "13:06", fin: "13:50", titulo: "Anime: Los Thundercast", categoria: "animacion" },
-      { hora: "13:50", fin: "16:17", titulo: "Película: La Casa de los Espíritus", categoria: "pelicula" },
-      { hora: "16:17", fin: "18:19", titulo: "Especial Concert: Michael Jackson - Dangerous World Tour Live", categoria: "musical" },
-      { hora: "18:19", fin: "18:57", titulo: "Santo Rosario \"Misterios Gozosos\"", categoria: "religioso" },
-      { hora: "18:57", fin: "20:05", titulo: "Serie Temporada 2: Hanna Montana", categoria: "serie" },
-      { hora: "20:05", fin: "21:34", titulo: "Película: Embrujo De La Casa Whaley (Sobrevivirán A Una Noche Paranormal)", categoria: "pelicula" },
-      { hora: "21:34", fin: "11:59", titulo: "Fin de la Programación", categoria: "general" }
-    ];
-
+    /* Programación extraída exactamente del video para Domingo, Lunes y Martes */
     var programacionDomingo15 = [
       { hora: "12:00", fin: "13:14", titulo: "Anime: Dragon Ball", categoria: "animacion" },
       { hora: "13:14", fin: "14:29", titulo: "Anime: Mazinger Z", categoria: "animacion" },
@@ -1106,7 +1095,16 @@
       { hora: "21:58", fin: "15:59", titulo: "Fin de la Programación", categoria: "general" }
     ];
 
-    var diaActual = "lunes16";
+    var programacionMartes17 = [
+      { hora: "16:00", fin: "17:51", titulo: "Especial : AC/DC", categoria: "musical" },
+      { hora: "17:51", fin: "18:24", titulo: "Santo Rosario \"Misterios Dolorosos\"", categoria: "religioso" },
+      { hora: "18:24", fin: "19:18", titulo: "Serie Temporada 2: Juegos de Tronos", categoria: "serie" },
+      { hora: "19:18", fin: "21:19", titulo: "Película: Everest", categoria: "pelicula" },
+      { hora: "21:19", fin: "21:56", titulo: "Series : La Tierra Prometida", categoria: "serie" },
+      { hora: "21:56", fin: "15:59", titulo: "Fin de la Programación", categoria: "general" }
+    ];
+
+    var diaActual = "martes17";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1143,17 +1141,17 @@
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnSab = document.getElementById("btnSabado14");
       var btnDom = document.getElementById("btnDomingo15");
       var btnLun = document.getElementById("btnLunes16");
+      var btnMar = document.getElementById("btnMartes17");
 
-      if (btnSab) btnSab.className = "tab-btn" + (dia === "sabado14" ? " active" : "");
       if (btnDom) btnDom.className = "tab-btn" + (dia === "domingo15" ? " active" : "");
       if (btnLun) btnLun.className = "tab-btn" + (dia === "lunes16" ? " active" : "");
+      if (btnMar) btnMar.className = "tab-btn" + (dia === "martes17" ? " active" : "");
 
-      var lista = programacionLunes16;
-      if (dia === "sabado14") lista = programacionSabado14;
+      var lista = programacionMartes17;
       if (dia === "domingo15") lista = programacionDomingo15;
+      if (dia === "lunes16") lista = programacionLunes16;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
@@ -1162,7 +1160,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "sabado14" && diaSemana === 6) || (dia === "domingo15" && diaSemana === 0) || (dia === "lunes16" && diaSemana === 1);
+      var esHoy = (dia === "domingo15" && diaSemana === 0) || (dia === "lunes16" && diaSemana === 1) || (dia === "martes17" && diaSemana === 2);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1257,12 +1255,12 @@
 
       iniciarContadorVistas();
       iniciarPlayer();
-      mostrarDia('lunes16');
+      mostrarDia('martes17');
       
       setInterval(function() {
-        if (diaActual === 'sabado14') mostrarDia('sabado14');
-        else if (diaActual === 'domingo15') mostrarDia('domingo15');
+        if (diaActual === 'domingo15') mostrarDia('domingo15');
         else if (diaActual === 'lunes16') mostrarDia('lunes16');
+        else if (diaActual === 'martes17') mostrarDia('martes17');
       }, 60000);
     };
   </script>
