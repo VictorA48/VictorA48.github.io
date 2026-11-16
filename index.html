@@ -931,13 +931,6 @@
       <div class="weather-days-grid" id="gridPronosticoDinamico">
         <div class="weather-card">
           <div class="weather-card-info">
-            <span class="weather-card-day">Domingo, 15 Nov</span>
-            <span class="weather-card-desc">Despejado</span>
-          </div>
-          <span class="weather-card-temps">33°C / 22°C</span>
-        </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
             <span class="weather-card-day">Lunes, 16 Nov</span>
             <span class="weather-card-desc">Parcialmente Nublado</span>
           </div>
@@ -950,6 +943,13 @@
           </div>
           <span class="weather-card-temps">34°C / 22°C</span>
         </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Miércoles, 18 Nov</span>
+            <span class="weather-card-desc">Despejado</span>
+          </div>
+          <span class="weather-card-temps">33°C / 22°C</span>
+        </div>
       </div>
     </div>
 
@@ -960,14 +960,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn" id="btnDomingo15" onclick="mostrarDia('domingo15')">
-            <i class="fas fa-calendar-day"></i> Domingo, 15 Noviembre 2026
-          </button>
           <button class="tab-btn" id="btnLunes16" onclick="mostrarDia('lunes16')">
             <i class="fas fa-calendar-day"></i> Lunes, 16 Noviembre 2026
           </button>
-          <button class="tab-btn active" id="btnMartes17" onclick="mostrarDia('martes17')">
+          <button class="tab-btn" id="btnMartes17" onclick="mostrarDia('martes17')">
             <i class="fas fa-calendar-day"></i> Martes, 17 Noviembre 2026
+          </button>
+          <button class="tab-btn active" id="btnMiercoles18" onclick="mostrarDia('miercoles18')">
+            <i class="fas fa-calendar-day"></i> Miércoles, 18 Noviembre 2026
           </button>
         </div>
       </div>
@@ -1073,19 +1073,7 @@
       }, 12000);
     }
 
-    /* Programación extraída exactamente del video para Domingo, Lunes y Martes */
-    var programacionDomingo15 = [
-      { hora: "12:00", fin: "13:14", titulo: "Anime: Dragon Ball", categoria: "animacion" },
-      { hora: "13:14", fin: "14:29", titulo: "Anime: Mazinger Z", categoria: "animacion" },
-      { hora: "14:29", fin: "17:26", titulo: "Película: 100 Grados Bajo Cero", categoria: "pelicula" },
-      { hora: "17:26", fin: "19:10", titulo: "Especial Concert: Ministry of Sound Classical, live from Sidney", categoria: "musical" },
-      { hora: "19:10", fin: "19:56", titulo: "Santa Misa", categoria: "religioso" },
-      { hora: "19:56", fin: "20:29", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
-      { hora: "20:29", fin: "21:36", titulo: "Series Temporada 1: Hannah Montana", categoria: "serie" },
-      { hora: "21:36", fin: "23:02", titulo: "Película: Tierra Marciana (Tormenta Letal)", categoria: "pelicula" },
-      { hora: "23:02", fin: "16:59", titulo: "Fin de la Programación", categoria: "general" }
-    ];
-
+    /* Programación extraída exactamente del video para Lunes, Martes y Miércoles */
     var programacionLunes16 = [
       { hora: "17:00", fin: "18:02", titulo: "Especial : Cyndi Lauper", categoria: "musical" },
       { hora: "18:02", fin: "18:41", titulo: "Santo Rosario \"Misterios Gozosos\"", categoria: "religioso" },
@@ -1104,7 +1092,16 @@
       { hora: "21:56", fin: "15:59", titulo: "Fin de la Programación", categoria: "general" }
     ];
 
-    var diaActual = "martes17";
+    var programacionMiercoles18 = [
+      { hora: "16:00", fin: "17:57", titulo: "Especial Concert : Michael Jackson - Dangerous World Tour - Buenos Aires Argentina", categoria: "musical" },
+      { hora: "17:57", fin: "18:30", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
+      { hora: "18:30", fin: "19:25", titulo: "Serie Temporada 2: Juegos de Tronos", categoria: "serie" },
+      { hora: "19:25", fin: "21:15", titulo: "Película: Cómo ser Soltera", categoria: "pelicula" },
+      { hora: "21:15", fin: "21:52", titulo: "Series : La Tierra Prometida", categoria: "serie" },
+      { hora: "21:52", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" }
+    ];
+
+    var diaActual = "miercoles18";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1141,17 +1138,17 @@
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnDom = document.getElementById("btnDomingo15");
       var btnLun = document.getElementById("btnLunes16");
       var btnMar = document.getElementById("btnMartes17");
+      var btnMie = document.getElementById("btnMiercoles18");
 
-      if (btnDom) btnDom.className = "tab-btn" + (dia === "domingo15" ? " active" : "");
       if (btnLun) btnLun.className = "tab-btn" + (dia === "lunes16" ? " active" : "");
       if (btnMar) btnMar.className = "tab-btn" + (dia === "martes17" ? " active" : "");
+      if (btnMie) btnMie.className = "tab-btn" + (dia === "miercoles18" ? " active" : "");
 
-      var lista = programacionMartes17;
-      if (dia === "domingo15") lista = programacionDomingo15;
+      var lista = programacionMiercoles18;
       if (dia === "lunes16") lista = programacionLunes16;
+      if (dia === "martes17") lista = programacionMartes17;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
@@ -1160,7 +1157,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "domingo15" && diaSemana === 0) || (dia === "lunes16" && diaSemana === 1) || (dia === "martes17" && diaSemana === 2);
+      var esHoy = (dia === "lunes16" && diaSemana === 1) || (dia === "martes17" && diaSemana === 2) || (dia === "miercoles18" && diaSemana === 3);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1176,7 +1173,7 @@
           }
         }
 
-        var esFinTransmision = item.titulo.includes("Fin de la Programación");
+        var esFinTransmision = item.titulo.includes("Fin de la Programación") || item.titulo.includes("Fin de la Transmisión");
 
         var cardClass = "schedule-card";
         var tagHtml = "";
@@ -1255,12 +1252,12 @@
 
       iniciarContadorVistas();
       iniciarPlayer();
-      mostrarDia('martes17');
+      mostrarDia('miercoles18');
       
       setInterval(function() {
-        if (diaActual === 'domingo15') mostrarDia('domingo15');
-        else if (diaActual === 'lunes16') mostrarDia('lunes16');
+        if (diaActual === 'lunes16') mostrarDia('lunes16');
         else if (diaActual === 'martes17') mostrarDia('martes17');
+        else if (diaActual === 'miercoles18') mostrarDia('miercoles18');
       }, 60000);
     };
   </script>
