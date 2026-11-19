@@ -931,13 +931,6 @@
       <div class="weather-days-grid" id="gridPronosticoDinamico">
         <div class="weather-card">
           <div class="weather-card-info">
-            <span class="weather-card-day">Miércoles, 18 Nov</span>
-            <span class="weather-card-desc">Despejado</span>
-          </div>
-          <span class="weather-card-temps">33°C / 22°C</span>
-        </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
             <span class="weather-card-day">Jueves, 19 Nov</span>
             <span class="weather-card-desc">Parcialmente Nublado</span>
           </div>
@@ -950,6 +943,13 @@
           </div>
           <span class="weather-card-temps">34°C / 22°C</span>
         </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Sábado, 21 Nov</span>
+            <span class="weather-card-desc">Caluroso</span>
+          </div>
+          <span class="weather-card-temps">35°C / 23°C</span>
+        </div>
       </div>
     </div>
 
@@ -960,14 +960,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn" id="btnMiercoles18" onclick="mostrarDia('miercoles18')">
-            <i class="fas fa-calendar-day"></i> Miércoles, 18 Noviembre 2026
-          </button>
-          <button class="tab-btn active" id="btnJueves19" onclick="mostrarDia('jueves19')">
+          <button class="tab-btn" id="btnJueves19" onclick="mostrarDia('jueves19')">
             <i class="fas fa-calendar-day"></i> Jueves, 19 Noviembre 2026
           </button>
           <button class="tab-btn" id="btnViernes20" onclick="mostrarDia('viernes20')">
             <i class="fas fa-calendar-day"></i> Viernes, 20 Noviembre 2026
+          </button>
+          <button class="tab-btn active" id="btnSabado21" onclick="mostrarDia('sabado21')">
+            <i class="fas fa-calendar-day"></i> Sábado, 21 Noviembre 2026
           </button>
         </div>
       </div>
@@ -1073,16 +1073,7 @@
       }, 12000);
     }
 
-    /* Programación extraída exactamente de los videos para Miércoles, Jueves y Viernes */
-    var programacionMiercoles18 = [
-      { hora: "16:00", fin: "17:57", titulo: "Especial Concert : Michael Jackson - Dangerous World Tour - Buenos Aires Argentina", categoria: "musical" },
-      { hora: "17:57", fin: "18:30", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
-      { hora: "18:30", fin: "19:25", titulo: "Serie Temporada 2: Juegos de Tronos", categoria: "serie" },
-      { hora: "19:25", fin: "21:15", titulo: "Película: Cómo ser Soltera", categoria: "pelicula" },
-      { hora: "21:15", fin: "21:52", titulo: "Series : La Tierra Prometida", categoria: "serie" },
-      { hora: "21:52", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" }
-    ];
-
+    /* Programación extraída exactamente de los videos para Jueves 19, Viernes 20 y Sábado 21 */
     var programacionJueves19 = [
       { hora: "15:00", fin: "17:00", titulo: "Especial En Vivo : Dj Victor Aguero - VideoClips", categoria: "musical" },
       { hora: "17:00", fin: "18:00", titulo: "Especial: Dr Alban", categoria: "musical" },
@@ -1095,14 +1086,25 @@
 
     var programacionViernes20 = [
       { hora: "16:00", fin: "18:16", titulo: "Especial Concert : Paul van Dyk", categoria: "musical" },
-      { hora: "18:16", fin: "18:49", titulo: "Santo Rosario \"Misterios Dolorosos\"", categoria: "religioso" },
+      { hora: "18:16", fin: "18:49", titulo: "Santo Rosario “Misterios Dolorosos”", categoria: "religioso" },
       { hora: "18:49", fin: "19:44", titulo: "Serie Temporada 2: Juegos de Tronos", categoria: "serie" },
       { hora: "19:44", fin: "22:14", titulo: "Película: 666 El Hijo", categoria: "pelicula" },
       { hora: "22:14", fin: "22:52", titulo: "Series : La Tierra Prometida", categoria: "serie" },
       { hora: "22:52", fin: "11:59", titulo: "Fin de la Transmisión", categoria: "general" }
     ];
 
-    var diaActual = "jueves19";
+    var programacionSabado21 = [
+      { hora: "12:00", fin: "13:05", titulo: "Serie Comedia: Los Tres Chiflados", categoria: "serie" },
+      { hora: "13:05", fin: "13:50", titulo: "Anime: Los Thundercast", categoria: "animacion" },
+      { hora: "13:50", fin: "16:30", titulo: "Película: Elvis", categoria: "pelicula" },
+      { hora: "16:30", fin: "17:36", titulo: "Especial Concert: La Oreja de Van Gogh", categoria: "musical" },
+      { hora: "17:36", fin: "18:14", titulo: "Santo Rosario \"Misterios Gozosos\"", categoria: "religioso" },
+      { hora: "18:14", fin: "19:21", titulo: "Series Temporada 2 : Hanna Montana", categoria: "serie" },
+      { hora: "19:21", fin: "22:11", titulo: "Película: 40 Días y Noches", categoria: "pelicula" },
+      { hora: "22:11", fin: "11:59", titulo: "Fin de la Transmisión", categoria: "general" }
+    ];
+
+    var diaActual = "sabado21";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1139,16 +1141,16 @@
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnMie = document.getElementById("btnMiercoles18");
       var btnJue = document.getElementById("btnJueves19");
       var btnVie = document.getElementById("btnViernes20");
+      var btnSab = document.getElementById("btnSabado21");
 
-      if (btnMie) btnMie.className = "tab-btn" + (dia === "miercoles18" ? " active" : "");
       if (btnJue) btnJue.className = "tab-btn" + (dia === "jueves19" ? " active" : "");
       if (btnVie) btnVie.className = "tab-btn" + (dia === "viernes20" ? " active" : "");
+      if (btnSab) btnSab.className = "tab-btn" + (dia === "sabado21" ? " active" : "");
 
-      var lista = programacionJueves19;
-      if (dia === "miercoles18") lista = programacionMiercoles18;
+      var lista = programacionSabado21;
+      if (dia === "jueves19") lista = programacionJueves19;
       if (dia === "viernes20") lista = programacionViernes20;
 
       var contenedor = document.getElementById("grillaProgramacion");
@@ -1158,7 +1160,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "miercoles18" && diaSemana === 3) || (dia === "jueves19" && diaSemana === 4) || (dia === "viernes20" && diaSemana === 5);
+      var esHoy = (dia === "jueves19" && diaSemana === 4) || (dia === "viernes20" && diaSemana === 5) || (dia === "sabado21" && diaSemana === 6);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1253,12 +1255,12 @@
 
       iniciarContadorVistas();
       iniciarPlayer();
-      mostrarDia('jueves19');
+      mostrarDia('sabado21');
       
       setInterval(function() {
-        if (diaActual === 'miercoles18') mostrarDia('miercoles18');
-        else if (diaActual === 'jueves19') mostrarDia('jueves19');
+        if (diaActual === 'jueves19') mostrarDia('jueves19');
         else if (diaActual === 'viernes20') mostrarDia('viernes20');
+        else if (diaActual === 'sabado21') mostrarDia('sabado21');
       }, 60000);
     };
   </script>
