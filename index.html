@@ -931,13 +931,6 @@
       <div class="weather-days-grid" id="gridPronosticoDinamico">
         <div class="weather-card">
           <div class="weather-card-info">
-            <span class="weather-card-day">Jueves, 19 Nov</span>
-            <span class="weather-card-desc">Parcialmente Nublado</span>
-          </div>
-          <span class="weather-card-temps">32°C / 21°C</span>
-        </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
             <span class="weather-card-day">Viernes, 20 Nov</span>
             <span class="weather-card-desc">Soleado</span>
           </div>
@@ -950,6 +943,13 @@
           </div>
           <span class="weather-card-temps">35°C / 23°C</span>
         </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Domingo, 22 Nov</span>
+            <span class="weather-card-desc">Parcialmente Nublado</span>
+          </div>
+          <span class="weather-card-temps">31°C / 21°C</span>
+        </div>
       </div>
     </div>
 
@@ -960,14 +960,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn" id="btnJueves19" onclick="mostrarDia('jueves19')">
-            <i class="fas fa-calendar-day"></i> Jueves, 19 Noviembre 2026
-          </button>
           <button class="tab-btn" id="btnViernes20" onclick="mostrarDia('viernes20')">
             <i class="fas fa-calendar-day"></i> Viernes, 20 Noviembre 2026
           </button>
-          <button class="tab-btn active" id="btnSabado21" onclick="mostrarDia('sabado21')">
+          <button class="tab-btn" id="btnSabado21" onclick="mostrarDia('sabado21')">
             <i class="fas fa-calendar-day"></i> Sábado, 21 Noviembre 2026
+          </button>
+          <button class="tab-btn active" id="btnDomingo22" onclick="mostrarDia('domingo22')">
+            <i class="fas fa-calendar-day"></i> Domingo, 22 Noviembre 2026
           </button>
         </div>
       </div>
@@ -1073,17 +1073,6 @@
       }, 12000);
     }
 
-    /* Programación extraída exactamente de los videos para Jueves 19, Viernes 20 y Sábado 21 */
-    var programacionJueves19 = [
-      { hora: "15:00", fin: "17:00", titulo: "Especial En Vivo : Dj Victor Aguero - VideoClips", categoria: "musical" },
-      { hora: "17:00", fin: "18:00", titulo: "Especial: Dr Alban", categoria: "musical" },
-      { hora: "18:00", fin: "18:38", titulo: "Santo Rosario \"Misterios Luminosos\"", categoria: "religioso" },
-      { hora: "18:38", fin: "19:32", titulo: "Serie Temporada 2 : Juegos de Tronos", categoria: "serie" },
-      { hora: "19:32", fin: "21:37", titulo: "Película : Pinocho", categoria: "pelicula" },
-      { hora: "21:37", fin: "22:13", titulo: "Series : La Tierra Prometida", categoria: "serie" },
-      { hora: "22:13", fin: "14:59", titulo: "Fin de la Transmisión", categoria: "general" }
-    ];
-
     var programacionViernes20 = [
       { hora: "16:00", fin: "18:16", titulo: "Especial Concert : Paul van Dyk", categoria: "musical" },
       { hora: "18:16", fin: "18:49", titulo: "Santo Rosario “Misterios Dolorosos”", categoria: "religioso" },
@@ -1104,7 +1093,19 @@
       { hora: "22:11", fin: "11:59", titulo: "Fin de la Transmisión", categoria: "general" }
     ];
 
-    var diaActual = "sabado21";
+    var programacionDomingo22 = [
+      { hora: "12:00", fin: "13:14", titulo: "Anime: Dragon Ball", categoria: "animacion" },
+      { hora: "13:14", fin: "14:29", titulo: "Anime: Mazinger Z", categoria: "animacion" },
+      { hora: "14:29", fin: "16:01", titulo: "Película: El Lado Salvaje", categoria: "pelicula" },
+      { hora: "16:01", fin: "17:34", titulo: "Especial Concert: Linkin Park", categoria: "musical" },
+      { hora: "17:34", fin: "18:30", titulo: "Santa Misa", categoria: "religioso" },
+      { hora: "18:30", fin: "19:02", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
+      { hora: "19:02", fin: "20:10", titulo: "Series Temporada 1 : Hannah Montana", categoria: "serie" },
+      { hora: "20:10", fin: "21:57", titulo: "Película: Regresión", categoria: "pelicula" },
+      { hora: "21:57", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" }
+    ];
+
+    var diaActual = "domingo22";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1141,17 +1142,17 @@
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnJue = document.getElementById("btnJueves19");
       var btnVie = document.getElementById("btnViernes20");
       var btnSab = document.getElementById("btnSabado21");
+      var btnDom = document.getElementById("btnDomingo22");
 
-      if (btnJue) btnJue.className = "tab-btn" + (dia === "jueves19" ? " active" : "");
       if (btnVie) btnVie.className = "tab-btn" + (dia === "viernes20" ? " active" : "");
       if (btnSab) btnSab.className = "tab-btn" + (dia === "sabado21" ? " active" : "");
+      if (btnDom) btnDom.className = "tab-btn" + (dia === "domingo22" ? " active" : "");
 
-      var lista = programacionSabado21;
-      if (dia === "jueves19") lista = programacionJueves19;
+      var lista = programacionDomingo22;
       if (dia === "viernes20") lista = programacionViernes20;
+      if (dia === "sabado21") lista = programacionSabado21;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
@@ -1160,7 +1161,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "jueves19" && diaSemana === 4) || (dia === "viernes20" && diaSemana === 5) || (dia === "sabado21" && diaSemana === 6);
+      var esHoy = (dia === "viernes20" && diaSemana === 5) || (dia === "sabado21" && diaSemana === 6) || (dia === "domingo22" && diaSemana === 0);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1255,12 +1256,12 @@
 
       iniciarContadorVistas();
       iniciarPlayer();
-      mostrarDia('sabado21');
+      mostrarDia('domingo22');
       
       setInterval(function() {
-        if (diaActual === 'jueves19') mostrarDia('jueves19');
-        else if (diaActual === 'viernes20') mostrarDia('viernes20');
+        if (diaActual === 'viernes20') mostrarDia('viernes20');
         else if (diaActual === 'sabado21') mostrarDia('sabado21');
+        else if (diaActual === 'domingo22') mostrarDia('domingo22');
       }, 60000);
     };
   </script>
