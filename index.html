@@ -931,13 +931,6 @@
       <div class="weather-days-grid" id="gridPronosticoDinamico">
         <div class="weather-card">
           <div class="weather-card-info">
-            <span class="weather-card-day">Domingo, 22 Nov</span>
-            <span class="weather-card-desc">Parcialmente Nublado</span>
-          </div>
-          <span class="weather-card-temps">31°C / 21°C</span>
-        </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
             <span class="weather-card-day">Lunes, 23 Nov</span>
             <span class="weather-card-desc">Soleado</span>
           </div>
@@ -950,6 +943,13 @@
           </div>
           <span class="weather-card-temps">32°C / 21°C</span>
         </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Miércoles, 25 Nov</span>
+            <span class="weather-card-desc">Soleado</span>
+          </div>
+          <span class="weather-card-temps">34°C / 22°C</span>
+        </div>
       </div>
     </div>
 
@@ -960,14 +960,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn" id="btnDomingo22" onclick="mostrarDia('domingo22')">
-            <i class="fas fa-calendar-day"></i> Domingo, 22 Noviembre 2026
-          </button>
           <button class="tab-btn" id="btnLunes23" onclick="mostrarDia('lunes23')">
             <i class="fas fa-calendar-day"></i> Lunes, 23 Noviembre 2026
           </button>
-          <button class="tab-btn active" id="btnMartes24" onclick="mostrarDia('martes24')">
+          <button class="tab-btn" id="btnMartes24" onclick="mostrarDia('martes24')">
             <i class="fas fa-calendar-day"></i> Martes, 24 Noviembre 2026
+          </button>
+          <button class="tab-btn active" id="btnMiercoles25" onclick="mostrarDia('miercoles25')">
+            <i class="fas fa-calendar-day"></i> Miércoles, 25 Noviembre 2026
           </button>
         </div>
       </div>
@@ -1073,18 +1073,6 @@
       }, 12000);
     }
 
-    var programacionDomingo22 = [
-      { hora: "12:00", fin: "13:14", titulo: "Anime: Dragon Ball", categoria: "animacion" },
-      { hora: "13:14", fin: "14:29", titulo: "Anime: Mazinger Z", categoria: "animacion" },
-      { hora: "14:29", fin: "16:01", titulo: "Película: El Lado Salvaje", categoria: "pelicula" },
-      { hora: "16:01", fin: "17:34", titulo: "Especial Concert: Linkin Park", categoria: "musical" },
-      { hora: "17:34", fin: "18:30", titulo: "Santa Misa", categoria: "religioso" },
-      { hora: "18:30", fin: "19:02", titulo: "Santo Rosario \"Misterios Gloriosos\"", categoria: "religioso" },
-      { hora: "19:02", fin: "20:10", titulo: "Series Temporada 1 : Hannah Montana", categoria: "serie" },
-      { hora: "20:10", fin: "21:57", titulo: "Película: Regresión", categoria: "pelicula" },
-      { hora: "21:57", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" }
-    ];
-
     var programacionLunes23 = [
       { hora: "16:00", fin: "18:01", titulo: "Especial Concert : Vilma Palma E Vampiros", categoria: "musical" },
       { hora: "18:01", fin: "18:39", titulo: "Santo Rosario “Misterios Gozosos”", categoria: "religioso" },
@@ -1103,7 +1091,16 @@
       { hora: "22:20", fin: "16:29", titulo: "Fin de la Transmisión", categoria: "general" }
     ];
 
-    var diaActual = "martes24";
+    var programacionMiercoles25 = [
+      { hora: "16:30", fin: "17:50", titulo: "Especial Concert : T.A.T.U", categoria: "musical" },
+      { hora: "17:50", fin: "18:23", titulo: "Santo Rosario “Misterios Gloriosos”", categoria: "religioso" },
+      { hora: "18:23", fin: "19:20", titulo: "Serie Temporada 3: Juegos de Tronos", categoria: "serie" },
+      { hora: "19:20", fin: "21:10", titulo: "Pelicula: Milagros del Cielo", categoria: "pelicula" },
+      { hora: "21:10", fin: "21:48", titulo: "Series : La Tierra Prometida", categoria: "serie" },
+      { hora: "21:48", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" }
+    ];
+
+    var diaActual = "miercoles25";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1140,17 +1137,17 @@
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnDom = document.getElementById("btnDomingo22");
       var btnLun = document.getElementById("btnLunes23");
       var btnMar = document.getElementById("btnMartes24");
+      var btnMie = document.getElementById("btnMiercoles25");
 
-      if (btnDom) btnDom.className = "tab-btn" + (dia === "domingo22" ? " active" : "");
       if (btnLun) btnLun.className = "tab-btn" + (dia === "lunes23" ? " active" : "");
       if (btnMar) btnMar.className = "tab-btn" + (dia === "martes24" ? " active" : "");
+      if (btnMie) btnMie.className = "tab-btn" + (dia === "miercoles25" ? " active" : "");
 
-      var lista = programacionMartes24;
-      if (dia === "domingo22") lista = programacionDomingo22;
+      var lista = programacionMiercoles25;
       if (dia === "lunes23") lista = programacionLunes23;
+      if (dia === "martes24") lista = programacionMartes24;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
@@ -1159,7 +1156,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "domingo22" && diaSemana === 0) || (dia === "lunes23" && diaSemana === 1) || (dia === "martes24" && diaSemana === 2);
+      var esHoy = (dia === "lunes23" && diaSemana === 1) || (dia === "martes24" && diaSemana === 2) || (dia === "miercoles25" && diaSemana === 3);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1254,12 +1251,12 @@
 
       iniciarContadorVistas();
       iniciarPlayer();
-      mostrarDia('martes24');
+      mostrarDia('miercoles25');
       
       setInterval(function() {
-        if (diaActual === 'domingo22') mostrarDia('domingo22');
-        else if (diaActual === 'lunes23') mostrarDia('lunes23');
+        if (diaActual === 'lunes23') mostrarDia('lunes23');
         else if (diaActual === 'martes24') mostrarDia('martes24');
+        else if (diaActual === 'miercoles25') mostrarDia('miercoles25');
       }, 60000);
     };
   </script>
