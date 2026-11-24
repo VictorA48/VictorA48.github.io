@@ -931,13 +931,6 @@
       <div class="weather-days-grid" id="gridPronosticoDinamico">
         <div class="weather-card">
           <div class="weather-card-info">
-            <span class="weather-card-day">Lunes, 23 Nov</span>
-            <span class="weather-card-desc">Soleado</span>
-          </div>
-          <span class="weather-card-temps">33°C / 22°C</span>
-        </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
             <span class="weather-card-day">Martes, 24 Nov</span>
             <span class="weather-card-desc">Parcialmente Nublado</span>
           </div>
@@ -950,6 +943,13 @@
           </div>
           <span class="weather-card-temps">34°C / 22°C</span>
         </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Jueves, 26 Nov</span>
+            <span class="weather-card-desc">Soleado</span>
+          </div>
+          <span class="weather-card-temps">33°C / 22°C</span>
+        </div>
       </div>
     </div>
 
@@ -960,14 +960,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn" id="btnLunes23" onclick="mostrarDia('lunes23')">
-            <i class="fas fa-calendar-day"></i> Lunes, 23 Noviembre 2026
-          </button>
           <button class="tab-btn" id="btnMartes24" onclick="mostrarDia('martes24')">
             <i class="fas fa-calendar-day"></i> Martes, 24 Noviembre 2026
           </button>
-          <button class="tab-btn active" id="btnMiercoles25" onclick="mostrarDia('miercoles25')">
+          <button class="tab-btn" id="btnMiercoles25" onclick="mostrarDia('miercoles25')">
             <i class="fas fa-calendar-day"></i> Miércoles, 25 Noviembre 2026
+          </button>
+          <button class="tab-btn active" id="btnJueves26" onclick="mostrarDia('jueves26')">
+            <i class="fas fa-calendar-day"></i> Jueves, 26 Noviembre 2026
           </button>
         </div>
       </div>
@@ -1073,15 +1073,6 @@
       }, 12000);
     }
 
-    var programacionLunes23 = [
-      { hora: "16:00", fin: "18:01", titulo: "Especial Concert : Vilma Palma E Vampiros", categoria: "musical" },
-      { hora: "18:01", fin: "18:39", titulo: "Santo Rosario “Misterios Gozosos”", categoria: "religioso" },
-      { hora: "18:39", fin: "19:42", titulo: "Serie Temporada 2: Juegos de Tronos", categoria: "serie" },
-      { hora: "19:42", fin: "21:12", titulo: "Pelicula: El Cataclismo", categoria: "pelicula" },
-      { hora: "21:12", fin: "21:50", titulo: "Series : La Tierra Prometida", categoria: "serie" },
-      { hora: "21:50", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" }
-    ];
-
     var programacionMartes24 = [
       { hora: "16:00", fin: "18:12", titulo: "Especial Concert : Phil Collins", categoria: "musical" },
       { hora: "18:12", fin: "18:46", titulo: "Santo Rosario “Misterios Dolorosos”", categoria: "religioso" },
@@ -1100,7 +1091,16 @@
       { hora: "21:48", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" }
     ];
 
-    var diaActual = "miercoles25";
+    var programacionJueves26 = [
+      { hora: "16:00", fin: "17:53", titulo: "Especial Concert : Dj Victor Aguero - Especial Jamiroquai", categoria: "musical" },
+      { hora: "17:53", fin: "18:31", titulo: "Santo Rosario “Misterios Luminosos”", categoria: "religioso" },
+      { hora: "18:31", fin: "19:24", titulo: "Serie Temporada 3: Juegos de Tronos", categoria: "serie" },
+      { hora: "19:24", fin: "21:40", titulo: "Pelicula: Uri (Fuerzas Especiales)", categoria: "pelicula" },
+      { hora: "21:40", fin: "22:32", titulo: "Series : La Tierra Prometida", categoria: "serie" },
+      { hora: "22:32", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" }
+    ];
+
+    var diaActual = "jueves26";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1137,17 +1137,17 @@
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnLun = document.getElementById("btnLunes23");
       var btnMar = document.getElementById("btnMartes24");
       var btnMie = document.getElementById("btnMiercoles25");
+      var btnJue = document.getElementById("btnJueves26");
 
-      if (btnLun) btnLun.className = "tab-btn" + (dia === "lunes23" ? " active" : "");
       if (btnMar) btnMar.className = "tab-btn" + (dia === "martes24" ? " active" : "");
       if (btnMie) btnMie.className = "tab-btn" + (dia === "miercoles25" ? " active" : "");
+      if (btnJue) btnJue.className = "tab-btn" + (dia === "jueves26" ? " active" : "");
 
-      var lista = programacionMiercoles25;
-      if (dia === "lunes23") lista = programacionLunes23;
+      var lista = programacionJueves26;
       if (dia === "martes24") lista = programacionMartes24;
+      if (dia === "miercoles25") lista = programacionMiercoles25;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
@@ -1156,7 +1156,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "lunes23" && diaSemana === 1) || (dia === "martes24" && diaSemana === 2) || (dia === "miercoles25" && diaSemana === 3);
+      var esHoy = (dia === "martes24" && diaSemana === 2) || (dia === "miercoles25" && diaSemana === 3) || (dia === "jueves26" && diaSemana === 4);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1251,12 +1251,12 @@
 
       iniciarContadorVistas();
       iniciarPlayer();
-      mostrarDia('miercoles25');
+      mostrarDia('jueves26');
       
       setInterval(function() {
-        if (diaActual === 'lunes23') mostrarDia('lunes23');
-        else if (diaActual === 'martes24') mostrarDia('martes24');
+        if (diaActual === 'martes24') mostrarDia('martes24');
         else if (diaActual === 'miercoles25') mostrarDia('miercoles25');
+        else if (diaActual === 'jueves26') mostrarDia('jueves26');
       }, 60000);
     };
   </script>
