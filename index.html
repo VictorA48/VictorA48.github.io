@@ -441,6 +441,193 @@
       transform: scale(1.02);
     }
 
+    .encuesta-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 11, 17, 0.78);
+      backdrop-filter: blur(6px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      padding: 18px;
+    }
+
+    .encuesta-modal-card {
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: #161b26;
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 22px 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .encuesta-modal-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .encuesta-modal-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .encuesta-close-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: #fff;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .encuesta-pregunta-texto {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.4;
+    }
+
+    .encuesta-opciones-lista {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .encuesta-opcion-btn {
+      width: 100%;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 11px 14px;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .encuesta-opcion-btn:hover {
+      border-color: var(--primary);
+      background: rgba(0, 242, 254, 0.08);
+    }
+
+    .encuesta-opcion-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .encuesta-barra-bg {
+      width: 100%;
+      height: 7px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .encuesta-barra-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 99px;
+      transition: width 0.3s ease;
+    }
+
+    .encuesta-footer-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .encuesta-admin-controls {
+      display: none;
+      gap: 8px;
+    }
+
+    .encuesta-small-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: var(--primary);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .encuesta-config-box {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .encuesta-config-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .encuesta-opciones-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .encuesta-opcion-input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .encuesta-opcion-input-row .form-input {
+      flex: 1;
+    }
+
+    .encuesta-del-op-btn {
+      background: rgba(255, 42, 95, 0.14);
+      border: 1px solid rgba(255, 42, 95, 0.4);
+      color: #ff5e82;
+      width: 34px;
+      height: 36px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .encuesta-save-btn {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #080b11;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
     .card-panel {
       background: var(--card-bg);
       backdrop-filter: blur(12px);
@@ -895,12 +1082,45 @@
       </div>
 
       <div class="action-buttons-right">
-        <button class="btn-custom-action" onclick="alert('¡Próximamente encuestas interactivas activas!')">
+        <button class="btn-custom-action" onclick="abrirEncuesta()">
           <i class="fas fa-poll"></i> Encuesta
         </button>
         <button class="btn-fullscreen" onclick="togglePantallaCompleta()">
           <i class="fas fa-expand"></i> Pantalla Completa
         </button>
+      </div>
+    </div>
+
+    <div class="encuesta-modal-backdrop" id="encuestaModal" onclick="cerrarEncuestaSiFuera(event)">
+      <div class="encuesta-modal-card">
+        <div class="encuesta-modal-top">
+          <div class="encuesta-modal-title">
+            <i class="fas fa-poll"></i> Encuesta en Vivo UTV
+          </div>
+          <button class="encuesta-close-btn" onclick="cerrarEncuesta()">&times;</button>
+        </div>
+        <div class="encuesta-pregunta-texto" id="encuestaPreguntaTexto"></div>
+        <div class="encuesta-opciones-lista" id="encuestaOpcionesLista"></div>
+        <div class="encuesta-footer-meta">
+          <span id="encuestaTotalVotos">0 votos</span>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="encuesta-admin-controls" id="encuestaAdminControls">
+              <button class="encuesta-small-btn" onclick="alternarConfigEncuesta()">Configurar Encuesta</button>
+              <button class="encuesta-small-btn" onclick="reiniciarVotosEncuesta()">Reiniciar Votos</button>
+            </div>
+            <button class="encuesta-small-btn" id="btnModoAdminEncuesta" onclick="activarModoAdminEncuesta()">Admin</button>
+          </div>
+        </div>
+        <div class="encuesta-config-box" id="encuestaConfigBox">
+          <span class="encuesta-config-label">Pregunta de la encuesta:</span>
+          <input type="text" id="inputPreguntaEncuesta" class="form-input" placeholder="Escribe tu pregunta..." />
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+            <span class="encuesta-config-label">Opciones para votar:</span>
+            <button type="button" class="encuesta-small-btn" onclick="agregarCampoOpcionEncuesta('')">+ Agregar opción</button>
+          </div>
+          <div class="encuesta-opciones-inputs" id="inputOpcionesContainer"></div>
+          <button class="encuesta-save-btn" onclick="guardarNuevaEncuesta()">Guardar y Publicar Encuesta</button>
+        </div>
       </div>
     </div>
 
@@ -931,13 +1151,6 @@
       <div class="weather-days-grid" id="gridPronosticoDinamico">
         <div class="weather-card">
           <div class="weather-card-info">
-            <span class="weather-card-day">Miércoles, 25 Nov</span>
-            <span class="weather-card-desc">Soleado</span>
-          </div>
-          <span class="weather-card-temps">34°C / 22°C</span>
-        </div>
-        <div class="weather-card">
-          <div class="weather-card-info">
             <span class="weather-card-day">Jueves, 26 Nov</span>
             <span class="weather-card-desc">Soleado</span>
           </div>
@@ -950,6 +1163,13 @@
           </div>
           <span class="weather-card-temps">32°C / 21°C</span>
         </div>
+        <div class="weather-card">
+          <div class="weather-card-info">
+            <span class="weather-card-day">Sábado, 28 Nov</span>
+            <span class="weather-card-desc">Caluroso</span>
+          </div>
+          <span class="weather-card-temps">35°C / 23°C</span>
+        </div>
       </div>
     </div>
 
@@ -960,14 +1180,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn" id="btnMiercoles25" onclick="mostrarDia('miercoles25')">
-            <i class="fas fa-calendar-day"></i> Miércoles, 25 Noviembre 2026
-          </button>
           <button class="tab-btn" id="btnJueves26" onclick="mostrarDia('jueves26')">
             <i class="fas fa-calendar-day"></i> Jueves, 26 Noviembre 2026
           </button>
-          <button class="tab-btn active" id="btnViernes27" onclick="mostrarDia('viernes27')">
+          <button class="tab-btn" id="btnViernes27" onclick="mostrarDia('viernes27')">
             <i class="fas fa-calendar-day"></i> Viernes, 27 Noviembre 2026
+          </button>
+          <button class="tab-btn active" id="btnSabado28" onclick="mostrarDia('sabado28')">
+            <i class="fas fa-calendar-day"></i> Sábado, 28 Noviembre 2026
           </button>
         </div>
       </div>
@@ -981,6 +1201,247 @@
   </div>
 
   <script class="notranslate">
+    var CLAVE_ENCUESTA = "utv_encuesta_activa_v1";
+    var CLAVE_ADMIN_ENCUESTA = "utv2026";
+    var adminEncuestaHabilitado = false;
+    var encuestaPorDefecto = {
+      pregunta: "¿Qué bloque querés ver en el próximo especial de UTV?",
+      opciones: [
+        { texto: "Especial Concert / Electrónica", votos: 0 },
+        { texto: "Película de Acción / Aventura", votos: 0 },
+        { texto: "Series y Clásicos", votos: 0 }
+      ]
+    };
+
+    function cargarEncuesta() {
+      try {
+        var guardada = localStorage.getItem(CLAVE_ENCUESTA);
+        if (guardada) {
+          var parsed = JSON.parse(guardada);
+          if (parsed && parsed.pregunta && Array.isArray(parsed.opciones) && parsed.opciones.length > 0) {
+            return parsed;
+          }
+        }
+      } catch (e) {}
+      return JSON.parse(JSON.stringify(encuestaPorDefecto));
+    }
+
+    function guardarEncuestaStorage(datos) {
+      try {
+        localStorage.setItem(CLAVE_ENCUESTA, JSON.stringify(datos));
+      } catch (e) {}
+    }
+
+    function actualizarVisibilidadAdminEncuesta() {
+      var controls = document.getElementById("encuestaAdminControls");
+      var btnAdmin = document.getElementById("btnModoAdminEncuesta");
+      var configBox = document.getElementById("encuestaConfigBox");
+
+      if (controls) {
+        controls.style.display = adminEncuestaHabilitado ? "flex" : "none";
+      }
+      if (btnAdmin) {
+        btnAdmin.textContent = adminEncuestaHabilitado ? "Salir Admin" : "Admin";
+      }
+      if (!adminEncuestaHabilitado && configBox) {
+        configBox.style.display = "none";
+      }
+    }
+
+    function activarModoAdminEncuesta() {
+      if (adminEncuestaHabilitado) {
+        adminEncuestaHabilitado = false;
+        actualizarVisibilidadAdminEncuesta();
+        return;
+      }
+
+      var clave = prompt("Ingresá la clave de administrador para configurar la encuesta:");
+      if (clave === null) return;
+      if (clave === CLAVE_ADMIN_ENCUESTA) {
+        adminEncuestaHabilitado = true;
+        actualizarVisibilidadAdminEncuesta();
+      } else {
+        alert("Clave incorrecta.");
+      }
+    }
+
+    function renderizarEncuesta() {
+      var datos = cargarEncuesta();
+      var elPregunta = document.getElementById("encuestaPreguntaTexto");
+      var elLista = document.getElementById("encuestaOpcionesLista");
+      var elTotal = document.getElementById("encuestaTotalVotos");
+
+      if (!elPregunta || !elLista || !elTotal) return;
+
+      actualizarVisibilidadAdminEncuesta();
+      elPregunta.textContent = datos.pregunta;
+      elLista.innerHTML = "";
+
+      var totalVotos = 0;
+      for (var i = 0; i < datos.opciones.length; i++) {
+        totalVotos += (parseInt(datos.opciones[i].votos, 10) || 0);
+      }
+
+      for (var j = 0; j < datos.opciones.length; j++) {
+        var op = datos.opciones[j];
+        var votosOp = parseInt(op.votos, 10) || 0;
+        var pct = totalVotos > 0 ? Math.round((votosOp / totalVotos) * 100) : 0;
+
+        var btn = document.createElement("button");
+        btn.className = "encuesta-opcion-btn";
+        btn.setAttribute("data-idx", j);
+        btn.onclick = function() {
+          votarEncuesta(parseInt(this.getAttribute("data-idx"), 10));
+        };
+
+        var safeTexto = String(op.texto).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        btn.innerHTML =
+          '<div class="encuesta-opcion-row">' +
+            '<span>' + safeTexto + '</span>' +
+            '<span>' + votosOp + ' (' + pct + '%)</span>' +
+          '</div>' +
+          '<div class="encuesta-barra-bg">' +
+            '<div class="encuesta-barra-fill" style="width: ' + pct + '%;"></div>' +
+          '</div>';
+
+        elLista.appendChild(btn);
+      }
+
+      elTotal.textContent = totalVotos + (totalVotos === 1 ? " voto" : " votos");
+    }
+
+    function votarEncuesta(idx) {
+      var datos = cargarEncuesta();
+      if (!datos.opciones[idx]) return;
+      datos.opciones[idx].votos = (parseInt(datos.opciones[idx].votos, 10) || 0) + 1;
+      guardarEncuestaStorage(datos);
+      renderizarEncuesta();
+    }
+
+    function abrirEncuesta() {
+      var modal = document.getElementById("encuestaModal");
+      if (modal) {
+        renderizarEncuesta();
+        modal.style.display = "flex";
+      }
+    }
+
+    function cerrarEncuesta() {
+      var modal = document.getElementById("encuestaModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function cerrarEncuestaSiFuera(event) {
+      if (event && event.target && event.target.id === "encuestaModal") {
+        cerrarEncuesta();
+      }
+    }
+
+    function actualizarEtiquetasOpcionesEncuesta() {
+      var container = document.getElementById("inputOpcionesContainer");
+      if (!container) return;
+      var inputs = container.querySelectorAll(".encuesta-opcion-input");
+      for (var i = 0; i < inputs.length; i++) {
+        inputs[i].placeholder = "Opción " + (i + 1);
+      }
+    }
+
+    function agregarCampoOpcionEncuesta(valor) {
+      var container = document.getElementById("inputOpcionesContainer");
+      if (!container) return;
+
+      var row = document.createElement("div");
+      row.className = "encuesta-opcion-input-row";
+
+      var input = document.createElement("input");
+      input.type = "text";
+      input.className = "form-input encuesta-opcion-input";
+      input.value = valor || "";
+
+      var delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.className = "encuesta-del-op-btn";
+      delBtn.title = "Quitar opción";
+      delBtn.innerHTML = "&times;";
+      delBtn.onclick = function() {
+        var total = container.querySelectorAll(".encuesta-opcion-input-row").length;
+        if (total <= 2) {
+          alert("La encuesta debe tener al menos 2 opciones.");
+          return;
+        }
+        container.removeChild(row);
+        actualizarEtiquetasOpcionesEncuesta();
+      };
+
+      row.appendChild(input);
+      row.appendChild(delBtn);
+      container.appendChild(row);
+      actualizarEtiquetasOpcionesEncuesta();
+    }
+
+    function alternarConfigEncuesta() {
+      if (!adminEncuestaHabilitado) return;
+      var box = document.getElementById("encuestaConfigBox");
+      var inpPreg = document.getElementById("inputPreguntaEncuesta");
+      var container = document.getElementById("inputOpcionesContainer");
+      if (!box || !inpPreg || !container) return;
+
+      var estaVisible = box.style.display === "flex";
+      if (!estaVisible) {
+        var datos = cargarEncuesta();
+        inpPreg.value = datos.pregunta;
+        container.innerHTML = "";
+        for (var i = 0; i < datos.opciones.length; i++) {
+          agregarCampoOpcionEncuesta(datos.opciones[i].texto);
+        }
+        box.style.display = "flex";
+      } else {
+        box.style.display = "none";
+      }
+    }
+
+    function guardarNuevaEncuesta() {
+      if (!adminEncuestaHabilitado) return;
+      var inpPreg = document.getElementById("inputPreguntaEncuesta");
+      var container = document.getElementById("inputOpcionesContainer");
+      var box = document.getElementById("encuestaConfigBox");
+      if (!inpPreg || !container) return;
+
+      var pregunta = inpPreg.value.trim();
+      var inputs = container.querySelectorAll(".encuesta-opcion-input");
+      var nuevasOpciones = [];
+
+      for (var i = 0; i < inputs.length; i++) {
+        var txt = inputs[i].value.trim();
+        if (txt) {
+          nuevasOpciones.push({ texto: txt, votos: 0 });
+        }
+      }
+
+      if (!pregunta || nuevasOpciones.length < 2) {
+        alert("Ingresá una pregunta y al menos 2 opciones completas.");
+        return;
+      }
+
+      guardarEncuestaStorage({
+        pregunta: pregunta,
+        opciones: nuevasOpciones
+      });
+
+      if (box) box.style.display = "none";
+      renderizarEncuesta();
+    }
+
+    function reiniciarVotosEncuesta() {
+      if (!adminEncuestaHabilitado) return;
+      var datos = cargarEncuesta();
+      for (var i = 0; i < datos.opciones.length; i++) {
+        datos.opciones[i].votos = 0;
+      }
+      guardarEncuestaStorage(datos);
+      renderizarEncuesta();
+    }
+
     function mostrarLogoFallback() {
       var img = document.getElementById("channelLogo");
       var fallback = document.getElementById("logoFallback");
@@ -1073,15 +1534,6 @@
       }, 12000);
     }
 
-    var programacionMiercoles25 = [
-      { hora: "16:30", fin: "17:50", titulo: "Especial Concert : T.A.T.U", categoria: "musical" },
-      { hora: "17:50", fin: "18:23", titulo: "Santo Rosario “Misterios Gloriosos”", categoria: "religioso" },
-      { hora: "18:23", fin: "19:20", titulo: "Serie Temporada 3: Juegos de Tronos", categoria: "serie" },
-      { hora: "19:20", fin: "21:10", titulo: "Pelicula: Milagros del Cielo", categoria: "pelicula" },
-      { hora: "21:10", fin: "21:48", titulo: "Series : La Tierra Prometida", categoria: "serie" },
-      { hora: "21:48", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" }
-    ];
-
     var programacionJueves26 = [
       { hora: "16:00", fin: "17:53", titulo: "Especial Concert : Dj Victor Aguero - Especial Jamiroquai", categoria: "musical" },
       { hora: "17:53", fin: "18:31", titulo: "Santo Rosario “Misterios Luminosos”", categoria: "religioso" },
@@ -1100,7 +1552,18 @@
       { hora: "22:32", fin: "11:59", titulo: "Fin de la Transmisión", categoria: "general" }
     ];
 
-    var diaActual = "viernes27";
+    var programacionSabado28 = [
+      { hora: "12:00", fin: "13:04", titulo: "Serie Comedia: Los Tres Chiflados", categoria: "serie" },
+      { hora: "13:04", fin: "14:11", titulo: "Anime: Los Thundercast", categoria: "animacion" },
+      { hora: "14:11", fin: "16:13", titulo: "Pelicula: Sonic 2 La película", categoria: "pelicula" },
+      { hora: "16:13", fin: "17:32", titulo: "Especial Concert: Eminem", categoria: "musical" },
+      { hora: "17:32", fin: "18:10", titulo: "Santo Rosario “Misterios Gozosos”", categoria: "religioso" },
+      { hora: "18:10", fin: "19:17", titulo: "Series Temporada 2 : Hanna Montana", categoria: "serie" },
+      { hora: "19:17", fin: "21:19", titulo: "Pelicula: Tornados", categoria: "pelicula" },
+      { hora: "21:19", fin: "11:59", titulo: "Fin de la Transmisión", categoria: "general" }
+    ];
+
+    var diaActual = "sabado28";
 
     function obtenerMinutos(h) {
       if (!h) return 0;
@@ -1137,17 +1600,17 @@
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnMie = document.getElementById("btnMiercoles25");
       var btnJue = document.getElementById("btnJueves26");
       var btnVie = document.getElementById("btnViernes27");
+      var btnSab = document.getElementById("btnSabado28");
 
-      if (btnMie) btnMie.className = "tab-btn" + (dia === "miercoles25" ? " active" : "");
       if (btnJue) btnJue.className = "tab-btn" + (dia === "jueves26" ? " active" : "");
       if (btnVie) btnVie.className = "tab-btn" + (dia === "viernes27" ? " active" : "");
+      if (btnSab) btnSab.className = "tab-btn" + (dia === "sabado28" ? " active" : "");
 
-      var lista = programacionViernes27;
-      if (dia === "miercoles25") lista = programacionMiercoles25;
+      var lista = programacionSabado28;
       if (dia === "jueves26") lista = programacionJueves26;
+      if (dia === "viernes27") lista = programacionViernes27;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
@@ -1156,7 +1619,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "miercoles25" && diaSemana === 3) || (dia === "jueves26" && diaSemana === 4) || (dia === "viernes27" && diaSemana === 5);
+      var esHoy = (dia === "jueves26" && diaSemana === 4) || (dia === "viernes27" && diaSemana === 5) || (dia === "sabado28" && diaSemana === 6);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1251,12 +1714,12 @@
 
       iniciarContadorVistas();
       iniciarPlayer();
-      mostrarDia('viernes27');
+      mostrarDia('sabado28');
       
       setInterval(function() {
-        if (diaActual === 'miercoles25') mostrarDia('miercoles25');
-        else if (diaActual === 'jueves26') mostrarDia('jueves26');
+        if (diaActual === 'jueves26') mostrarDia('jueves26');
         else if (diaActual === 'viernes27') mostrarDia('viernes27');
+        else if (diaActual === 'sabado28') mostrarDia('sabado28');
       }, 60000);
     };
   </script>
