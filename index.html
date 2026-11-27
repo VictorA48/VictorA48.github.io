@@ -1180,14 +1180,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn" id="btnJueves26" onclick="mostrarDia('jueves26')">
-            <i class="fas fa-calendar-day"></i> Jueves, 26 Noviembre 2026
-          </button>
           <button class="tab-btn" id="btnViernes27" onclick="mostrarDia('viernes27')">
             <i class="fas fa-calendar-day"></i> Viernes, 27 Noviembre 2026
           </button>
           <button class="tab-btn active" id="btnSabado28" onclick="mostrarDia('sabado28')">
             <i class="fas fa-calendar-day"></i> Sábado, 28 Noviembre 2026
+          </button>
+          <button class="tab-btn" id="btnDomingo29" onclick="mostrarDia('domingo29')">
+            <i class="fas fa-calendar-day"></i> Domingo, 29 Noviembre 2026
           </button>
         </div>
       </div>
@@ -1202,7 +1202,7 @@
 
   <script class="notranslate">
     var CLAVE_ENCUESTA = "utv_encuesta_activa_v1";
-    var CLAVE_ADMIN_ENCUESTA = "utv2026";
+    var CLAVE_ADMIN_ENCUESTA = "UltraTv2025";
     var adminEncuestaHabilitado = false;
     var encuestaPorDefecto = {
       pregunta: "¿Qué bloque querés ver en el próximo especial de UTV?",
@@ -1534,15 +1534,6 @@
       }, 12000);
     }
 
-    var programacionJueves26 = [
-      { hora: "16:00", fin: "17:53", titulo: "Especial Concert : Dj Victor Aguero - Especial Jamiroquai", categoria: "musical" },
-      { hora: "17:53", fin: "18:31", titulo: "Santo Rosario “Misterios Luminosos”", categoria: "religioso" },
-      { hora: "18:31", fin: "19:24", titulo: "Serie Temporada 3: Juegos de Tronos", categoria: "serie" },
-      { hora: "19:24", fin: "21:40", titulo: "Pelicula: Uri (Fuerzas Especiales)", categoria: "pelicula" },
-      { hora: "21:40", fin: "22:32", titulo: "Series : La Tierra Prometida", categoria: "serie" },
-      { hora: "22:32", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" }
-    ];
-
     var programacionViernes27 = [
       { hora: "17:00", fin: "18:20", titulo: "Especial Concert : Mauro Picotto", categoria: "musical" },
       { hora: "18:20", fin: "18:53", titulo: "Santo Rosario “Misterios Dolorosos”", categoria: "religioso" },
@@ -1561,6 +1552,19 @@
       { hora: "18:10", fin: "19:17", titulo: "Series Temporada 2 : Hanna Montana", categoria: "serie" },
       { hora: "19:17", fin: "21:19", titulo: "Pelicula: Tornados", categoria: "pelicula" },
       { hora: "21:19", fin: "11:59", titulo: "Fin de la Transmisión", categoria: "general" }
+    ];
+
+    var programacionDomingo29 = [
+      { hora: "12:00", fin: "13:14", titulo: "Anime: Dragon Ball", categoria: "animacion" },
+      { hora: "13:14", fin: "14:04", titulo: "Anime: Mazinger Z", categoria: "animacion" },
+      { hora: "14:04", fin: "15:37", titulo: "Pelicula: Cuenta Regresiva Para El Fin Del Mundo", categoria: "pelicula" },
+      { hora: "15:37", fin: "17:59", titulo: "Especial Concert: U2", categoria: "musical" },
+      { hora: "17:59", fin: "18:45", titulo: "Santa Misa", categoria: "religioso" },
+      { hora: "18:45", fin: "19:17", titulo: "Santo Rosario “Misterios Gloriosos”", categoria: "religioso" },
+      { hora: "19:17", fin: "20:25", titulo: "Series Temporada 2 : Hannah Montana", categoria: "serie" },
+      { hora: "20:25", fin: "21:13", titulo: "Documental: Coronavirus El Origen", categoria: "general" },
+      { hora: "21:13", fin: "22:25", titulo: "Pelicula: Mega Relámpago 2", categoria: "pelicula" },
+      { hora: "22:25", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" }
     ];
 
     var diaActual = "sabado28";
@@ -1600,17 +1604,17 @@
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnJue = document.getElementById("btnJueves26");
       var btnVie = document.getElementById("btnViernes27");
       var btnSab = document.getElementById("btnSabado28");
+      var btnDom = document.getElementById("btnDomingo29");
 
-      if (btnJue) btnJue.className = "tab-btn" + (dia === "jueves26" ? " active" : "");
       if (btnVie) btnVie.className = "tab-btn" + (dia === "viernes27" ? " active" : "");
       if (btnSab) btnSab.className = "tab-btn" + (dia === "sabado28" ? " active" : "");
+      if (btnDom) btnDom.className = "tab-btn" + (dia === "domingo29" ? " active" : "");
 
       var lista = programacionSabado28;
-      if (dia === "jueves26") lista = programacionJueves26;
       if (dia === "viernes27") lista = programacionViernes27;
+      if (dia === "domingo29") lista = programacionDomingo29;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
@@ -1619,7 +1623,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "jueves26" && diaSemana === 4) || (dia === "viernes27" && diaSemana === 5) || (dia === "sabado28" && diaSemana === 6);
+      var esHoy = (dia === "viernes27" && diaSemana === 5) || (dia === "sabado28" && diaSemana === 6) || (dia === "domingo29" && diaSemana === 0);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1717,9 +1721,9 @@
       mostrarDia('sabado28');
       
       setInterval(function() {
-        if (diaActual === 'jueves26') mostrarDia('jueves26');
-        else if (diaActual === 'viernes27') mostrarDia('viernes27');
+        if (diaActual === 'viernes27') mostrarDia('viernes27');
         else if (diaActual === 'sabado28') mostrarDia('sabado28');
+        else if (diaActual === 'domingo29') mostrarDia('domingo29');
       }, 60000);
     };
   </script>
