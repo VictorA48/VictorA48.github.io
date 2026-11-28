@@ -1180,14 +1180,14 @@
         </div>
         
         <div class="tabs-container">
-          <button class="tab-btn" id="btnViernes27" onclick="mostrarDia('viernes27')">
-            <i class="fas fa-calendar-day"></i> Viernes, 27 Noviembre 2026
-          </button>
           <button class="tab-btn active" id="btnSabado28" onclick="mostrarDia('sabado28')">
             <i class="fas fa-calendar-day"></i> Sábado, 28 Noviembre 2026
           </button>
           <button class="tab-btn" id="btnDomingo29" onclick="mostrarDia('domingo29')">
             <i class="fas fa-calendar-day"></i> Domingo, 29 Noviembre 2026
+          </button>
+          <button class="tab-btn" id="btnLunes30" onclick="mostrarDia('lunes30')">
+            <i class="fas fa-calendar-day"></i> Lunes 30 Noviembre 2026
           </button>
         </div>
       </div>
@@ -1522,7 +1522,7 @@
     }
 
     function iniciarContadorVistas() {
-      var vistasActuales = 1425;
+      var vistasActuales = 3425;
       var elVistas = document.getElementById("contadorVisitas");
       if (!elVistas) return;
 
@@ -1533,15 +1533,6 @@
         }
       }, 12000);
     }
-
-    var programacionViernes27 = [
-      { hora: "17:00", fin: "18:20", titulo: "Especial Concert : Mauro Picotto", categoria: "musical" },
-      { hora: "18:20", fin: "18:53", titulo: "Santo Rosario “Misterios Dolorosos”", categoria: "religioso" },
-      { hora: "18:53", fin: "19:46", titulo: "Serie Temporada 3: Juegos de Tronos", categoria: "serie" },
-      { hora: "19:46", fin: "21:32", titulo: "Pelicula: El Orfanato", categoria: "pelicula" },
-      { hora: "21:32", fin: "22:32", titulo: "Series : La Tierra Prometida", categoria: "serie" },
-      { hora: "22:32", fin: "11:59", titulo: "Fin de la Transmisión", categoria: "general" }
-    ];
 
     var programacionSabado28 = [
       { hora: "12:00", fin: "13:04", titulo: "Serie Comedia: Los Tres Chiflados", categoria: "serie" },
@@ -1565,6 +1556,15 @@
       { hora: "20:25", fin: "21:13", titulo: "Documental: Coronavirus El Origen", categoria: "general" },
       { hora: "21:13", fin: "22:25", titulo: "Pelicula: Mega Relámpago 2", categoria: "pelicula" },
       { hora: "22:25", fin: "15:59", titulo: "Fin de la Transmisión", categoria: "general" }
+    ];
+
+    var programacionLunes30 = [
+      { hora: "16:00", fin: "18:43", titulo: "Especial Concert : Soda Stereo", categoria: "musical" },
+      { hora: "18:43", fin: "19:21", titulo: "Santo Rosario “Misterios Gozosos”", categoria: "religioso" },
+      { hora: "19:21", fin: "20:18", titulo: "Serie Temporada 3: Juegos de Tronos", categoria: "serie" },
+      { hora: "20:18", fin: "22:14", titulo: "Pelicula: Madame Web", categoria: "pelicula" },
+      { hora: "22:14", fin: "23:05", titulo: "Series : La Tierra Prometida", categoria: "serie" },
+      { hora: "23:05", fin: "16:59", titulo: "Fin de la Transmisión", categoria: "general" }
     ];
 
     var diaActual = "sabado28";
@@ -1604,17 +1604,17 @@
     function mostrarDia(dia) {
       diaActual = dia;
       
-      var btnVie = document.getElementById("btnViernes27");
       var btnSab = document.getElementById("btnSabado28");
       var btnDom = document.getElementById("btnDomingo29");
+      var btnLun = document.getElementById("btnLunes30");
 
-      if (btnVie) btnVie.className = "tab-btn" + (dia === "viernes27" ? " active" : "");
       if (btnSab) btnSab.className = "tab-btn" + (dia === "sabado28" ? " active" : "");
       if (btnDom) btnDom.className = "tab-btn" + (dia === "domingo29" ? " active" : "");
+      if (btnLun) btnLun.className = "tab-btn" + (dia === "lunes30" ? " active" : "");
 
       var lista = programacionSabado28;
-      if (dia === "viernes27") lista = programacionViernes27;
       if (dia === "domingo29") lista = programacionDomingo29;
+      if (dia === "lunes30") lista = programacionLunes30;
 
       var contenedor = document.getElementById("grillaProgramacion");
       if (!contenedor) return;
@@ -1623,7 +1623,7 @@
       var ah = new Date();
       var hm = ah.getHours() * 60 + ah.getMinutes();
       var diaSemana = ah.getDay();
-      var esHoy = (dia === "viernes27" && diaSemana === 5) || (dia === "sabado28" && diaSemana === 6) || (dia === "domingo29" && diaSemana === 0);
+      var esHoy = (dia === "sabado28" && diaSemana === 6) || (dia === "domingo29" && diaSemana === 0) || (dia === "lunes30" && diaSemana === 1);
 
       for (var i = 0; i < lista.length; i++) {
         var item = lista[i];
@@ -1721,9 +1721,9 @@
       mostrarDia('sabado28');
       
       setInterval(function() {
-        if (diaActual === 'viernes27') mostrarDia('viernes27');
-        else if (diaActual === 'sabado28') mostrarDia('sabado28');
+        if (diaActual === 'sabado28') mostrarDia('sabado28');
         else if (diaActual === 'domingo29') mostrarDia('domingo29');
+        else if (diaActual === 'lunes30') mostrarDia('lunes30');
       }, 60000);
     };
   </script>
